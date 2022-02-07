@@ -20,8 +20,8 @@ def main():
 
     while running:
         clock.tick(FPS)
-        WIN.fill('Yellow')
 
+        # Title screen
         titleScreen()
 
         for event in pygame.event.get():
@@ -32,9 +32,19 @@ def main():
 
 def titleScreen():
 
-    RED = (255, 0, 0)
-    btnPlay = Rect(100,100,100,100)
-    pygame.draw.rect(WIN,RED,btnPlay)
+    # background color of the window
+    WIN.fill('Yellow')
+
+    # font
+    font = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
+
+    # title
+    TITLE = font.render('Nom du jeu', 0, 'Black')
+    TITLE_RECT = TITLE.get_rect(center=(WIDTH / 2, 50))
+    WIN.blit(TITLE, TITLE_RECT)
+
+    # button play
+
 
 
 if __name__ == "__main__":
