@@ -2,6 +2,10 @@ from cmath import rect
 import pygame
 import Player
 import os
+import viewMenu
+import viewOption
+import viewParty
+import viewCredits
 
 from sys import exit
 from pygame.locals import *
@@ -45,87 +49,58 @@ def main():
         ################################################################################################################
 
         if (MENU==1):
-            # Title
-            font1 = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
-            TITLE = font1.render('Nom du jeu', 0, 'Black')
-            TITLE_RECT = TITLE.get_rect(center=(WIDTH / 2, 100))
-            screen.blit(TITLE, TITLE_RECT)
-            # Button PLAY
-            font2 = pygame.font.Font("assets/font/Pixeltype.ttf", 50)
-            PLAY_BTN_LABEL = font2.render('PLAY', 0, 'Black')
-            PLAY_BTN_RECT = PLAY_BTN_LABEL.get_rect(center=(WIDTH / 2, 300))
-            PLAY_EVENT = screen.blit(PLAY_BTN_LABEL,PLAY_BTN_RECT)
-            # Button OPTIONS
-            OPT_BTN_LABEL = font2.render('OPTIONS', 0, 'Black')
-            OPT_BTN_RECT = OPT_BTN_LABEL.get_rect(center=(WIDTH / 2, 400))
-            OPT_EVENT = screen.blit(OPT_BTN_LABEL,OPT_BTN_RECT)
-            # Button CREDITS
-            CRED_BTN_LABEL = font2.render('CREDITS', 0, 'Black')
-            CRED_BTN_RECT = CRED_BTN_LABEL.get_rect(center=(WIDTH / 2, 500))
-            CRED_EVENT = screen.blit(CRED_BTN_LABEL,CRED_BTN_RECT)
-            # Button EXIT
-            EXIT_BTN_LABEL = font2.render('EXIT', 0, 'Black')
-            EXIT_BTN_RECT = EXIT_BTN_LABEL.get_rect(center=(WIDTH / 2, 600))
-            EXIT_EVENT = screen.blit(EXIT_BTN_LABEL,EXIT_BTN_RECT)
+            menu = viewMenu.viewMenu()
+            menu.draw(screen)
         
         elif (OPTIONS==1):
-            # Title
-            font1 = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
-            TITLE = font1.render('OPTIONS', 0, 'Black')
-            TITLE_RECT = TITLE.get_rect(center=(WIDTH / 2, 100))
-            screen.blit(TITLE, TITLE_RECT)
-            # Back to menu
-            font2 = pygame.font.Font("assets/font/Pixeltype.ttf", 30)
-            BACK = font2.render('BACK TO MENU', 0, 'Black')
-            BACK_RECT = BACK.get_rect(center=(WIDTH / 12, 30))
-            BACK_EVENT = screen.blit(BACK, BACK_RECT)
+            option = viewOption.viewOption()
+            option.draw(screen)
         
         elif (CREDITS==1):
-            # Title
-            font1 = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
-            TITLE = font1.render('CREDITS', 0, 'Black')
-            TITLE_RECT = TITLE.get_rect(center=(WIDTH / 2, 100))
-            screen.blit(TITLE, TITLE_RECT)
-            # Back to menu
-            font2 = pygame.font.Font("assets/font/Pixeltype.ttf", 30)
-            BACK = font2.render('BACK TO MENU', 0, 'Black')
-            BACK_RECT = BACK.get_rect(center=(WIDTH / 12, 30))
-            BACK_EVENT = screen.blit(BACK, BACK_RECT)
+            credit = viewCredits.viewCredits()
+            credit.draw(screen)
 
         elif (PARTY==1):
-            screen.fill(BACKGROUND2)
+            party = viewParty.viewParty()
+            party.draw(screen)
+            player.update()
+            player.draw(screen)
 
         ################################################################################################################
         # EVENT LISTENER
         ################################################################################################################
         
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONUP and event.button==1 and EXIT_EVENT.collidepoint(event.pos):
+            if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.exit_event.collidepoint(event.pos):
                 running = False
                 exit()
-            #elif event.type == pygame.KEYDOWN:
-                #player.update(event)
-            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and PLAY_EVENT.collidepoint(event.pos):
+            elif event.type == pygame.KEYDOWN:
+                player.update(event)
+            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.play_event.collidepoint(event.pos) and MENU==1:
                 MENU=0
+                CREDITS=0
+                OPTIONS=0
                 PARTY=1
-            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and OPT_EVENT.collidepoint(event.pos):
+            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.opt_event.collidepoint(event.pos) and MENU==1:
                 MENU=0
                 PARTY=0
                 CREDITS=0
                 OPTIONS=1
-            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and CRED_EVENT.collidepoint(event.pos):
+            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.cred_event.collidepoint(event.pos) and MENU==1:
                 MENU=0
                 PARTY=0
                 OPTIONS=0
                 CREDITS=1
-            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and BACK_EVENT.collidepoint(event.pos):
+            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and option.back_event.collidepoint(event.pos):
                 OPTIONS=0
                 PARTY=0
                 CREDITS=0
                 MENU=1
-
-        player.update()
-        player.draw(screen)
+            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and credit.back_event_credit.collidepoint(event.pos):
+                CREDITS=0
+                OPTIONS=0
+                PARTY=0
+                MENU=1
 
         ################################################################################################################
         # CURSOR
