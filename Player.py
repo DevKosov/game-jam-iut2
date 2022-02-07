@@ -28,7 +28,7 @@ class Player(pygame.sprite.Sprite):
 
 		self.rotation = 1 # 1 regarde à droite // 2 regarde à gauche
 
-		self.index = 0;
+		self.index = 0
 
 		self.image = self.frame_0
 
@@ -39,12 +39,12 @@ class Player(pygame.sprite.Sprite):
 		self.jump_sound.set_volume(0.5)
 
 	def player_input(self, event):
-		keys = event.key
-		if keys == pygame.K_SPACE:
-			self.jump_sound.play()
-			self.index += 1
-			if self.index == 7:
-				self.index = 0
+		if event.type == pygame.KEYUP:
+			self.index = 0
+		if event.type == pygame.KEYDOWN:
+			keys = event.key
+			if keys == pygame.K_SPACE:
+				self.jump_sound.play()
 
 
 		
@@ -104,7 +104,6 @@ class Player(pygame.sprite.Sprite):
 			self.index += 0.2
 			if self.index >= 7:
 				self.index = 0
-			self.rotation(self.rotation, 0)
 		if keys_pressed[pygame.K_DOWN]:
 			self.rect.top = self.rect.top + 5
 			self.index += 0.2
