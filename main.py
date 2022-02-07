@@ -8,12 +8,10 @@ FPS = 60
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
-backgroundsound = pygame.mixer.Sound('assets/audio/bgm/Town2.ogg')
-
 def main():
     running = True
     clock = pygame.time.Clock()
-    backgroundsound.play()
+    
 
     while running:
         clock.tick(FPS)
