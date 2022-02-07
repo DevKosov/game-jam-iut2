@@ -16,10 +16,19 @@ class Player(pygame.sprite.Sprite):
 		# self.player_walk = [player_image,player_image]
 
 		BLACK = (0, 0, 0)
-		self.image = self.sheet.get_image(0, 24, 24, 3, BLACK)
-		# frame_1 = sprite_sheet.get_image(1, 24, 24, 3, BLACK)
-		# frame_2 = sprite_sheet.get_image(2, 24, 24, 3, BLACK)
-		# frame_3 = sprite_sheet.get_image(3, 24, 24, 3, BLACK)
+
+		self.frame_0 =  self.sheet.get_image(0, 24, 24, 3, BLACK)
+		self.frame_1 =  self.sheet.get_image(1, 24, 24, 3, BLACK)
+		self.frame_2 =  self.sheet.get_image(2, 24, 24, 3, BLACK)
+		self.frame_3 =  self.sheet.get_image(3, 24, 24, 3, BLACK)
+		self.frame_4 = self.sheet.get_image(4, 24, 24, 3, BLACK)
+		self.frame_5 = self.sheet.get_image(5, 24, 24, 3, BLACK)
+		self.frame_6 = self.sheet.get_image(6, 24, 24, 3, BLACK)
+		self.frame_7 = self.sheet.get_image(7, 24, 24, 3, BLACK)
+
+		self.index = 0;
+
+		self.image = self.frame_0
 
 		self.rect = self.image.get_rect(midbottom = (80,300))
 		self.gravity = 0
@@ -31,15 +40,31 @@ class Player(pygame.sprite.Sprite):
 		keys = event.key
 		if keys == pygame.K_SPACE:
 			self.jump_sound.play()
+			self.index += 1
+			if self.index == 7:
+				self.index = 0
+
+
 		
 
 	def animation_state(self):
-		if self.rect.bottom < 300:
-			self.image = self.player_jump
-		# else:
-		# 	self.player_index += 0.1
-		# 	if self.player_index >= len(self.player_walk):self.player_index = 0
-		# 	self.image = self.player_walk[int(self.player_index)]
+		if self.index == 0:
+			self.image = self.frame_0
+		if self.index == 1:
+			self.image = self.frame_1
+		if self.index == 2:
+			self.image = self.frame_2
+		if self.index == 3:
+			self.image = self.frame_3
+		if self.index == 4:
+			self.image = self.frame_4
+		if self.index == 5:
+			self.image = self.frame_5
+		if self.index == 6:
+			self.image = self.frame_6
+		if self.index == 7:
+			self.image = self.frame_7
+
 
 	def update(self, event):
 		self.player_input(event)
