@@ -11,7 +11,7 @@ pygame.display.set_caption('GAME JAM 2022')
 WIDTH, HEIGHT = 1024, 768
 FPS = 60
 
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 player = pygame.sprite.GroupSingle()
 player.add(Player.Player())
@@ -28,7 +28,9 @@ def main():
         clock.tick(FPS)
 
         # Title screen
-        mainView()
+        titleScreen()
+        player.draw(screen)
+        player.update()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -38,30 +40,34 @@ def main():
                 print("clicked")
         pygame.display.update()
 
-def mainView():
+def titleScreen():
 
     # background color of the window
-    WIN.fill('Yellow')
+    screen.fill('Yellow')
 
     # title
     font1 = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
     TITLE = font1.render('Nom du jeu', 0, 'Black')
     TITLE_RECT = TITLE.get_rect(center=(WIDTH / 2, 100))
-    WIN.blit(TITLE, TITLE_RECT)
+    screen.blit(TITLE, TITLE_RECT)
 
     # button
     font2 = pygame.font.Font("assets/font/Pixeltype.ttf", 50)
     PLAY_BTN_LABEL = font1.render('PLAY', 0, 'Black')
     PLAY_BTN_RECT = PLAY_BTN_LABEL.get_rect(center=(WIDTH / 2, 300))
-    PLAY_EVENT = WIN.blit(PLAY_BTN_LABEL,PLAY_BTN_RECT)
+
+    PLAY_EVENT = screen.blit(PLAY_BTN_LABEL,PLAY_BTN_RECT)
+
+    screen.blit(PLAY_BTN_LABEL,PLAY_BTN_RECT)
+
 
     CRED_BTN_LABEL = font1.render('CREDITS', 0, 'Black')
     CRED_BTN_RECT = CRED_BTN_LABEL.get_rect(center=(WIDTH / 2, 400))
-    WIN.blit(CRED_BTN_LABEL,CRED_BTN_RECT)
+    screen.blit(CRED_BTN_LABEL,CRED_BTN_RECT)
 
     EXIT_BTN_LABEL = font1.render('EXIT', 0, 'Black')
     EXIT_BTN_RECT = EXIT_BTN_LABEL.get_rect(center=(WIDTH / 2, 500))
-    WIN.blit(EXIT_BTN_LABEL,EXIT_BTN_RECT)
+    screen.blit(EXIT_BTN_LABEL,EXIT_BTN_RECT)
 
 if __name__ == "__main__":
     main()
