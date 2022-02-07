@@ -34,7 +34,7 @@ def main():
 
     while running:
         clock.tick(FPS)
-
+        
         # Title screen
         titleScreen()
 
