@@ -1,6 +1,7 @@
 from cmath import rect
 import pygame
 import Player
+import os
 
 from sys import exit
 from pygame.locals import *
@@ -16,6 +17,11 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 player = pygame.sprite.GroupSingle()
 player.add(Player.Player())
 
+CURSOR = pygame.transform.scale(pygame.image.load(os.path.join('assets/img/cursor', 'viewfinder.png')).convert_alpha(), (100, 100))
+CURSOR_RECT = CURSOR.get_rect()
+
+BACKGROUND = (173, 239, 255)
+
 def main():
     running = True
     clock = pygame.time.Clock()
@@ -24,6 +30,8 @@ def main():
     pygame.mixer.music.set_volume(0.05)
     pygame.mixer.music.play(fade_ms=2000)
 
+    pygame.mouse.set_visible(False)
+
     while running:
         clock.tick(FPS)
 
@@ -31,6 +39,11 @@ def main():
         titleScreen()
         player.draw(screen)
         player.update()
+
+        #cursor
+        mouse_pos = pygame.mouse.get_pos()
+        CURSOR_RECT.center = mouse_pos
+        screen.blit(CURSOR, CURSOR_RECT)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -43,7 +56,10 @@ def main():
 def titleScreen():
 
     # background color of the window
-    screen.fill('Yellow')
+    screen.fill(BACKGROUND)
+
+    # font
+    font = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
 
     # title
     font1 = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
