@@ -28,15 +28,17 @@ def main():
         clock.tick(FPS)
 
         # Title screen
-        titleScreen()
+        mainView()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
                 exit()
+            elif event.type == pygame.mouse.get_pressed():
+                print("clicked")
         pygame.display.update()
 
-def titleScreen():
+def mainView():
 
     # background color of the window
     WIN.fill('Yellow')
@@ -51,7 +53,7 @@ def titleScreen():
     font2 = pygame.font.Font("assets/font/Pixeltype.ttf", 50)
     PLAY_BTN_LABEL = font1.render('PLAY', 0, 'Black')
     PLAY_BTN_RECT = PLAY_BTN_LABEL.get_rect(center=(WIDTH / 2, 300))
-    WIN.blit(PLAY_BTN_LABEL,PLAY_BTN_RECT)
+    PLAY_EVENT = WIN.blit(PLAY_BTN_LABEL,PLAY_BTN_RECT)
 
     CRED_BTN_LABEL = font1.render('CREDITS', 0, 'Black')
     CRED_BTN_RECT = CRED_BTN_LABEL.get_rect(center=(WIDTH / 2, 400))
