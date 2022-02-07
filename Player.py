@@ -35,8 +35,8 @@ class Player(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect(midbottom = (80,300))
 		self.gravity = 0
 
-		self.jump_sound = pygame.mixer.Sound('assets/audio/se/Bell3.ogg')
-		self.jump_sound.set_volume(0.5)
+		self.test_sound = pygame.mixer.Sound('assets/audio/se/Bell3.ogg')
+		self.test_sound.set_volume(0.5)
 
 	def player_input(self, event):
 		if event.type == pygame.KEYUP:
@@ -47,7 +47,7 @@ class Player(pygame.sprite.Sprite):
 				self.jump_sound.play()
 
 
-		
+
 
 	def animation_state(self):
 		if self.index == 0:
@@ -76,8 +76,7 @@ class Player(pygame.sprite.Sprite):
 			self.flipper()
 
 
-	def update(self): # , event
-		#self.player_input(event)
+	def update(self):
 		self.animation_state()
 		self.move()
 		self.image.set_colorkey((0,0,0))
@@ -110,7 +109,7 @@ class Player(pygame.sprite.Sprite):
 			if self.index >= 7:
 				self.index = 0
 
-		
+
 	def flipper(self):
 		if self.rotation != 1:
 				self.image = pygame.transform.flip(self.image, 1, 0)
