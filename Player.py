@@ -1,4 +1,4 @@
-import pygame
+import pygame, os
 import spritesheet
 
 class Player(pygame.sprite.Sprite):
@@ -6,7 +6,7 @@ class Player(pygame.sprite.Sprite):
 		super().__init__()
 
 		try:
-			self.sheet = pygame.image.load('assets/img/tests/character_test.png').convert()
+			self.sheet = pygame.image.load(os.path.join('assets/img/characters/', 'doux.png')).convert()
 		except pygame.error as e:
 			print(f"Unable to load spritesheet image: player spritesheet ")
 			raise SystemExit(e)
