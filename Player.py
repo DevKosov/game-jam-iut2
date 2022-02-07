@@ -44,7 +44,7 @@ class Player(pygame.sprite.Sprite):
 		if event.type == pygame.KEYDOWN:
 			keys = event.key
 			if keys == pygame.K_SPACE:
-				self.jump_sound.play()
+				self.test_sound.play()
 
 
 
