@@ -48,8 +48,8 @@ class Player(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect(midbottom = (80,300))
 		self.gravity = 0
 
-		self.test_sound = pygame.mixer.Sound('assets/audio/se/Bell3.ogg')
-		self.test_sound.set_volume(0.5)
+		self.test_sound = pygame.mixer.Sound('assets/audio/se/Applause2.ogg')
+		self.test_sound.set_volume(0.1)
 
 		self.bullet_sound = pygame.mixer.Sound('assets/audio/se/Gun1.ogg')
 		self.bullet_sound.set_volume(0.1)
