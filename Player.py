@@ -69,7 +69,15 @@ class Player(pygame.sprite.Sprite):
 	def update(self, event):
 		self.player_input(event)
 		self.animation_state()
+		self.move()
 
-	def move(self, y, deplacement):
-		if y:
-			self.rect.left = self.rect.left + deplacement
+	def move():
+		keys_pressed = pygame.key.get_pressed()
+		if keys_pressed[pygame.K_LEFT]:
+				self.rect.left = self.rect.left - 5
+			if keys_pressed[pygame.K_RIGHT]:
+				self.rect.left = self.rect.left + 5
+			if keys_pressed[pygame.K_UP]:
+				self.rect.top = self.rect.top - 5
+			if keys_pressed[pygame.K_DOWN]:
+				self.rect.top = self.rect.top + 5
