@@ -1,6 +1,6 @@
 from cmath import rect
 import pygame
-import Player
+import sprite
 import os
 import viewMenu
 import viewOption
@@ -19,10 +19,11 @@ FPS = 60
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 player = pygame.sprite.GroupSingle()
-player.add(Player.Player())
+player.add(sprite.Player())
+
 
 BACKGROUND = (173, 239, 255)
-BACKGROUND2 = (255, 0, 0)
+BACKGROUND2 = pygame.image.load('assets/img/tests/backgroundTest2.png')
 
 def main():
     running = True
@@ -69,14 +70,14 @@ def main():
         ################################################################################################################
         # EVENT LISTENER
         ################################################################################################################
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.exit_event.collidepoint(event.pos):
                 running = False
                 exit()
-            elif event.type == pygame.KEYDOWN:
-                player.update(event)
-            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.play_event.collidepoint(event.pos) and MENU==1:
+            if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
+                player.sprites().__getitem__(0).player_input(event)
+            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.play_event.collidepoint(event.pos):
                 MENU=0
                 CREDITS=0
                 OPTIONS=0
