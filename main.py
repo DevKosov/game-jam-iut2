@@ -37,20 +37,15 @@ def main():
 
         # Title screen
         titleScreen()
+
         player.draw(screen)
         player.update()
 
-        #cursor
+        # Cursor
         mouse_pos = pygame.mouse.get_pos()
         CURSOR_RECT.center = mouse_pos
         screen.blit(CURSOR, CURSOR_RECT)
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                exit()
-            elif event.type == pygame.mouse.get_pressed():
-                print("clicked")
         pygame.display.update()
 
 def titleScreen():
@@ -61,29 +56,40 @@ def titleScreen():
     # font
     font = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
 
-    # title
+    # Title
     font1 = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
     TITLE = font1.render('Nom du jeu', 0, 'Black')
     TITLE_RECT = TITLE.get_rect(center=(WIDTH / 2, 100))
     screen.blit(TITLE, TITLE_RECT)
 
-    # button
+    # Button PLAY
     font2 = pygame.font.Font("assets/font/Pixeltype.ttf", 50)
     PLAY_BTN_LABEL = font1.render('PLAY', 0, 'Black')
     PLAY_BTN_RECT = PLAY_BTN_LABEL.get_rect(center=(WIDTH / 2, 300))
-
     PLAY_EVENT = screen.blit(PLAY_BTN_LABEL,PLAY_BTN_RECT)
 
-    screen.blit(PLAY_BTN_LABEL,PLAY_BTN_RECT)
+    # Button OPTIONS
+    OPT_BTN_LABEL = font1.render('OPTIONS', 0, 'Black')
+    OPT_BTN_RECT = OPT_BTN_LABEL.get_rect(center=(WIDTH / 2, 400))
+    screen.blit(OPT_BTN_LABEL,OPT_BTN_RECT)
 
-
+    # Button CREDITS
     CRED_BTN_LABEL = font1.render('CREDITS', 0, 'Black')
-    CRED_BTN_RECT = CRED_BTN_LABEL.get_rect(center=(WIDTH / 2, 400))
+    CRED_BTN_RECT = CRED_BTN_LABEL.get_rect(center=(WIDTH / 2, 500))
     screen.blit(CRED_BTN_LABEL,CRED_BTN_RECT)
 
+    # Button EXIT
     EXIT_BTN_LABEL = font1.render('EXIT', 0, 'Black')
-    EXIT_BTN_RECT = EXIT_BTN_LABEL.get_rect(center=(WIDTH / 2, 500))
-    screen.blit(EXIT_BTN_LABEL,EXIT_BTN_RECT)
+    EXIT_BTN_RECT = EXIT_BTN_LABEL.get_rect(center=(WIDTH / 2, 600))
+    EXIT_EVENT = screen.blit(EXIT_BTN_LABEL,EXIT_BTN_RECT)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONUP and event.button==1 and EXIT_EVENT.collidepoint(event.pos):
+            running = False
+            exit()
+        elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and PLAY_EVENT.collidepoint(event.pos):
+            print("PLAY CLICKED")
+
 
 if __name__ == "__main__":
     main()
