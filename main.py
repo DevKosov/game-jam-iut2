@@ -2,6 +2,7 @@ import pygame
 from sys import exit
 
 pygame.init()
+pygame.display.set_caption('GAME JAM 2022')
 
 WIDTH, HEIGHT = 1024, 768
 FPS = 60
@@ -11,7 +12,6 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 def main():
     running = True
     clock = pygame.time.Clock()
-    
 
     while running:
         clock.tick(FPS)
