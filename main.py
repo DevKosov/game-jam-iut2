@@ -38,7 +38,6 @@ def main():
         # Title screen
         titleScreen()
         player.draw(screen)
-        player.update()
 
         #cursor
         mouse_pos = pygame.mouse.get_pos()
@@ -51,6 +50,10 @@ def main():
                 exit()
             elif event.type == pygame.mouse.get_pressed():
                 print("clicked")
+
+            if event.type == pygame.KEYDOWN:
+                player.update()
+
         pygame.display.update()
 
 def titleScreen():
