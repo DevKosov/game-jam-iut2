@@ -103,8 +103,8 @@ def main():
             if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONUP and event.button==1 and EXIT_EVENT.collidepoint(event.pos):
                 running = False
                 exit()
-            elif event.type == pygame.KEYDOWN:
-                player.update(event)
+            #elif event.type == pygame.KEYDOWN:
+                #player.update(event)
             elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and PLAY_EVENT.collidepoint(event.pos):
                 MENU=0
                 PARTY=1

@@ -76,13 +76,13 @@ class Player(pygame.sprite.Sprite):
 			self.flipper()
 
 
-	def update(self, event):
-		self.player_input(event)
+	def update(self): # , event
+		#self.player_input(event)
 		self.animation_state()
 		self.move()
 		self.image.set_colorkey((0,0,0))
 
-	def move():
+	def move(self):
 		keys_pressed = pygame.key.get_pressed()
 		if keys_pressed[pygame.K_LEFT]:
 			self.rect.left = self.rect.left - 5
