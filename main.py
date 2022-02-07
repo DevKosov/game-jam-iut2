@@ -62,8 +62,9 @@ def main():
             credit.draw(screen)
 
         elif (PARTY==1):
-            party = viewParty.viewParty()
-            party.draw(screen)
+            # party = viewParty.viewParty()
+            # party.draw(screen)
+            screen.blit(BACKGROUND2,(-1024,-1024))
             player.update()
             player.draw(screen)
 
@@ -75,7 +76,7 @@ def main():
             if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.exit_event.collidepoint(event.pos):
                 running = False
                 exit()
-            if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 player.sprites().__getitem__(0).player_input(event)
             elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.play_event.collidepoint(event.pos):
                 MENU=0
@@ -87,21 +88,24 @@ def main():
                 PARTY=0
                 CREDITS=0
                 OPTIONS=1
-            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.cred_event.collidepoint(event.pos) and MENU==1:
-                MENU=0
-                PARTY=0
-                OPTIONS=0
-                CREDITS=1
-            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and option.back_event.collidepoint(event.pos):
-                OPTIONS=0
-                PARTY=0
-                CREDITS=0
-                MENU=1
-            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and credit.back_event_credit.collidepoint(event.pos):
-                CREDITS=0
-                OPTIONS=0
-                PARTY=0
-                MENU=1
+            elif event.type == pygame.MOUSEBUTTONUP and event.button==1 :
+                if menu.cred_event.collidepoint(event.pos) and MENU==1:
+                    MENU=0
+                    PARTY=0
+                    OPTIONS=0
+                    CREDITS=1
+            elif event.type == pygame.MOUSEBUTTONUP and event.button==1:
+                if  option.back_event.collidepoint(event.pos):
+                    OPTIONS=0
+                    PARTY=0
+                    CREDITS=0
+                    MENU=1
+            elif event.type == pygame.MOUSEBUTTONUP and event.button==1:
+                if credit.back_event_credit.collidepoint(event.pos):
+                    CREDITS=0
+                    OPTIONS=0
+                    PARTY=0
+                    MENU=1
 
         ################################################################################################################
         # CURSOR

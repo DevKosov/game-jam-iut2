@@ -48,6 +48,10 @@ class Player(pygame.sprite.Sprite):
 		self.test_sound = pygame.mixer.Sound('assets/audio/se/Bell3.ogg')
 		self.test_sound.set_volume(0.5)
 
+		self.bullet_sound = pygame.mixer.Sound('assets/audio/se/Gun1.ogg')
+		self.bullet_sound.set_volume(0.1)
+
+
 	def player_input(self, event):
 		if event.type == pygame.KEYUP:
 			self.index = 0
@@ -55,6 +59,11 @@ class Player(pygame.sprite.Sprite):
 			keys = event.key
 			if keys == pygame.K_SPACE:
 				self.test_sound.play()
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			if event.button == pygame.BUTTON_LEFT:
+				self.bullet_sound.play()
+
+
 
 
 
