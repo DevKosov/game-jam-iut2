@@ -1,5 +1,7 @@
 from cmath import rect
 import pygame
+import Player
+
 from sys import exit
 from pygame.locals import *
 
@@ -10,6 +12,9 @@ WIDTH, HEIGHT = 1024, 768
 FPS = 60
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+
+player = pygame.sprite.GroupSingle()
+player.add(Player.Player())
 
 def main():
     running = True
