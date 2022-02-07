@@ -67,7 +67,7 @@ def main():
             EXIT_BTN_LABEL = font2.render('EXIT', 0, 'Black')
             EXIT_BTN_RECT = EXIT_BTN_LABEL.get_rect(center=(WIDTH / 2, 600))
             EXIT_EVENT = screen.blit(EXIT_BTN_LABEL,EXIT_BTN_RECT)
-        
+
         elif (OPTIONS==1):
             # Title
             font1 = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
@@ -79,7 +79,7 @@ def main():
             BACK = font2.render('BACK TO MENU', 0, 'Black')
             BACK_RECT = BACK.get_rect(center=(WIDTH / 12, 30))
             BACK_EVENT = screen.blit(BACK, BACK_RECT)
-        
+
         elif (CREDITS==1):
             # Title
             font1 = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
@@ -98,7 +98,7 @@ def main():
         ################################################################################################################
         # EVENT LISTENER
         ################################################################################################################
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONUP and event.button==1 and EXIT_EVENT.collidepoint(event.pos):
                 running = False
@@ -139,4 +139,4 @@ def main():
         pygame.display.update()
 
 if __name__ == "__main__":
-    main()
+	main()

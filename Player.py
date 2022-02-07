@@ -6,7 +6,7 @@ class Player(pygame.sprite.Sprite):
 		super().__init__()
 
 		try:
-			self.sheet_image = pygame.image.load(os.path.join('assets/img/characters/', 'doux.png')).convert_alpha()
+			self.sheet_image = pygame.image.load('assets/img/characters/doux.png').convert_alpha()
 		except pygame.error as e:
 			print(f"Unable to load spritesheet image: player spritesheet ")
 			raise SystemExit(e)
@@ -17,14 +17,14 @@ class Player(pygame.sprite.Sprite):
 
 		BLACK = (0, 0, 0)
 
-		self.frame_0 =  self.sheet.get_image(0, 24, 24, 3, BLACK)
-		self.frame_1 =  self.sheet.get_image(1, 24, 24, 3, BLACK)
-		self.frame_2 =  self.sheet.get_image(2, 24, 24, 3, BLACK)
-		self.frame_3 =  self.sheet.get_image(3, 24, 24, 3, BLACK)
-		self.frame_4 = self.sheet.get_image(4, 24, 24, 3, BLACK)
-		self.frame_5 = self.sheet.get_image(5, 24, 24, 3, BLACK)
-		self.frame_6 = self.sheet.get_image(6, 24, 24, 3, BLACK)
-		self.frame_7 = self.sheet.get_image(7, 24, 24, 3, BLACK)
+		self.frame_0 =  self.sheet.get_image(1, 1, 24, 24, 3, BLACK)
+		self.frame_1 =  self.sheet.get_image(2,1, 24, 24, 3,BLACK)
+		self.frame_2 =  self.sheet.get_image(3,1, 24, 24, 3,BLACK)
+		self.frame_3 =  self.sheet.get_image(4,1, 24, 24, 3,BLACK)
+		self.frame_4 = self.sheet.get_image(5,1, 24, 24, 3,BLACK)
+		self.frame_5 = self.sheet.get_image(6,1, 24, 24, 3,BLACK)
+		self.frame_6 = self.sheet.get_image(7,1, 24, 24, 3,BLACK)
+		self.frame_7 = self.sheet.get_image(8,1, 24, 24, 3,BLACK)
 
 		self.index = 0;
 
@@ -74,10 +74,10 @@ class Player(pygame.sprite.Sprite):
 	def move():
 		keys_pressed = pygame.key.get_pressed()
 		if keys_pressed[pygame.K_LEFT]:
-				self.rect.left = self.rect.left - 5
-			if keys_pressed[pygame.K_RIGHT]:
-				self.rect.left = self.rect.left + 5
-			if keys_pressed[pygame.K_UP]:
-				self.rect.top = self.rect.top - 5
-			if keys_pressed[pygame.K_DOWN]:
-				self.rect.top = self.rect.top + 5
+			self.rect.left = self.rect.left - 5
+		if keys_pressed[pygame.K_RIGHT]:
+			self.rect.left = self.rect.left + 5
+		if keys_pressed[pygame.K_UP]:
+			self.rect.top = self.rect.top - 5
+		if keys_pressed[pygame.K_DOWN]:
+			self.rect.top = self.rect.top + 5
