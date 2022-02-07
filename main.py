@@ -10,7 +10,7 @@ pygame.display.set_caption('GAME JAM 2022')
 WIDTH, HEIGHT = 1024, 768
 FPS = 60
 
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 player = pygame.sprite.GroupSingle()
 player.add(Player.Player())
@@ -28,7 +28,8 @@ def main():
 
         # Title screen
         titleScreen()
-
+        player.draw(screen)
+        player.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -38,7 +39,7 @@ def main():
 def titleScreen():
 
     # background color of the window
-    WIN.fill('Yellow')
+    screen.fill('Yellow')
 
     # font
     font = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
@@ -46,7 +47,7 @@ def titleScreen():
     # title
     TITLE = font.render('Nom du jeu', 0, 'Black')
     TITLE_RECT = TITLE.get_rect(center=(WIDTH / 2, 50))
-    WIN.blit(TITLE, TITLE_RECT)
+    screen.blit(TITLE, TITLE_RECT)
 
     # button play
 
