@@ -11,7 +11,9 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 def main():
     running = True
     clock = pygame.time.Clock()
-    
+    pygame.mixer.music.load("assets/audio/bgm/Town1.ogg")
+    pygame.mixer.music.set_volume(0.05)
+    pygame.mixer.music.play(fade_ms=2000)
 
     while running:
         clock.tick(FPS)
@@ -21,6 +23,7 @@ def main():
                 running = False
                 exit()
         pygame.display.update()
+
 
 
 if __name__ == "__main__":
