@@ -41,43 +41,60 @@ class Player(pygame.sprite.Sprite):
 		if keys == pygame.K_SPACE:
 			self.jump_sound.play()
 			self.index += 1
-			if self.index == 7:
+			if self.index >= 7:
 				self.index = 0
 
 
 		
 
 	def animation_state(self):
+		#self.index = int(self.index)
 		if self.index == 0:
 			self.image = self.frame_0
-		if self.index == 1:
+		if self.index >= 1:
 			self.image = self.frame_1
-		if self.index == 2:
+		if self.index >= 2:
 			self.image = self.frame_2
-		if self.index == 3:
+		if self.index >= 3:
 			self.image = self.frame_3
-		if self.index == 4:
+		if self.index >= 4:
 			self.image = self.frame_4
-		if self.index == 5:
+		if self.index >= 5:
 			self.image = self.frame_5
-		if self.index == 6:
+		if self.index >= 6:
 			self.image = self.frame_6
-		if self.index == 7:
+		if self.index >= 7:
 			self.image = self.frame_7
 
 
-	def update(self, event):
-		self.player_input(event)
+	def update(self, event = None):
+		#self.player_input(event)
 		self.animation_state()
 		self.move()
 
-	def move():
+	def move(self):
 		keys_pressed = pygame.key.get_pressed()
 		if keys_pressed[pygame.K_LEFT]:
 			self.rect.left = self.rect.left - 5
+			self.index += 0.2
+			if self.index >= 7:
+				self.index = 0
 		if keys_pressed[pygame.K_RIGHT]:
 			self.rect.left = self.rect.left + 5
+			self.index += 0.2
+			if self.index >= 7:
+				self.index = 0
 		if keys_pressed[pygame.K_UP]:
 			self.rect.top = self.rect.top - 5
+			self.index += 0.2
+			if self.index >= 7:
+				self.index = 0
 		if keys_pressed[pygame.K_DOWN]:
 			self.rect.top = self.rect.top + 5
+			self.index += 0.2
+			if self.index >= 7:
+				self.index = 0
+		print(self.index)
+
+		
+		
