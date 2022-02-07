@@ -27,13 +27,13 @@ class Player(pygame.sprite.Sprite):
 		if keys[pygame.K_SPACE]:
 			self.jump_sound.play()
 		if keys[pygame.K_d]:
-    		self.rect.left = self.rect.left + 5
-    	if keys[pygame.K_q]:
-        	self.rect.left = self.rect.left - 5
-    	if keys[pygame.K_z]:
-        	self.rect.top = self.rect.top - 5
-    	if keys[pygame.K_s]:
-        	self.rect.top = self.rect.top + 5
+			self.rect.left = self.rect.left + 5
+		if keys[pygame.K_q]:
+			self.rect.left = self.rect.left - 5
+		if keys[pygame.K_z]:
+			self.rect.top = self.rect.top - 5
+		if keys[pygame.K_s]:
+			self.rect.top = self.rect.top + 5
 
 	def animation_state(self):
 		if self.rect.bottom < 300:
