@@ -39,12 +39,16 @@ def main():
         titleScreen()
 
         player.draw(screen)
-        player.update()
 
         # Cursor
         mouse_pos = pygame.mouse.get_pos()
         CURSOR_RECT.center = mouse_pos
         screen.blit(CURSOR, CURSOR_RECT)
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.KEYDOWN:
+                player.update()
 
         pygame.display.update()
 
