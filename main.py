@@ -49,6 +49,7 @@ def main():
 
             if event.type == pygame.KEYDOWN:
                 player.update()
+                
 
         pygame.display.update()
 

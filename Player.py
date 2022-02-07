@@ -26,6 +26,14 @@ class Player(pygame.sprite.Sprite):
 		keys = pygame.key.get_pressed()
 		if keys[pygame.K_SPACE]:
 			self.jump_sound.play()
+		if keys[pygame.K_d]:
+    		self.rect.left = self.rect.left + 5
+    	if keys[pygame.K_q]:
+        	self.rect.left = self.rect.left - 5
+    	if keys[pygame.K_z]:
+        	self.rect.top = self.rect.top - 5
+    	if keys[pygame.K_s]:
+        	self.rect.top = self.rect.top + 5
 
 	def animation_state(self):
 		if self.rect.bottom < 300:
@@ -38,3 +46,7 @@ class Player(pygame.sprite.Sprite):
 	def update(self):
 		self.player_input()
 		self.animation_state()
+
+	def move(self, y, deplacement):
+		if y:
+			self.rect.left = self.rect.left + deplacement
