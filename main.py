@@ -44,7 +44,6 @@ def titleScreen():
     WIN.blit(TITLE, TITLE_RECT)
 
     # button play
-    # tjr pas de btn play
 
 
 if __name__ == "__main__":
