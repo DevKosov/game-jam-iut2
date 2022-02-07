@@ -19,7 +19,7 @@ player.add(sprite.Player())
 
 
 BACKGROUND = (173, 239, 255)
-BACKGROUND2 = (255, 0, 0)
+BACKGROUND2 = pygame.image.load('assets/img/tests/backgroundTest2.png')
 
 def main():
     running = True
@@ -68,7 +68,7 @@ def main():
             EXIT_BTN_LABEL = font2.render('EXIT', 0, 'Black')
             EXIT_BTN_RECT = EXIT_BTN_LABEL.get_rect(center=(WIDTH / 2, 600))
             EXIT_EVENT = screen.blit(EXIT_BTN_LABEL,EXIT_BTN_RECT)
-        
+
         elif (OPTIONS==1):
             # Title
             font1 = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
@@ -80,7 +80,7 @@ def main():
             BACK = font2.render('BACK TO MENU', 0, 'Black')
             BACK_RECT = BACK.get_rect(center=(WIDTH / 12, 30))
             BACK_EVENT = screen.blit(BACK, BACK_RECT)
-        
+
         elif (CREDITS==1):
             # Title
             font1 = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
@@ -94,18 +94,18 @@ def main():
             BACK_EVENT = screen.blit(BACK, BACK_RECT)
 
         elif (PARTY==1):
-            screen.fill(BACKGROUND2)
+            screen.blit(BACKGROUND2,(-1024,-1024))
 
         ################################################################################################################
         # EVENT LISTENER
         ################################################################################################################
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONUP and event.button==1 and EXIT_EVENT.collidepoint(event.pos):
                 running = False
                 exit()
-            #elif event.type == pygame.KEYDOWN:
-                #player.update(event)
+            if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
+                player.sprites().__getitem__(0).player_input(event)
             elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and PLAY_EVENT.collidepoint(event.pos):
                 MENU=0
                 PARTY=1
@@ -124,7 +124,6 @@ def main():
                 PARTY=0
                 CREDITS=0
                 MENU=1
-
         player.update()
         player.draw(screen)
 
