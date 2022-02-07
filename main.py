@@ -46,21 +46,21 @@ def titleScreen():
     font1 = pygame.font.Font("assets/font/Pixeltype.ttf", 70)
     TITLE = font1.render('Nom du jeu', 0, 'Black')
     TITLE_RECT = TITLE.get_rect(center=(WIDTH / 2, 100))
-    WIN.blit(TITLE, TITLE_RECT)
+    screen.blit(TITLE, TITLE_RECT)
 
     # button
     font2 = pygame.font.Font("assets/font/Pixeltype.ttf", 50)
     PLAY_BTN_LABEL = font1.render('PLAY', 0, 'Black')
     PLAY_BTN_RECT = PLAY_BTN_LABEL.get_rect(center=(WIDTH / 2, 300))
-    WIN.blit(PLAY_BTN_LABEL,PLAY_BTN_RECT)
+    screen.blit(PLAY_BTN_LABEL,PLAY_BTN_RECT)
 
     CRED_BTN_LABEL = font1.render('CREDITS', 0, 'Black')
     CRED_BTN_RECT = CRED_BTN_LABEL.get_rect(center=(WIDTH / 2, 400))
-    WIN.blit(CRED_BTN_LABEL,CRED_BTN_RECT)
+    screen.blit(CRED_BTN_LABEL,CRED_BTN_RECT)
 
     EXIT_BTN_LABEL = font1.render('EXIT', 0, 'Black')
     EXIT_BTN_RECT = EXIT_BTN_LABEL.get_rect(center=(WIDTH / 2, 500))
-    WIN.blit(EXIT_BTN_LABEL,EXIT_BTN_RECT)
+    screen.blit(EXIT_BTN_LABEL,EXIT_BTN_RECT)
 
 if __name__ == "__main__":
     main()
