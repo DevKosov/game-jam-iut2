@@ -73,11 +73,11 @@ def main():
         ################################################################################################################
 
         for event in pygame.event.get():
+            if PARTY:
+                player.sprites().__getitem__(0).player_input(event)
             if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.exit_event.collidepoint(event.pos):
                 running = False
                 exit()
-            if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                player.sprites().__getitem__(0).player_input(event)
             elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.play_event.collidepoint(event.pos):
                 MENU=0
                 CREDITS=0

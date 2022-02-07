@@ -26,15 +26,18 @@ class Player(pygame.sprite.Sprite):
 		# self.player_walk = [player_image,player_image]
 
 		BLACK = (0, 0, 0)
+		WIDTH = 24
+		LENGH = 24
+		SCALE = 5
 
-		self.frame_0 =  self.sheet.get_image(1, 1, 24, 24, 3, BLACK)
-		self.frame_1 =  self.sheet.get_image(2,1, 24, 24, 3,BLACK)
-		self.frame_2 =  self.sheet.get_image(3,1, 24, 24, 3,BLACK)
-		self.frame_3 =  self.sheet.get_image(4,1, 24, 24, 3,BLACK)
-		self.frame_4 = self.sheet.get_image(5,1, 24, 24, 3,BLACK)
-		self.frame_5 = self.sheet.get_image(6,1, 24, 24, 3,BLACK)
-		self.frame_6 = self.sheet.get_image(7,1, 24, 24, 3,BLACK)
-		self.frame_7 = self.sheet.get_image(8,1, 24, 24, 3,BLACK)
+		self.frame_0 =  self.sheet.get_image(1, 1, WIDTH, LENGH, SCALE, BLACK)
+		self.frame_1 =  self.sheet.get_image(2,1, WIDTH, LENGH, SCALE,BLACK)
+		self.frame_2 =  self.sheet.get_image(2,1, WIDTH, LENGH, SCALE,BLACK)
+		self.frame_3 =  self.sheet.get_image(4,1, WIDTH, LENGH, SCALE,BLACK)
+		self.frame_4 = self.sheet.get_image(5,1, WIDTH, LENGH, SCALE,BLACK)
+		self.frame_5 = self.sheet.get_image(6,1, WIDTH, LENGH, SCALE,BLACK)
+		self.frame_6 = self.sheet.get_image(7,1, WIDTH, LENGH, SCALE,BLACK)
+		self.frame_7 = self.sheet.get_image(8,1, WIDTH, LENGH, SCALE,BLACK)
 
 		self.rotation = 1 # 1 regarde à droite // 2 regarde à gauche
 
@@ -50,7 +53,6 @@ class Player(pygame.sprite.Sprite):
 
 		self.bullet_sound = pygame.mixer.Sound('assets/audio/se/Gun1.ogg')
 		self.bullet_sound.set_volume(0.1)
-
 
 	def player_input(self, event):
 		if event.type == pygame.KEYUP:
@@ -101,30 +103,34 @@ class Player(pygame.sprite.Sprite):
 		self.image.set_colorkey((0,0,0))
 
 	def move(self):
+		SPEED_ANIMATION = 0.2
+		MAX_INDEX = 8
+		DEPLACEMENT = 5
+
 		keys_pressed = pygame.key.get_pressed()
 		if keys_pressed[pygame.K_LEFT] or keys_pressed[pygame.K_q]:
-			self.rect.left = self.rect.left - 5
-			self.index += 0.2
-			if self.index >= 7:
+			self.rect.left = self.rect.left - DEPLACEMENT
+			self.index += SPEED_ANIMATION
+			if self.index >= MAX_INDEX:
 				self.index = 0
 			if self.rotation == 1:
 				self.rotation = 2
 		if keys_pressed[pygame.K_RIGHT] or keys_pressed[pygame.K_d]:
-			self.rect.left = self.rect.left + 5
-			self.index += 0.2
-			if self.index >= 7:
+			self.rect.left = self.rect.left + DEPLACEMENT
+			self.index += SPEED_ANIMATION
+			if self.index >= MAX_INDEX:
 				self.index = 0
 			if self.rotation == 2:
 				self.rotation = 1
 		if keys_pressed[pygame.K_UP] or keys_pressed[pygame.K_z]:
-			self.rect.top = self.rect.top - 5
-			self.index += 0.2
-			if self.index >= 7:
+			self.rect.top = self.rect.top - DEPLACEMENT
+			self.index += SPEED_ANIMATION
+			if self.index >= MAX_INDEX:
 				self.index = 0
 		if keys_pressed[pygame.K_DOWN] or keys_pressed[pygame.K_s]:
-			self.rect.top = self.rect.top + 5
-			self.index += 0.2
-			if self.index >= 7:
+			self.rect.top = self.rect.top + DEPLACEMENT
+			self.index += SPEED_ANIMATION
+			if self.index >= MAX_INDEX:
 				self.index = 0
 
 
