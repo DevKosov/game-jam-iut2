@@ -1,6 +1,16 @@
 import pygame, os
 import spritesheet
 
+
+
+all_sprites = pygame.sprite.LayeredUpdates()
+players = pygame.sprite.Group()
+
+
+
+
+
+
 class Player(pygame.sprite.Sprite):
 	def __init__(self):
 		super().__init__()
@@ -34,6 +44,10 @@ class Player(pygame.sprite.Sprite):
 
 		self.rect = self.image.get_rect(midbottom = (80,300))
 		self.gravity = 0
+
+		self._layer = 1
+
+		pygame.sprite.Sprite.__init__(self, all_sprites, players)
 
 		self.jump_sound = pygame.mixer.Sound('assets/audio/se/Bell3.ogg')
 		self.jump_sound.set_volume(0.5)
@@ -84,28 +98,26 @@ class Player(pygame.sprite.Sprite):
 
 	def move(self):
 		keys_pressed = pygame.key.get_pressed()
-		if keys_pressed[pygame.K_LEFT]:
+		if keys_pressed[pygame.K_LEFT] or keys_pressed[pygame.K_q]:
 			self.rect.left = self.rect.left - 5
 			self.index += 0.2
 			if self.index >= 7:
 				self.index = 0
-
 			if self.rotation == 1:
 				self.rotation = 2
-		if keys_pressed[pygame.K_RIGHT]:
+		if keys_pressed[pygame.K_RIGHT] or keys_pressed[pygame.K_d]:
 			self.rect.left = self.rect.left + 5
 			self.index += 0.2
 			if self.index >= 7:
 				self.index = 0
 			if self.rotation == 2:
 				self.rotation = 1
-		if keys_pressed[pygame.K_UP]:
+		if keys_pressed[pygame.K_UP] or keys_pressed[pygame.K_z]:
 			self.rect.top = self.rect.top - 5
 			self.index += 0.2
 			if self.index >= 7:
 				self.index = 0
-			self.rotation(self.rotation, 0)
-		if keys_pressed[pygame.K_DOWN]:
+		if keys_pressed[pygame.K_DOWN] or keys_pressed[pygame.K_s]:
 			self.rect.top = self.rect.top + 5
 			self.index += 0.2
 			if self.index >= 7:

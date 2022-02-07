@@ -1,6 +1,6 @@
 from cmath import rect
 import pygame
-import Player
+import sprite
 import os
 
 from sys import exit
@@ -15,7 +15,8 @@ FPS = 60
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 player = pygame.sprite.GroupSingle()
-player.add(Player.Player())
+player.add(sprite.Player())
+
 
 BACKGROUND = (173, 239, 255)
 BACKGROUND2 = (255, 0, 0)
