@@ -34,7 +34,12 @@ def main():
 
     while running:
         clock.tick(FPS)
-        
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.KEYDOWN:
+                player.update(event)
+
         # Title screen
         titleScreen()
 
@@ -45,10 +50,8 @@ def main():
         CURSOR_RECT.center = mouse_pos
         screen.blit(CURSOR, CURSOR_RECT)
 
-        for event in pygame.event.get():
-
-            if event.type == pygame.KEYDOWN:
-                player.update()
+        
+                
 
         pygame.display.update()
 
