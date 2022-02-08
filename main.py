@@ -154,6 +154,7 @@ class Game:
                 if column == 'x':
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomSandGrassT', False)
 
+
                 #Player pog
                 if column == 'P':
                     self.player = Player(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT,self.gameplay_ZQSD)
