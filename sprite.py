@@ -331,16 +331,20 @@ class Crab(pygame.sprite.Sprite):
 	def update(self):
 		self.movement()
 		self.animate()
-		self.shooted()
 		self.death()
 
 
-	def shooted(self):
-		mouse_pos = pygame.mouse.get_pos()
-		mouse_pressed = pygame.mouse.get_pressed()
-		if mouse_pressed[0]:
-			if self.rect.collidepoint(mouse_pos) == True:
-				self.hp += -20
+	def damaged(self,damaged):
+		# mouse_pos = pygame.mouse.get_pos()
+		# mouse_pressed = pygame.mouse.get_pressed()
+		# if mouse_pressed[0]:
+		# 	if self.rect.collidepoint(mouse_pos) == True:
+		# 		self.hp += -20
+
+		# hit = pygame.sprite.spritecollide(self, self.game.bullets, False)
+		#
+		# if hit:
+			self.hp += -damaged
 
 	def death(self):
 		if self.hp <= 0:
@@ -414,6 +418,21 @@ class Bullet(pygame.sprite.Sprite):
 		while a < 0.0:
 			a += pi * 2
 		return a
+
+	def collisition(self):
+		# hit = pygame.sprite.spritecollide(self, self.game.enemies, False)
+		click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Damage1.ogg'))
+		click_sound.set_volume(0.05)
+		for enemies in self.game.enemies:
+			if pygame.sprite.collide_mask(self, enemies):
+				enemies.damaged(50)
+				click_sound.play()
+				self.kill()
+
+
+
+	def update(self):
+		self.collisition()
 
 		
 

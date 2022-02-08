@@ -65,7 +65,7 @@ tilemap = [
 bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
 test_sound = pygame.mixer.Sound('assets/audio/se/Applause2.ogg')
 spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Up1.ogg'))
-click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Load2.ogg'))
+click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Decision5.ogg'))
 
 class Game:
     def __init__(self):
@@ -182,7 +182,6 @@ class Game:
                     x, y = pygame.mouse.get_pos()
                     Bullet(self, self.player.x, self.player.y, x, y, 5)
                 if event.button == pygame.BUTTON_RIGHT:
-                    print("f")
                     spawn_sound.play()
                     Crab(self, self.player.x + (random.choice((-1,1))*random.randint(150,250)), self.player.y + (random.choice((-1,1))*random.randint(150,250)), 100,2)
             elif event.type == pygame.KEYDOWN:
