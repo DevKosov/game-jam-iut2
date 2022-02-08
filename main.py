@@ -167,9 +167,27 @@ class Game:
                 if event.button == pygame.BUTTON_RIGHT:
                     spawn_sound.play()
                     Crab(self, self.player.x + (random.choice((-1,1))*random.randint(150,250)), self.player.y + (random.choice((-1,1))*random.randint(150,250)), 100,2)
-            if event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     test_sound.play()
+
+                if event.key == pygame.K_ESCAPE:
+                    self.playing = False
+                    self.menu = True
+                elif event.key == pygame.K_i:
+                    self.tips = not self.tips
+                    if self.tips:
+                        self.tips1.set_alpha(150)
+                        self.tips2.set_alpha(150)
+                        self.tips3.set_alpha(150)
+                    else:
+                        self.tips1.set_alpha(0)
+                        self.tips2.set_alpha(0)
+                        self.tips3.set_alpha(0)
+                elif event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
+                    self.playing = not self.playing
+                    self.options = not self.options
+                    self.back_to_game = True
 
     def update(self):
         #game llop events
@@ -177,62 +195,48 @@ class Game:
 
     def draw(self):
         #game loop draw
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+
+        
+        self.tips1 = font.render("Press 'esc' to quit party", True, BLACK)
+        self.tips1.set_alpha(150)
+        self.tips1_rect = self.tips1.get_rect(x=self.screen.get_width()/2-self.tips1.get_width()/2, y=100)
+
+        self.tips2 = font.render("Press 'ctrl' to open options", True, BLACK)
+        self.tips2.set_alpha(150)
+        self.tips2_rect = self.tips2.get_rect(x=self.screen.get_width()/2-self.tips2.get_width()/2, y=130)
+
+        self.tips3 = font.render("Press 'i' to toggle tips", True, BLACK)
+        self.tips3.set_alpha(150)
+        self.tips3_rect = self.tips3.get_rect(x=self.screen.get_width()/2-self.tips3.get_width()/2, y=160)
+
+        self.tips = True
+
+
+
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
         self.clock.tick(FPS)
+        self.screen.blit(self.tips1,self.tips1_rect)
+        self.screen.blit(self.tips2,self.tips2_rect)
+        self.screen.blit(self.tips3,self.tips3_rect)
         self.curseur()
         pygame.display.update()
 
     def main(self):
         self.playing = True
 
-        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+        
 
-        tips1 = font.render("Press 'esc' to quit party", True, BLACK)
-        tips1.set_alpha(150)
-        tips1_rect = tips1.get_rect(x=self.screen.get_width()/2-tips1.get_width()/2, y=100)
-
-        tips2 = font.render("Press 'ctrl' to open options", True, BLACK)
-        tips2.set_alpha(150)
-        tips2_rect = tips2.get_rect(x=self.screen.get_width()/2-tips2.get_width()/2, y=130)
-
-        tips3 = font.render("Press 'i' to toggle tips", True, BLACK)
-        tips3.set_alpha(150)
-        tips3_rect = tips3.get_rect(x=self.screen.get_width()/2-tips3.get_width()/2, y=160)
-
-        tips = True
+        
 
         while self.playing:
             self.events()
             self.update()
             self.draw()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.playing = False
-                    self.running = False
-                    exit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        self.playing = False
-                        self.menu = True
-                    elif event.key == pygame.K_i:
-                        tips = not tips
-                        if tips:
-                            tips1.set_alpha(150)
-                            tips2.set_alpha(150)
-                            tips3.set_alpha(150)
-                        else:
-                            tips1.set_alpha(0)
-                            tips2.set_alpha(0)
-                            tips3.set_alpha(0)
-                    elif event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
-                        self.playing = not self.playing
-                        self.options = not self.options
-                        self.back_to_game = True
-
-            self.screen.blit(tips1,tips1_rect)
-            self.screen.blit(tips2,tips2_rect)
-            self.screen.blit(tips3,tips3_rect)
+            
+            
+            
             pygame.display.update()
 
     def game_over(self):
