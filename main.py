@@ -17,6 +17,7 @@ FPS = 60
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 BLUE = (150, 252, 255)
+RED = (255, 0, 0)
 tilemap = [
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
@@ -179,6 +180,8 @@ class Game:
         # self.night_effect.set_alpha(115)
         # self.night_effect.fill((30,0,0))
         self.day_time = True
+        self.farm_time = False
+        self.night_time = False
         self.createTileMap()
 
     def events(self):
@@ -225,6 +228,7 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
                     self.day_time = False
+                    self.farm_time = True
 
     def update(self):
         #game llop events
@@ -270,37 +274,84 @@ class Game:
         self.curseur()
         
         pygame.display.update()
+    
+    def draw_farm(self):
+
+        title = self.font.render("It's farmer time", True, WHITE)
+        title_rect = title.get_rect(x=self.screen.get_width()/2-title.get_width()/2, y=100)
+
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+        subtitle = font.render("Improve your weapon damage", True, WHITE)
+        subtitle_rect = subtitle.get_rect(x=self.screen.get_width()/2-subtitle.get_width()/2, y=150)
+
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
+        label_nb_ress1 = font.render("Number of Potat : 10", True, WHITE) # à changer une fois les ressources crées
+        label_nb_ress1_rect = subtitle.get_rect(x=self.screen.get_width()/3-label_nb_ress1.get_width()/2, y=230)
+        label_nb_ress2 = font.render("Number of Corn : 7", True, WHITE) # à changer une fois les ressources crées
+        label_nb_ress2_rect = subtitle.get_rect(x=350+self.screen.get_width()/3-label_nb_ress2.get_width()/2, y=230)
+
+        res_btn1 = Button(80, 500, 120, 50, BLACK, BLUE, '10 Potat', 30)
+        res_btn2 = Button(300, 500, 120, 50, BLACK, BLUE, '10 Corn', 30)
+        res_btn3 = Button(520, 500, 120, 50, BLACK, BLUE, '10 Potat', 30)
+        res_btn4 = Button(740, 500, 120, 50, BLACK, BLUE, '10 Corn', 30)
+
+        buy_btn1 = Button(200, 500, 80, 50, BLACK, WHITE, 'Buy', 30)
+        buy_btn2 = Button(420, 500, 80, 50, BLACK, WHITE, 'Buy', 30)
+        buy_btn3 = Button(640, 500, 80, 50, BLACK, WHITE, 'Buy', 30)
+        buy_btn4 = Button(860, 500, 80, 50, BLACK, WHITE, 'Buy', 30)
+
+
+        self.screen.fill(BLACK)
+        self.clock.tick(FPS)
+        self.screen.blit(title,title_rect)
+        self.screen.blit(subtitle,subtitle_rect)
+        self.screen.blit(label_nb_ress1,label_nb_ress1_rect)
+        self.screen.blit(label_nb_ress2,label_nb_ress2_rect)
+        pygame.draw.rect(self.screen, RED, pygame.Rect(80, 300, 200, 200))
+        self.screen.blit(res_btn1.image,res_btn1.rect)
+        self.screen.blit(buy_btn1.image,buy_btn1.rect)
+        pygame.draw.rect(self.screen, RED, pygame.Rect(300, 300, 200, 200))
+        self.screen.blit(res_btn2.image,res_btn2.rect)
+        self.screen.blit(buy_btn2.image,buy_btn2.rect)
+        pygame.draw.rect(self.screen, RED, pygame.Rect(520, 300, 200, 200))
+        self.screen.blit(res_btn3.image,res_btn3.rect)
+        self.screen.blit(buy_btn3.image,buy_btn3.rect)
+        pygame.draw.rect(self.screen, RED, pygame.Rect(740, 300, 200, 200))
+        self.screen.blit(res_btn4.image,res_btn4.rect)
+        self.screen.blit(buy_btn4.image,buy_btn4.rect)
+        self.curseur()
+
+        pygame.display.update()
+
+    def events_farm(self):
+        #game loop events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.playing = False
+                self.running = False
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == pygame.BUTTON_LEFT:
+                    self.farm_time = False
+                    self.night_time = True
 
     def main(self):
         self.playing = True
 
-
-
-        if self.music_played==True:
-            pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town3.ogg'))
-            pygame.mixer.music.set_volume(0.05)
-            pygame.mixer.music.play(fade_ms=2000)
-        else:
-            pygame.mixer.music.pause()
-
         while self.playing:
-<<<<<<< HEAD
-            self.draw()    
-            self.events() 
-            self.update()
-            self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
-            if self.timer_value==0:
-                d
-=======
             if self.day_time:
                 self.draw_day()
                 self.events_day()
-            else:
+            elif self.farm_time:
+                self.draw_farm()
+                self.events_farm()
+            elif self.night_time:
                 self.draw()
                 self.events() 
                 self.update()
                 self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
->>>>>>> 97cdd7fc2644fb87e0d198649bf9b1b6cf3cbfa6
+                if self.timer_value==0:
+                    self.day_time=True
         pygame.display.update()
 
     def game_over(self):
