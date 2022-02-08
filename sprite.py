@@ -215,25 +215,27 @@ class Block(pygame.sprite.Sprite):
 		self.block_type = block_type
 
 		if self.block_type == 'sand':
+			self.image = self.game.terrain_spritesheet.get_image(2, 3, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'grass':
 			self.image = self.game.terrain_spritesheet.get_image(1, 3, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'water':
 			self.image = self.game.terrain_spritesheet.get_image(3, 3, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'topWater':
-			self.image = self.game.terrain_spritesheet.get_image(4, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(2, 2, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'topLeftWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(6, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(7, 2, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'topRightWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(5, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(6, 2, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'bottomWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(2, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(4, 2, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'bottomLeftSand':
-			self.image = self.game.terrain_spritesheet.get_image(7, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(8, 2, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'bottomRightSand':
-			self.image = self.game.terrain_spritesheet.get_image(8, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(5, 2, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'rightWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(3, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(1, 2, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'leftWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(1, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(3, 2, WIDTH, HEIGHT, SCALE, BLACK)
 
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
