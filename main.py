@@ -182,6 +182,7 @@ class Game:
         self.createTileMap()
 
     def events(self):
+        self.back_to_game = False
         #game loop events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -271,6 +272,8 @@ class Game:
             self.events() 
             self.update()
             self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
+            if self.timer_value==0:
+                d
         pygame.display.update()
 
     def game_over(self):
