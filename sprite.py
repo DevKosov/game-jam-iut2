@@ -56,7 +56,7 @@ class Player(pygame.sprite.Sprite):
 		self.y_change  = 0
 
 	def movement(self):
-		PLAYER_SPEED = 20
+		PLAYER_SPEED = 5
 		
 		keys = pygame.key.get_pressed()
 		if keys[pygame.K_LEFT]:
