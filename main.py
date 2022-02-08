@@ -1,585 +1,562 @@
-# from tkinter import Y
-from turtle import width
-import pygame, os, math
-#import spritesheet
-import sprite
-
-
-class SpriteSheet():
-	def __init__(self, image):
-		self.sheet = image	
-
-	def get_image(self, frame, line, width, height, scale, colour):
-		image = pygame.Surface((width, height)).convert_alpha()
-		image.blit(self.sheet, (0, 0), (((frame-1) * width), (line-1)*height, width, height))
-		image = pygame.transform.scale(image, (width * scale, height * scale))
-		image.set_colorkey(colour)
-
-		return image
-
-class Player(pygame.sprite.Sprite):
-	def __init__(self, game, x, y, gameplay):
-		BLACK = (0,0,0)
-		WIDTH = 24
-		HEIGHT = 24
-
-
-		self.game = game
-		self._layer = 2
-		self.groups = self.game.all_sprites
-		pygame.sprite.Sprite.__init__(self, self.groups)
-
-		self.x = x
-		self.y = y
-		self.width = WIDTH
-		self.height = HEIGHT
-
-		self.current_weapon = "gun"
-
-		self.x_change = 0
-		self.y_change = 0
-
-		self.facing = 'right'
-		self.animation_loop = 1
-		
-		self.image = self.game.character_spritesheet.get_image(1, 1, self.width, self.height, 3, BLACK)
-
-		self.rect = self.image.get_rect()
-		self.rect.x = self.x
-		self.rect.y = self.y
-
-		self.player_gameplay_ZQSD = gameplay
-
-	def update(self):
-		self.movement()
-		self.animate()
-
-		self.rect.x += self.x_change
-		self.collision('x')
-		self.rect.y += self.y_change
-		self.collision('y')
-
-		self.x_change = 0
-		self.y_change  = 0
-	def movement(self):
-		PLAYER_SPEED = 5
-		
-		if self.player_gameplay_ZQSD==False:
-			keys = pygame.key.get_pressed()
-			if keys[pygame.K_LEFT]:
-				for sprite in self.game.all_sprites:
-						sprite.rect.x += PLAYER_SPEED
-				self.x_change -= PLAYER_SPEED
-				self.facing = 'left'
-			if keys[pygame.K_RIGHT]:
-				for sprite in self.game.all_sprites:
-						sprite.rect.x -= PLAYER_SPEED
-				self.x_change += PLAYER_SPEED
-				self.facing = 'right'
-			if keys[pygame.K_UP]:
-				for sprite in self.game.all_sprites:
-						sprite.rect.y += PLAYER_SPEED
-				self.y_change -= PLAYER_SPEED
-				self.facing = 'up'
-			if keys[pygame.K_DOWN]:
-				for sprite in self.game.all_sprites:
-						sprite.rect.y -= PLAYER_SPEED
-				self.y_change += PLAYER_SPEED
-				self.facing = 'down'
-		else:
-			keys = pygame.key.get_pressed()
-			if keys[pygame.K_q]:
-				for sprite in self.game.all_sprites:
-						sprite.rect.x += PLAYER_SPEED
-				self.x_change -= PLAYER_SPEED
-				self.facing = 'left'
-			if keys[pygame.K_d]:
-				for sprite in self.game.all_sprites:
-						sprite.rect.x -= PLAYER_SPEED
-				self.x_change += PLAYER_SPEED
-				self.facing = 'right'
-			if keys[pygame.K_z]:
-				for sprite in self.game.all_sprites:
-						sprite.rect.y += PLAYER_SPEED
-				self.y_change -= PLAYER_SPEED
-				self.facing = 'up'
-			if keys[pygame.K_s]:
-				for sprite in self.game.all_sprites:
-						sprite.rect.y -= PLAYER_SPEED
-				self.y_change += PLAYER_SPEED
-				self.facing = 'down'
-
-	def animate(self):
-		BLACK = (0, 0, 0)
-		SCALE = 3
-
-		image = pygame.transform.flip(self.game.character_spritesheet.get_image(1, 1, self.width, self.height, SCALE, BLACK), 1, 0)
-		image.set_colorkey(BLACK)
-		image1 = pygame.transform.flip(self.game.character_spritesheet.get_image(2, 1, self.width, self.height, SCALE, BLACK), 1, 0)
-		image1.set_colorkey(BLACK)
-		image2 = pygame.transform.flip(self.game.character_spritesheet.get_image(3, 1, self.width, self.height, SCALE, BLACK), 1, 0)
-		image2.set_colorkey(BLACK)
-		left_animations = [image,
-							image1,
-							image2]
-
-		right_animations = [self.game.character_spritesheet.get_image(1, 1, self.width, self.height, SCALE, BLACK),
-						   self.game.character_spritesheet.get_image(2, 1, self.width, self.height, SCALE, BLACK),
-						   self.game.character_spritesheet.get_image(3, 1, self.width, self.height, SCALE, BLACK)]
-
-		if self.facing == 'left':
-			if self.x_change == 0:
-				pygame.transform.flip(self.game.character_spritesheet.get_image(1, 1, self.width, self.height, 1, BLACK), 1, 0)
-			else :
-				self.image = left_animations[math.floor(self.animation_loop)]
-				self.animation_loop += 0.1
-				if self.animation_loop >= 3:
-					self.animation_loop = 0
-
-		if self.facing == 'right':
-			if self.x_change == 0:
-				self.game.character_spritesheet.get_image(1, 1, self.width, self.height, SCALE, BLACK)
-			else :
-				self.image = right_animations[math.floor(self.animation_loop)]
-				self.animation_loop += 0.1
-				if self.animation_loop >= 3:
-					self.animation_loop = 0
-
-		if self.facing == 'up':
-			if self.y_change == 0:
-				self.game.character_spritesheet.get_image(1, 1, self.width, self.height, SCALE, BLACK)
-			else :
-				self.image = right_animations[math.floor(self.animation_loop)]
-				self.animation_loop += 0.1
-				if self.animation_loop >= 3:
-					self.animation_loop = 0
-
-		if self.facing == 'down':
-			if self.y_change == 0:
-				pygame.transform.flip(self.game.character_spritesheet.get_image(1, 1, self.width, self.height, 1, BLACK), 1, 0)
-			else :
-				self.image = left_animations[math.floor(self.animation_loop)]
-				self.animation_loop += 0.1
-				if self.animation_loop >= 3:
-					self.animation_loop = 0
-					
-	def switch_weapon(self,event):
-		if event.button == 4:
-			self.game.switch_weapon_sound.play()
-			self.current_weapon = "knife"
-		if event.button == 5:
-			self.game.switch_weapon_sound.play()
-			self.current_weapon = "gun"
-
-	def attacks(self):
-		if (self.current_weapon == "gun"):
-			self.game.bullet_sound.play()
-			x, y = pygame.mouse.get_pos()
-			Bullet(self.game, self.rect.centerx, self.rect.centery, x, y, 5)
-		# else:
-
-	def collision(self, direction):
-		PLAYER_SPEED = 5
-
-
-		if direction == 'x':
-			hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
-			if hit:
-				if self.x_change > 0:
-					self.rect.x = hit[0].rect.left - self.rect.width
-					for sprite in self.game.all_sprites:
-						sprite.rect.x += PLAYER_SPEED
-				if self.x_change < 0:
-					self.rect.x = hit[0].rect.right
-					for sprite in self.game.all_sprites:
-						sprite.rect.x -= PLAYER_SPEED
-
-		if direction == 'y':
-			hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
-			if hit:
-				if self.y_change > 0:
-					self.rect.y = hit[0].rect.top - self.rect.height
-					for sprite in self.game.all_sprites:
-						sprite.rect.y += PLAYER_SPEED
-				if self.y_change < 0:
-					self.rect.y = hit[0].rect.bottom
-					for sprite in self.game.all_sprites:
-						sprite.rect.y -= PLAYER_SPEED
-
-class Block(pygame.sprite.Sprite):
-	def __init__(self, game, x, y, block_type, colision):
-		BLACK = (0,0,0)
-		WIDTH = 64
-		HEIGHT = 64
-		SCALE = 1
-		self.colision = colision
-		self.game = game
-		self._layer = 1
-		if colision:
-			self.groups = self.game.all_sprites, self.game.blocks_collid
-			pygame.sprite.Sprite.__init__(self, self.groups)
-		else:
-			self.groups = self.game.all_sprites, self.game.blocks_no_collid
-			pygame.sprite.Sprite.__init__(self, self.groups)
-		self.x = x
-		self.y = y
-		self.width = 64
-		self.height = 64
-		
-
-		self.block_type = block_type
-
-	# basic textures
-		if self.block_type == 'sand':
-			self.image = self.game.terrain_spritesheet.get_image(2, 3, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'grass':
-			self.image = self.game.terrain_spritesheet.get_image(1, 3, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'water':
-			self.image = self.game.terrain_spritesheet.get_image(3, 3, WIDTH, HEIGHT, SCALE, BLACK)
-		
-		#map border textures
-		if self.block_type == 'topWater':
-			self.image = self.game.terrain_spritesheet.get_image(2, 2, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topLeftWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(7, 2, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topRightWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(6, 2, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'bottomWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(4, 2, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'bottomLeftSand':
-			self.image = self.game.terrain_spritesheet.get_image(8, 2, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'bottomRightSand':
-			self.image = self.game.terrain_spritesheet.get_image(5, 2, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'rightWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(1, 2, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'leftWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(3, 2, WIDTH, HEIGHT, SCALE, BLACK)
-
-		#Sand + Grass Transition
-		if self.block_type == 'topLeftSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(6, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topRightSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(5, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(4, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'leftSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(1, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'rightSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(3, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'bottomRightSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(8, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'bottomleftSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(7, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'bottomSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(2, 1, WIDTH, HEIGHT, SCALE, BLACK)
-
-		#Fences
-		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(4, 4, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topRightFence':
-			self.image = self.game.terrain_spritesheet.get_image(5, 4, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topFence':
-			self.image = self.game.terrain_spritesheet.get_image(8, 4, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'sideFence':
-			self.image = self.game.terrain_spritesheet.get_image(1, 4, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'bottomLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(7, 4, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'bottomRightFence':
-			self.image = self.game.terrain_spritesheet.get_image(6, 4, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topStopFence':
-			self.image = self.game.terrain_spritesheet.get_image(3, 4, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'bottomStopFence':
-			self.image = self.game.terrain_spritesheet.get_image(2, 4, WIDTH, HEIGHT, SCALE, BLACK)
-
-		self.rect = self.image.get_rect()
-		self.rect.x = self.x
-		self.rect.y = self.y
-
-
-class Button:
-	def __init__(self, x, y, width, height, fg, bg, content, fontsize):
-		self.font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), fontsize)
-		self.content = content
-
-		self.x = x
-		self.y = y
-		self.width = width
-		self.height = height
-
-		self.bg = bg
-		self.fg = fg
-
-		self.image = pygame.Surface((self.width, self.height))
-		self.image.fill(self.bg)
-		self.rect = self.image.get_rect()
-
-		self.rect.x = self.x
-		self.rect.y = self.y
-
-		self.text = self.font.render(self.content, True, self.fg)
-		self.text_rect = self.text.get_rect(center=(self.width//2, self.height//2))
-		self.image.blit(self.text, self.text_rect)
-
-	def is_pressed(self, pos, pressed):
-		if self.rect.collidepoint(pos):
-			if pressed[0]:
-				return True
-			return False
-		return False
-
-class Crab(pygame.sprite.Sprite):
-	def __init__(self, game, x, y, hp,speed):
-		BLACK = (0,0,0)
-		WIDTH = 100
-		HEIGHT = 79
-		SCALE = 0.7
-
-		self._layer = 3
-		self.game = game
-		self.animation_loop = 0
-		self.speed = speed
-
-		self.groups = self.game.all_sprites, self.game.enemies
-		pygame.sprite.Sprite.__init__(self, self.groups)
-
-		self.x = x
-		self.y = y
-
-		#Image variable
-		self.width = WIDTH
-		self.height = HEIGHT
-		self.scale = SCALE
-		self.black = BLACK
-
-		self.hp = hp
-
-
-
-		self.image = self.game.crab_spritesheet.get_image(1, 1, self.width, self.height, self.scale, BLACK)
-
-		self.rect = self.image.get_rect()
-		self.rect.x = self.x
-		self.rect.y = self.y
-
-	def update(self):
-		self.movement()
-		self.animate()
-		self.death()
-
-
-	def damaged(self,damaged):
-		# mouse_pos = pygame.mouse.get_pos()
-		# mouse_pressed = pygame.mouse.get_pressed()
-		# if mouse_pressed[0]:
-		# 	if self.rect.collidepoint(mouse_pos) == True:
-		# 		self.hp += -20
-
-		# hit = pygame.sprite.spritecollide(self, self.game.bullets, False)
-		#
-		# if hit:
-			self.hp += -damaged
-
-	def death(self):
-		if self.hp <= 0:
-			self.kill()
-
-	def movement(self):
-		if self.game.player.x > self.rect.x:
-			self.rect.x += self.speed
-		if self.game.player.x < self.rect.x:
-			self.rect.x += -self.speed
-		if self.game.player.y > self.rect.y:
-			self.rect.y += self.speed
-		if self.game.player.y < self.rect.y:
-			self.rect.y += -self.speed
-
-
-	def animate(self):
-
-		VITESSE_ANIMATION = 0.1
-
-		image = pygame.transform.flip(self.game.crab_spritesheet.get_image(1, 1, self.width, self.height, self.scale, self.black ), 1, 0)
-		image.set_colorkey(self.black )
-		image1 = pygame.transform.flip(self.game.crab_spritesheet.get_image(2, 1, self.width, self.height, self.scale, self.black ), 1, 0)
-		image1.set_colorkey(self.black )
-		image2 = pygame.transform.flip(self.game.crab_spritesheet.get_image(3, 1, self.width, self.height, self.scale, self.black ), 1, 0)
-		image2.set_colorkey(self.black )
-
-		self.animation_loop += VITESSE_ANIMATION
-
-		if self.animation_loop < 1:
-			self.image = image
-		if self.animation_loop < 2:
-			self.image = image1
-		elif self.animation_loop < 3:
-			self.image = image2
-
-		if self.animation_loop >= 3:
-			self.animation_loop = 0
-
-
-class Bullet(pygame.sprite.Sprite):
-	
-
-
-	def __init__(self, game, x, y, destX, destY, speed):
-		self.x = x
-		self.y = y
-
-		self.game = game
-		self._layer = 2
-		self.groups = self.game.all_sprites, self.game.bullets
-		pygame.sprite.Sprite.__init__(self, self.groups)
-		
-
-		self.angle = ((self.getAngleBetweenPoints(x, y, destX, destY) / (6/4)   * 90) - 360 ) * (-1)
-
-		self.image = pygame.transform.rotate(pygame.transform.scale(pygame.image.load(os.path.join('assets/img/bullet', 'basic_bullet.png')).convert_alpha(), (30, 30)), self.angle - 90)
-
-		self.deplacementX = (destX - x) / 10
-		self.deplacementY = (destY - y) / 10
-
-
-
-		self.rect = self.image.get_rect()
-		self.rect.x = self.x
-		self.rect.y = self.y
-
-	def getAngleBetweenPoints(self, x_orig, y_orig, x_landmark, y_landmark):
-		deltaY = y_landmark - y_orig
-		deltaX = x_landmark - x_orig
-		t = math.atan2(deltaY, deltaX)
-		return self.angle_trunc(t)
-
-	def angle_trunc(self, a):
-		pi = 3.14159265359
-		while a < 0.0:
-			a += pi * 2
-		return a
-
-	def collisition(self):
-		# hit = pygame.sprite.spritecollide(self, self.game.enemies, False)
-		click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Damage1.ogg'))
-		click_sound.set_volume(0.05)
-		for enemies in self.game.enemies:
-			if pygame.sprite.collide_mask(self, enemies):
-				enemies.damaged(50)
-				click_sound.play()
-				self.kill()
-		hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
-		if hit:
-			self.kill()
-
-
-
-	def update(self):
-		self.collisition()
-		self.rect.x += self.deplacementX
-		self.rect.y += self.deplacementY
-
-		
-
-# 		try:
-# 			self.sheet_image = pygame.image.load('assets/img/characters/doux.png').convert_alpha()
-# 		except pygame.error as e:
-# 			print(f"Unable to load spritesheet image: player spritesheet ")
-# 			raise SystemExit(e)
-
-# 		self.sheet = spritesheet.SpriteSheet(self.sheet_image)
-
-# 		# self.player_walk = [player_image,player_image]
-
-# 		self.frame_7 = self.sheet.get_image(8,1, WIDTH, LENGH, SCALE,BLACK)
-
-# 		self.rotation = 1 # 1 regarde à droite // 2 regarde à gauche
-
-# 		self.index = 0
-
-# 		self.image = self.frame_0
-
-# 		self.rect = self.image.get_rect(midbottom = (80,300))
-# 		self.gravity = 0
-
-# 	def player_input(self, event):
-# 		if event.type == pygame.KEYUP:
-# 			self.index = 0
-# 		if event.type == pygame.KEYDOWN:
-# 			keys = event.key
-# 			if keys == pygame.K_SPACE:
-# 				self.test_sound.play()
-# 		if event.type == pygame.MOUSEBUTTONDOWN:
-# 			if event.button == pygame.BUTTON_LEFT:
-# 				self.bullet_sound.play()
-
-
-
-
-
-
-# 	def animation_state(self):
-# 		if self.index == 0:
-# 			self.image = self.frame_0
-# 			self.flipper()
-# 		if self.index >= 1:
-# 			self.image = self.frame_1
-# 			self.flipper()
-# 		if self.index >= 2:
-# 			self.image = self.frame_2
-# 			self.flipper()
-# 		if self.index >= 3:
-# 			self.image = self.frame_3
-# 			self.flipper()
-# 		if self.index >= 4:
-# 			self.image = self.frame_4
-# 			self.flipper()
-# 		if self.index >= 5:
-# 			self.image = self.frame_5
-# 			self.flipper()
-# 		if self.index >= 6:
-# 			self.image = self.frame_6
-# 			self.flipper()
-# 		if self.index >= 7:
-# 			self.image = self.frame_7
-# 			self.flipper()
-
-
-# 	def update(self):
-# 		self.animation_state()
-# 		self.move()
-# 		self.image.set_colorkey((0,0,0))
-
-# 	def move(self):
-# 		SPEED_ANIMATION = 0.2
-# 		MAX_INDEX = 8
-# 		DEPLACEMENT = 5
-
-# 		keys_pressed = pygame.key.get_pressed()
-# 		if keys_pressed[pygame.K_LEFT] or keys_pressed[pygame.K_q]:
-# 			self.rect.left = self.rect.left - DEPLACEMENT
-# 			self.index += SPEED_ANIMATION
-# 			if self.index >= MAX_INDEX:
-# 				self.index = 0
-# 			if self.rotation == 1:
-# 				self.rotation = 2
-# 		if keys_pressed[pygame.K_RIGHT] or keys_pressed[pygame.K_d]:
-# 			self.rect.left = self.rect.left + DEPLACEMENT
-# 			self.index += SPEED_ANIMATION
-# 			if self.index >= MAX_INDEX:
-# 				self.index = 0
-# 			if self.rotation == 2:
-# 				self.rotation = 1
-# 		if keys_pressed[pygame.K_UP] or keys_pressed[pygame.K_z]:
-# 			self.rect.top = self.rect.top - DEPLACEMENT
-# 			self.index += SPEED_ANIMATION
-# 			if self.index >= MAX_INDEX:
-# 				self.index = 0
-# 		if keys_pressed[pygame.K_DOWN] or keys_pressed[pygame.K_s]:
-# 			self.rect.top = self.rect.top + DEPLACEMENT
-# 			self.index += SPEED_ANIMATION
-# 			if self.index >= MAX_INDEX:
-# 				self.index = 0
-
-
-# 	def flipper(self):
-# 		if self.rotation != 1:
-# 				self.image = pygame.transform.flip(self.image, 1, 0)
+#from cmath import rect
+import random
+import this
+import pygame, os
+from sprite import *
+import sys
+
+from sys import exit
+from pygame.locals import *
+
+pygame.init()
+pygame.display.set_caption('GAME JAM 2022')
+
+WIDTH, HEIGHT = 1024, 768
+FPS = 60
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+BLUE = (150, 252, 255)
+tilemap = [   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEGTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTREEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSS1cccccccccccccccccccccccc2SSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggg]ppppp[bSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggygggggybSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggtgggggtbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggggPgggggipppppubSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSa]pp[ggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaoggyggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaogggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaogggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaoggtggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaippuggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSS3xxxxxxxxxxxxxxxxxxxxxxxx4SSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEVBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBXEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+]
+spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Up1.ogg'))
+click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Decision5.ogg'))
+
+class Game:
+    def __init__(self):
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.clock = pygame.time.Clock()
+        self.running = True
+        self.menu = True
+        self.playing = False
+        self.options = False
+        self.credits = False
+        self.font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 70)
+        self.music_played = True
+        self.fx_played = True
+        self.gameplay_ZQSD = False
+        self.back_to_game = False
+        self.tips = True
+        self.timer_value = 0
+        self.timer_init = 120 # 120s
+        self.clock = pygame.time.Clock()
+
+        self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
+        self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Switch2.ogg'))
+
+        pygame.mouse.set_visible(False)
+
+        if self.fx_played==True:
+            self.bullet_sound.set_volume(0.1)
+            self.switch_weapon_sound.set_volume(0.08)
+            spawn_sound.set_volume(0.1)
+            click_sound.set_volume(0.1)
+        else:
+            self.bullet_sound.set_volume(0)
+            self.switch_weapon_sound.set_volume(0)
+            spawn_sound.set_volume(0)
+            click_sound.set_volume(0)
+
+        self.character_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/characters', 'doux.png')).convert_alpha())
+        self.terrain_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha())
+        self.crab_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests/Crab.png')).convert_alpha())
+        self.night_effet = [
+            pygame.image.load(os.path.join('assets/img/tests', 'overlayN.png')).convert_alpha(),
+            pygame.image.load(os.path.join('assets/img/tests', 'overlayNormalRed.png')).convert_alpha(),
+            pygame.image.load(os.path.join('assets/img/tests', 'overlayBeforeDeath.png')).convert_alpha()
+        ] # lul
+
+
+    def createTileMap(self):
+        WIDTH, HEIGHT = 64, 64
+        OFFSETX, OFFSETY = 23.5, 15
+        for i, row in enumerate(tilemap):
+            for j, column in enumerate(row):
+
+                # basic textures
+                if column == 'E':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'water', True)
+                if column == 'S':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'sand', False)
+                if column == 'g':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'grass', False)
+
+                #map border textures
+                if column == 'T':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topWater', True)
+                if column == 'G':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topLeftWaterBord', True)
+                if column == 'R':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topRightWaterBord', True)
+                if column == 'B':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomWaterBord', True)
+                if column == 'V':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomLeftSand', True)
+                if column == 'X':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomRightSand', True)
+                if column == 'l':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'rightWaterBord', True)
+                if column == 'D':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'leftWaterBord', True)
+
+                #Sand + Grass Transition
+                if column == '1':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topLeftSandGrassT', False)
+                if column == '2':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topRightSandGrassT', False)
+                if column == 'c':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topSandGrassT', False)
+                if column == 'a':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'leftSandGrassT', False)
+                if column == 'b':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'rightSandGrassT', False)
+                if column == '4':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomRightSandGrassT', False)
+                if column == '3':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomleftSandGrassT', False)
+                if column == 'x':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomSandGrassT', False)
+
+                #Fences
+                if column == ']':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topLeftFence', True)
+                if column == '[':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topRightFence', True)
+                if column == 'p':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topFence', True)
+                if column == 'o':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'sideFence', True)
+                if column == 'i':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomLeftFence', True)
+                if column == 'u':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomRightFence', True)
+                if column == 'y':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topStopFence', True)
+                if column == 't':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomStopFence', True)
+
+                #Player pog
+                if column == 'P':
+                    self.player = Player(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT,self.gameplay_ZQSD)
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'grass', False)
+        self.screen.blit(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0,0))
+    def new(self):
+        #a new game starts
+        self.playing = True
+        self.all_sprites = pygame.sprite.LayeredUpdates()
+        self.blocks_collid = pygame.sprite.LayeredUpdates()
+        self.blocks_no_collid = pygame.sprite.LayeredUpdates()
+        self.enemies = pygame.sprite.LayeredUpdates()
+        self.bullets = pygame.sprite.LayeredUpdates()
+
+        # self.night_effect = pygame.Surface((1024, 768))
+        
+        # self.night_effect.set_alpha(115)
+        # self.night_effect.fill((30,0,0))
+        self.day_time = True
+        self.createTileMap()
+
+    def events(self):
+        self.back_to_game = False
+        #game loop events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.playing = False
+                self.running = False
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.player.switch_weapon(event)
+                if event.button == pygame.BUTTON_LEFT:
+                    self.player.attacks()
+                if event.button == pygame.BUTTON_RIGHT:
+                    spawn_sound.play()
+                    Crab(self, self.player.x + (random.choice((-1,1))*random.randint(150,250)), self.player.y + (random.choice((-1,1))*random.randint(150,250)), 100,2)
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.playing = False
+                    self.menu = True
+                elif event.key == pygame.K_i:
+                    self.tips = not self.tips
+                    if self.tips:
+                        self.tips1.set_alpha(150)
+                        self.tips2.set_alpha(150)
+                        self.tips3.set_alpha(150)
+                    else:
+                        self.tips1.set_alpha(0)
+                        self.tips2.set_alpha(0)
+                        self.tips3.set_alpha(0)
+                elif event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
+                    self.playing = not self.playing
+                    self.options = not self.options
+                    self.back_to_game = True
+
+    def events_day(self):
+        #game loop events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.playing = False
+                self.running = False
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == pygame.BUTTON_LEFT:
+                    self.day_time = False
+
+    def update(self):
+        #game llop events
+        self.all_sprites.update()
+
+    def draw(self):
+        #game loop draw
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+        self.timer = font.render("Time left:  "+str(self.timer_value)+"s", True, BLACK)
+        self.timer_rect = self.timer.get_rect(x=900, y=20)
+
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+        if self.tips:
+            self.tips1 = font.render("Press 'esc' to quit party", True, BLACK)
+            self.tips1.set_alpha(150)
+            self.tips1_rect = self.tips1.get_rect(x=self.screen.get_width()/2-self.tips1.get_width()/2, y=100)
+
+            self.tips2 = font.render("Press 'ctrl' to open options", True, BLACK)
+            self.tips2.set_alpha(150)
+            self.tips2_rect = self.tips2.get_rect(x=self.screen.get_width()/2-self.tips2.get_width()/2, y=130)
+
+            self.tips3 = font.render("Press 'i' to toggle tips", True, BLACK)
+            self.tips3.set_alpha(150)
+            self.tips3_rect = self.tips3.get_rect(x=self.screen.get_width()/2-self.tips3.get_width()/2, y=160)
+
+        self.screen.fill(BLACK)
+        self.all_sprites.draw(self.screen)
+        self.clock.tick(FPS)
+        self.screen.blit(self.tips1,self.tips1_rect)
+        self.screen.blit(self.tips2,self.tips2_rect)
+        self.screen.blit(self.tips3,self.tips3_rect)
+        self.screen.blit(self.timer,self.timer_rect)
+        
+        self.screen.blit(self.night_effet[0], (0,0))
+        self.curseur()
+        
+        pygame.display.update()
+    
+    def draw_day(self):
+        #game loop draw
+        self.screen.fill(BLACK)
+        self.clock.tick(FPS)
+        self.curseur()
+        
+        pygame.display.update()
+
+    def main(self):
+        self.playing = True
+
+
+
+        if self.music_played==True:
+            pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town3.ogg'))
+            pygame.mixer.music.set_volume(0.05)
+            pygame.mixer.music.play(fade_ms=2000)
+        else:
+            pygame.mixer.music.pause()
+
+        while self.playing:
+            if self.day_time:
+                self.draw_day()
+                self.events_day()
+            else:
+                self.draw()
+                self.events() 
+                self.update()
+                self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
+        pygame.display.update()
+
+    def game_over(self):
+        pass
+
+    def curseur(self):
+        mouse_pos = pygame.mouse.get_pos()
+        CURSOR = pygame.transform.scale(pygame.image.load(os.path.join('assets/img/cursor', 'viewfinder.png')).convert_alpha(), (100, 100))
+        CURSOR_RECT = CURSOR.get_rect()
+        CURSOR_RECT.center = mouse_pos
+        self.screen.blit(CURSOR, CURSOR_RECT)
+
+    def intro_screen(self):
+        click_sound.play()
+        self.menu = True
+
+        if self.music_played==True:
+            pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
+            pygame.mixer.music.set_volume(0.05)
+            pygame.mixer.music.play(fade_ms=2000)
+        else:
+            pygame.mixer.music.pause()
+
+        title = self.font.render('Pog Champs Game', True, BLACK)
+        title_rect = title.get_rect(x=self.screen.get_width()/2-title.get_width()/2, y=100)
+
+        play_button = Button((self.screen.get_width()/2)-100, 250, 200, 50, WHITE, BLACK, 'Play', 40)
+        option_button = Button((self.screen.get_width()/2)-100, 350, 200, 50, WHITE, BLACK, 'Options', 40)
+        credits_button = Button((self.screen.get_width()/2)-100, 450, 200, 50, WHITE, BLACK, 'Credits', 40)
+        exit_button = Button((self.screen.get_width()/2)-100, 550, 200, 50, WHITE, BLACK, 'Exit', 40)
+
+        while self.menu:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.menu = False
+                    self.running = False
+                    exit()
+            mouse_pos = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+
+            if play_button.is_pressed(mouse_pos, mouse_pressed):
+                self.menu = False
+                self.playing = True
+            elif option_button.is_pressed(mouse_pos,mouse_pressed):
+                self.menu = False
+                self.options = True
+            elif credits_button.is_pressed(mouse_pos,mouse_pressed):
+                self.menu = False
+                self.credits = True
+            elif exit_button.is_pressed(mouse_pos,mouse_pressed):
+                exit()
+            self.screen.fill(BLUE)
+            self.screen.blit(title, title_rect)
+            self.screen.blit(play_button.image, play_button.rect)
+            self.screen.blit(option_button.image, option_button.rect)
+            self.screen.blit(credits_button.image, credits_button.rect)
+            self.screen.blit(exit_button.image, exit_button.rect)
+            self.clock.tick(FPS)
+            self.curseur()
+            pygame.display.update()
+
+    def options_screen(self):
+        self.options = True
+        click_sound.play()
+
+        title = self.font.render('Options', True, BLACK)
+        title_rect = title.get_rect(x=self.screen.get_width()/2-title.get_width()/2, y=100)
+
+        font1 = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 50)
+        font2 = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 30)
+
+        sound_options = font1.render('Sound options', True, BLACK)
+        sound_options_rect = sound_options.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=200)
+
+        if self.music_played==True:
+            music_on_off = Button(700, 240, 60, 30, WHITE, BLACK, 'On', 30)
+        else:
+            music_on_off = Button(700, 240, 60, 30, BLACK, WHITE, 'Off', 30)
+
+        if self.fx_played==True:
+            fx_on_off = Button(700, 270, 60, 30, WHITE, BLACK, 'On', 30)
+        else:
+            fx_on_off = Button(700, 270, 60, 30, BLACK, WHITE, 'Off', 30)
+
+        music_sound = font2.render('Music theme sound', True, BLACK)
+        music_sound_rect = music_sound.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=250)
+
+        fx_sound = font2.render('FX sound', True, BLACK)
+        fx_sound_rect = music_sound.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=280)
+
+        gameplay = font1.render('Gameplay', True, BLACK)
+        gameplay_rect = gameplay.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=320)
+
+        top = font2.render('Top', True, BLACK)
+        top_rect = top.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=370)
+
+        bottom = font2.render('Bottom', True, BLACK)
+        bottom_rect = bottom.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=400)
+
+        left = font2.render('Left', True, BLACK)
+        left_rect = left.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=430)
+
+        right = font2.render('Right', True, BLACK)
+        right_rect = right.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=460)
+
+        if self.gameplay_ZQSD==True:
+            top_btn1 = Button(700, 370, 60, 30, WHITE, BLACK, 'Z', 30)
+            bottom_btn1 = Button(700, 400, 60, 30, WHITE, BLACK, 'S', 30)
+            left_btn1 = Button(700, 430, 60, 30, WHITE, BLACK, 'Q', 30)
+            right_btn1 = Button(700, 460, 60, 30, WHITE, BLACK, "D", 30)
+            top_btn2 = Button(590, 370, 110, 30, BLACK, WHITE, 'Arr. Top', 30)
+            bottom_btn2 = Button(590, 400, 110, 30, BLACK, WHITE, 'Arr. Bottom', 30)
+            left_btn2 = Button(590, 430, 110, 30, BLACK, WHITE, 'Arr. Left', 30)
+            right_btn2 = Button(590, 460, 110, 30, BLACK, WHITE, "Arr. Right", 30)
+        else:
+            top_btn1 = Button(700, 370, 60, 30, BLACK, WHITE, 'Z', 30)
+            bottom_btn1 = Button(700, 400, 60, 30, BLACK, WHITE, 'S', 30)
+            left_btn1 = Button(700, 430, 60, 30, BLACK, WHITE, 'Q', 30)
+            right_btn1 = Button(700, 460, 60, 30, BLACK, WHITE, "D", 30)
+            top_btn2 = Button(590, 370, 110, 30, WHITE, BLACK, 'Arr. Top', 30)
+            bottom_btn2 = Button(590, 400, 110, 30, WHITE, BLACK, 'Arr. Bottom', 30)
+            left_btn2 = Button(590, 430, 110, 30, WHITE, BLACK, 'Arr. Left', 30)
+            right_btn2 = Button(590, 460, 110, 30, WHITE, BLACK, "Arr. Right", 30)
+
+        if self.back_to_game:
+            back_button = Button((self.screen.get_width()/2)-100, 650, 200, 50, WHITE, BLACK, 'Back to game', 30)
+        else:
+            back_button = Button((self.screen.get_width()/2)-100, 650, 200, 50, WHITE, BLACK, 'Back to menu', 30)
+
+        while self.options:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.options = False
+                    self.running = False
+                    exit()
+                if event.type == pygame.MOUSEBUTTONUP and music_on_off.rect.collidepoint(pygame.mouse.get_pos()):
+                    click_sound.play()
+                    self.music_played= not self.music_played
+                    if self.music_played:
+                        pygame.mixer.music.unpause()
+                    else:
+                        pygame.mixer.music.pause()
+                    self.options_screen()
+                elif event.type == pygame.MOUSEBUTTONUP and fx_on_off.rect.collidepoint(pygame.mouse.get_pos()):
+                    click_sound.play()
+                    self.fx_played= not self.fx_played
+                    if self.fx_played:
+                        self.bullet_sound.set_volume(0.1)
+                        self.switch_weapon_sound.set_volume(0.08)
+                        spawn_sound.set_volume(0.1)
+                        click_sound.set_volume(0.1)
+                    else:
+                        self.bullet_sound.set_volume(0)
+                        self.switch_weapon_sound.set_volume(0)
+                        spawn_sound.set_volume(0)
+                        click_sound.set_volume(0)
+                    self.options_screen()
+                elif event.type == pygame.MOUSEBUTTONUP and (top_btn1.rect.collidepoint(pygame.mouse.get_pos())or
+                                                             bottom_btn1.rect.collidepoint(pygame.mouse.get_pos())or
+                                                             left_btn1.rect.collidepoint(pygame.mouse.get_pos())or
+                                                             right_btn1.rect.collidepoint(pygame.mouse.get_pos())):
+                    self.gameplay_ZQSD = True
+                    self.options_screen()
+                elif event.type == pygame.MOUSEBUTTONUP and (top_btn2.rect.collidepoint(pygame.mouse.get_pos())or
+                                                             bottom_btn2.rect.collidepoint(pygame.mouse.get_pos())or
+                                                             left_btn2.rect.collidepoint(pygame.mouse.get_pos())or
+                                                             right_btn2.rect.collidepoint(pygame.mouse.get_pos())):
+                    self.gameplay_ZQSD = False
+                    self.options_screen()
+                elif event.type == pygame.MOUSEBUTTONUP and back_button.rect.collidepoint(pygame.mouse.get_pos()) or (event.type == pygame.KEYDOWN and (event.key==K_RCTRL or event.key==K_LCTRL)):
+                    if self.back_to_game:
+                        self.options = False
+                        self.playing = True
+                    else:
+                        self.options = False
+                        self.menu = True
+
+            mouse_pos = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+
+            self.screen.fill(BLUE)
+            self.screen.blit(title, title_rect)
+            self.screen.blit(sound_options, sound_options_rect)
+            self.screen.blit(music_sound, music_sound_rect)
+            self.screen.blit(fx_sound, fx_sound_rect)
+            self.screen.blit(gameplay, gameplay_rect)
+            self.screen.blit(top, top_rect)
+            self.screen.blit(bottom, bottom_rect)
+            self.screen.blit(left, left_rect)
+            self.screen.blit(right, right_rect)
+            self.screen.blit(music_on_off.image, music_on_off.rect)
+            self.screen.blit(fx_on_off.image, fx_on_off.rect)
+            self.screen.blit(back_button.image, back_button.rect)
+            self.screen.blit(top_btn1.image, top_btn1.rect)
+            self.screen.blit(bottom_btn1.image, bottom_btn1.rect)
+            self.screen.blit(left_btn1.image, left_btn1.rect)
+            self.screen.blit(right_btn1.image, right_btn1.rect)
+            self.screen.blit(top_btn2.image, top_btn2.rect)
+            self.screen.blit(bottom_btn2.image, bottom_btn2.rect)
+            self.screen.blit(left_btn2.image, left_btn2.rect)
+            self.screen.blit(right_btn2.image, right_btn2.rect)
+            self.clock.tick(FPS)
+            self.curseur()
+            pygame.display.update()
+
+
+    def credits_screen(self):
+        click_sound.play()
+        self.credits = True
+
+        title = self.font.render('Credits', True, BLACK)
+        title_rect = title.get_rect(x=self.screen.get_width()/2-title.get_width()/2, y=100)
+
+        back_button = Button((self.screen.get_width()/2)-100, 650, 200, 50, WHITE, BLACK, 'Back to menu', 30)
+
+        while self.credits:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.credits = False
+                    self.running = False
+                    exit()
+            mouse_pos = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+            if back_button.is_pressed(mouse_pos,mouse_pressed):
+                self.credits = False
+                self.menu = True
+
+            self.screen.fill(BLUE)
+            self.screen.blit(title, title_rect)
+            self.screen.blit(back_button.image, back_button.rect)
+
+            self.clock.tick(FPS)
+            self.curseur()
+            pygame.display.update()
+
+
+g = Game()
+while g.running==True:
+
+    if g.menu==True:
+        g.intro_screen()
+    elif g.options==True:
+        g.options_screen()
+    elif g.credits==True:
+        g.credits_screen()
+    elif g.playing==True:
+        g.new()
+        g.main()
+        g.game_over()
+
+pygame.quit()
+sys.exit()
