@@ -220,16 +220,6 @@ class Game:
 
     def draw(self):
         #game loop draw
-<<<<<<< HEAD
-=======
-        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
-
-
-        self.tips1 = font.render("Press 'esc' to quit party", True, BLACK)
-        self.tips1.set_alpha(150)
-        self.tips1_rect = self.tips1.get_rect(x=self.screen.get_width()/2-self.tips1.get_width()/2, y=100)
->>>>>>> 262672c3f9d824e8a621cf9aec757567a8a473db
-
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
         self.timer = font.render("Time left:  "+str(self.timer_value)+"s", True, BLACK)
         self.timer_rect = self.timer.get_rect(x=900, y=20)
@@ -269,13 +259,8 @@ class Game:
             self.draw()    
             self.events() 
             self.update()
-<<<<<<< HEAD
             self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
         pygame.display.update()
-=======
-            self.draw()
-            pygame.display.update()
->>>>>>> 262672c3f9d824e8a621cf9aec757567a8a473db
 
     def game_over(self):
         pass
