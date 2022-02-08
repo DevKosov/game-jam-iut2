@@ -22,16 +22,8 @@ tilemap = ['.....',
             '.AAA.',
             '......']
 
-
-
-##################################Sound###########################################
 bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
 test_sound = pygame.mixer.Sound('assets/audio/se/Applause2.ogg')
-test_sound.set_volume(0.1)
-bullet_sound.set_volume(0.1)
-##################################################################################
-
-    
 
 class Game:
     def __init__(self):
@@ -43,14 +35,24 @@ class Game:
         self.options = False
         self.credits = False
         self.font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 70)
+        self.music_played = True
+        self.fx_played = True
 
-        
+        if self.music_played==True:
+            pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
+            pygame.mixer.music.set_volume(0.05)
+            pygame.mixer.music.play(fade_ms=2000)
+        else:
+            pygame.mixer.music.pause()
 
         pygame.mouse.set_visible(False)
 
-        pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
-        pygame.mixer.music.set_volume(0.05)
-        pygame.mixer.music.play(fade_ms=2000)
+        if self.fx_played==True:
+            test_sound.set_volume(0.1)
+            bullet_sound.set_volume(0.1)
+        else:
+            test_sound.set_volume(0)
+            bullet_sound.set_volume(0)
 
         self.character_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/characters', 'doux.png')).convert_alpha())
         self.terrain_spritesheet = SpriteSheet(pygame.transform.scale(pygame.image.load(os.path.join('assets/img/tilesets', 'asset_tilemap.png')).convert_alpha(), (12, 24)))
@@ -64,6 +66,7 @@ class Game:
                     Block(self, (j+5)*32, (i+5)*32, 'grass')
                 if column == 'P':
                     Player(self, (i+5)*32, (j+5)*32)
+                    
     def new(self):
         #a new game starts
         self.playing = True
@@ -73,8 +76,6 @@ class Game:
         self.balles = pygame.sprite.LayeredUpdates()
 
         self.createTileMap()
-
-        
 
     def events(self):
         #game loop events
@@ -165,6 +166,44 @@ class Game:
 
         title = self.font.render('Options', True, BLACK)
         title_rect = title.get_rect(x=self.screen.get_width()/2-title.get_width()/2, y=100)
+
+        font1 = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 50)
+        font2 = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 30)
+
+        sound_options = font1.render('Sound options', True, BLACK)
+        sound_options_rect = sound_options.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=200)
+
+        if self.music_played==True:
+            music_on_off = Button(700, 240, 60, 30, WHITE, BLACK, 'On', 30)
+        else:
+            music_on_off = Button(700, 240, 60, 30, BLACK, WHITE, 'Off', 30)
+
+        if self.fx_played==True:
+            fx_on_off = Button(700, 270, 60, 30, WHITE, BLACK, 'On', 30)
+        else:
+            fx_on_off = Button(700, 270, 60, 30, BLACK, WHITE, 'Off', 30)
+
+        music_sound = font2.render('Music theme sound', True, BLACK)
+        music_sound_rect = music_sound.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=250)
+
+        fx_sound = font2.render('FX sound', True, BLACK)
+        fx_sound_rect = music_sound.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=280)
+
+        gameplay = font1.render('Gameplay', True, BLACK)
+        gameplay_rect = gameplay.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=320)
+
+        top = font2.render('Top', True, BLACK)
+        top_rect = top.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=370)
+
+        bottom = font2.render('Bottom', True, BLACK)
+        bottom_rect = bottom.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=400)
+
+        left = font2.render('Left', True, BLACK)
+        left_rect = left.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=430)
+
+        right = font2.render('Right', True, BLACK)
+        right_rect = right.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=460)
+
         back_button = Button((self.screen.get_width()/2)-100, 650, 200, 50, WHITE, BLACK, 'Back to menu', 30)
 
         while self.options:
@@ -173,6 +212,23 @@ class Game:
                     self.options = False
                     self.running = False
                     exit()
+                if event.type == pygame.MOUSEBUTTONUP and music_on_off.rect.collidepoint(pygame.mouse.get_pos()):
+                    self.music_played= not self.music_played
+                    if self.music_played:
+                        pygame.mixer.music.unpause()
+                    else:
+                        pygame.mixer.music.pause()
+                    self.options_screen()
+                elif event.type == pygame.MOUSEBUTTONUP and fx_on_off.rect.collidepoint(pygame.mouse.get_pos()):
+                    self.fx_played= not self.fx_played
+                    if self.fx_played:
+                        test_sound.set_volume(0.1)
+                        bullet_sound.set_volume(0.1)
+                    else:
+                        test_sound.set_volume(0.1)
+                        bullet_sound.set_volume(0)
+                    self.options_screen()
+
             mouse_pos = pygame.mouse.get_pos()
             mouse_pressed = pygame.mouse.get_pressed()
             if back_button.is_pressed(mouse_pos,mouse_pressed):
@@ -181,8 +237,17 @@ class Game:
 
             self.screen.fill(BLUE)
             self.screen.blit(title, title_rect)
+            self.screen.blit(sound_options, sound_options_rect)
+            self.screen.blit(music_sound, music_sound_rect)
+            self.screen.blit(fx_sound, fx_sound_rect)
+            self.screen.blit(gameplay, gameplay_rect)
+            self.screen.blit(top, top_rect)
+            self.screen.blit(bottom, bottom_rect)
+            self.screen.blit(left, left_rect)
+            self.screen.blit(right, right_rect)
+            self.screen.blit(music_on_off.image, music_on_off.rect)
+            self.screen.blit(fx_on_off.image, fx_on_off.rect)
             self.screen.blit(back_button.image, back_button.rect)
-
             self.clock.tick(FPS)
             self.curseur()
             pygame.display.update()
