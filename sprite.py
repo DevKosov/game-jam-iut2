@@ -60,15 +60,23 @@ class Player(pygame.sprite.Sprite):
 		
 		keys = pygame.key.get_pressed()
 		if keys[pygame.K_LEFT]:
+			for sprite in self.game.all_sprites:
+					sprite.rect.x += PLAYER_SPEED
 			self.x_change -= PLAYER_SPEED
 			self.facing = 'left'
 		if keys[pygame.K_RIGHT]:
+			for sprite in self.game.all_sprites:
+					sprite.rect.x -= PLAYER_SPEED
 			self.x_change += PLAYER_SPEED
 			self.facing = 'right'
 		if keys[pygame.K_UP]:
+			for sprite in self.game.all_sprites:
+					sprite.rect.y += PLAYER_SPEED
 			self.y_change -= PLAYER_SPEED
 			self.facing = 'up'
 		if keys[pygame.K_DOWN]:
+			for sprite in self.game.all_sprites:
+					sprite.rect.y -= PLAYER_SPEED
 			self.y_change += PLAYER_SPEED
 			self.facing = 'down'
 
@@ -127,10 +135,10 @@ class Player(pygame.sprite.Sprite):
 					self.animation_loop = 0
  
 class Block(pygame.sprite.Sprite):
-	def __init__(self, game, x, y):
+	def __init__(self, game, x, y, block_type):
 		BLACK = (0,0,0)
-		WIDTH = 32
-		HEIGHT = 32
+		WIDTH = 12
+		HEIGHT = 12
 
 		self.game = game
 		self._layer = 1
@@ -141,7 +149,12 @@ class Block(pygame.sprite.Sprite):
 		self.width = 32
 		self.height = 32
 
-		self.image = self.game.terrain_spritesheet.get_image(1, 1, WIDTH, HEIGHT, 3, BLACK)
+		self.block_type = block_type
+
+		if self.block_type == 'ground':
+			self.image = self.game.terrain_spritesheet.get_image(1, 1, WIDTH, HEIGHT, 3, BLACK)
+		if self.block_type == 'grass':
+			self.image = self.game.terrain_spritesheet.get_image(2, 1, WIDTH, HEIGHT, 3, BLACK)
 
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
