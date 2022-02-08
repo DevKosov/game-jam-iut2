@@ -167,6 +167,10 @@ class Game:
         self.enemies = pygame.sprite.LayeredUpdates()
         self.bullets = pygame.sprite.LayeredUpdates()
 
+        self.night_effect = pygame.Surface((1024, 768))
+        self.night_effect.set_alpha(115)
+        self.night_effect.fill((30,0,0))
+
         self.createTileMap()
 
     def events(self):
@@ -180,7 +184,7 @@ class Game:
                 if event.button == pygame.BUTTON_LEFT:
                     bullet_sound.play()
                     x, y = pygame.mouse.get_pos()
-                    Bullet(self, self.player.x, self.player.y, x, y, 5)
+                    Bullet(self, self.player.rect.centerx, self.player.rect.centery, x, y, 5)
                 if event.button == pygame.BUTTON_RIGHT:
                     spawn_sound.play()
                     Crab(self, self.player.x + (random.choice((-1,1))*random.randint(150,250)), self.player.y + (random.choice((-1,1))*random.randint(150,250)), 100,2)
@@ -236,11 +240,16 @@ class Game:
         self.screen.blit(self.tips2,self.tips2_rect)
         self.screen.blit(self.tips3,self.tips3_rect)
         self.screen.blit(self.timer,self.timer_rect)
+        
+        self.screen.blit(self.night_effect, (0,0))
         self.curseur()
+        
         pygame.display.update()
 
     def main(self):
         self.playing = True
+
+
 
         if self.music_played==True:
             pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town3.ogg'))

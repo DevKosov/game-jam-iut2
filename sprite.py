@@ -403,6 +403,11 @@ class Bullet(pygame.sprite.Sprite):
 
 		self.image = pygame.transform.rotate(pygame.transform.scale(pygame.image.load(os.path.join('assets/img/bullet', 'basic_bullet.png')).convert_alpha(), (30, 30)), self.angle - 90)
 
+		self.deplacementX = (destX - x) / 10
+		self.deplacementY = (destY - y) / 10
+
+
+
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
 		self.rect.y = self.y
@@ -428,11 +433,16 @@ class Bullet(pygame.sprite.Sprite):
 				enemies.damaged(50)
 				click_sound.play()
 				self.kill()
+		hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
+		if hit:
+			self.kill()
 
 
 
 	def update(self):
 		self.collisition()
+		self.rect.x += self.deplacementX
+		self.rect.y += self.deplacementY
 
 		
 
