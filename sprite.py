@@ -260,21 +260,21 @@ class Block(pygame.sprite.Sprite):
 
 		#Fences
 		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(6, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(4, 4, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'topRightFence':
-			self.image = self.game.terrain_spritesheet.get_image(5, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(5, 4, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'topFence':
-			self.image = self.game.terrain_spritesheet.get_image(4, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(1, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(3, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(8, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(7, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(2, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(8, 4, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'sideFence':
+			self.image = self.game.terrain_spritesheet.get_image(1, 4, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'bottomLeftFence':
+			self.image = self.game.terrain_spritesheet.get_image(7, 4, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'bottomRightFence':
+			self.image = self.game.terrain_spritesheet.get_image(6, 4, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'topStopFence':
+			self.image = self.game.terrain_spritesheet.get_image(3, 4, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'bottomStopFence':
+			self.image = self.game.terrain_spritesheet.get_image(2, 4, WIDTH, HEIGHT, SCALE, BLACK)
 
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
