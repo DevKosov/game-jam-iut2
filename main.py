@@ -54,9 +54,9 @@ class Game:
         for i, row in enumerate(tilemap):
             for j, column in enumerate(row):
                 if column == '.':
-                    Block(self, j*32, i*32)
+                    Block(self, (j+5)*32, (i+5)*32)
                 if column == 'P':
-                    Player(self, i*32, j*32)
+                    Player(self, (i+5)*32, (j+5)*32)
     def new(self):
         #a new game starts
         self.playing = True
@@ -137,6 +137,7 @@ class Game:
             self.clock.tick(FPS)
             self.curseur()
             pygame.display.update()
+
 
 
 g = Game()
