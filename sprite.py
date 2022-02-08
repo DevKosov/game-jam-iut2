@@ -180,6 +180,9 @@ class Player(pygame.sprite.Sprite):
 			Bullet(self.game, self.rect.centerx, self.rect.centery, x, y, 5)
 		# else:
 
+	def sprint(self):
+		print("f")
+
 	def collision(self, direction):
 
 		if direction == 'x':
@@ -188,7 +191,7 @@ class Player(pygame.sprite.Sprite):
 				if self.x_change > 0:
 					self.rect.x = hit[0].rect.left - self.rect.width
 					for sprite in self.game.all_sprites:
-						sprite.rect.x += self.self.player_speed
+						sprite.rect.x += self.player_speed
 				if self.x_change < 0:
 					self.rect.x = hit[0].rect.right
 					for sprite in self.game.all_sprites:
