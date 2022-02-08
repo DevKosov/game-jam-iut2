@@ -83,7 +83,7 @@ class Game:
         self.back_to_game = False
         self.tips = True
         self.timer_value = 0
-        self.timer_init = 10 # 120s
+        self.timer_init = 120 # 120s
         self.clock = pygame.time.Clock()
 
 
