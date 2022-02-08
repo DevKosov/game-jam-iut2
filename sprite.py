@@ -23,6 +23,7 @@ class Player(pygame.sprite.Sprite):
 		WIDTH = 24
 		HEIGHT = 24
 
+		#HIhihiha
 
 		self.game = game
 		self._layer = 2
@@ -33,15 +34,17 @@ class Player(pygame.sprite.Sprite):
 		self.y = y
 		self.width = WIDTH
 		self.height = HEIGHT
+		self.hp = 150
 
 		self.current_weapon = "gun"
+		self.player_speed = 5
 
 		self.x_change = 0
 		self.y_change = 0
 
 		self.facing = 'right'
 		self.animation_loop = 1
-		
+
 		self.image = self.game.character_spritesheet.get_image(1, 1, self.width, self.height, 3, BLACK)
 
 		self.rect = self.image.get_rect()
@@ -62,51 +65,50 @@ class Player(pygame.sprite.Sprite):
 		self.x_change = 0
 		self.y_change  = 0
 	def movement(self):
-		PLAYER_SPEED = 5
-		
+
 		if self.player_gameplay_ZQSD==False:
 			keys = pygame.key.get_pressed()
 			if keys[pygame.K_LEFT]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.x += PLAYER_SPEED
-				self.x_change -= PLAYER_SPEED
+						sprite.rect.x += self.player_speed
+				self.x_change -= self.player_speed
 				self.facing = 'left'
 			if keys[pygame.K_RIGHT]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.x -= PLAYER_SPEED
-				self.x_change += PLAYER_SPEED
+						sprite.rect.x -= self.player_speed
+				self.x_change += self.player_speed
 				self.facing = 'right'
 			if keys[pygame.K_UP]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.y += PLAYER_SPEED
-				self.y_change -= PLAYER_SPEED
+						sprite.rect.y += self.player_speed
+				self.y_change -= self.player_speed
 				self.facing = 'up'
 			if keys[pygame.K_DOWN]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.y -= PLAYER_SPEED
-				self.y_change += PLAYER_SPEED
+						sprite.rect.y -= self.player_speed
+				self.y_change += self.player_speed
 				self.facing = 'down'
 		else:
 			keys = pygame.key.get_pressed()
 			if keys[pygame.K_q]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.x += PLAYER_SPEED
-				self.x_change -= PLAYER_SPEED
+						sprite.rect.x += self.player_speed
+				self.x_change -= self.player_speed
 				self.facing = 'left'
 			if keys[pygame.K_d]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.x -= PLAYER_SPEED
-				self.x_change += PLAYER_SPEED
+						sprite.rect.x -= self.player_speed
+				self.x_change += self.player_speed
 				self.facing = 'right'
 			if keys[pygame.K_z]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.y += PLAYER_SPEED
-				self.y_change -= PLAYER_SPEED
+						sprite.rect.y += self.player_speed
+				self.y_change -= self.player_speed
 				self.facing = 'up'
 			if keys[pygame.K_s]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.y -= PLAYER_SPEED
-				self.y_change += PLAYER_SPEED
+						sprite.rect.y -= self.player_speed
+				self.y_change += self.player_speed
 				self.facing = 'down'
 
 	def animate(self):
@@ -162,7 +164,7 @@ class Player(pygame.sprite.Sprite):
 				self.animation_loop += 0.1
 				if self.animation_loop >= 3:
 					self.animation_loop = 0
-					
+
 	def switch_weapon(self,event):
 		if event.button == 4:
 			self.game.switch_weapon_sound.play()
@@ -178,9 +180,10 @@ class Player(pygame.sprite.Sprite):
 			Bullet(self.game, self.rect.centerx, self.rect.centery, x, y, 5)
 		# else:
 
-	def collision(self, direction):
-		PLAYER_SPEED = 5
+	def sprint(self):
+		print("f")
 
+	def collision(self, direction):
 
 		if direction == 'x':
 			hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
@@ -188,11 +191,11 @@ class Player(pygame.sprite.Sprite):
 				if self.x_change > 0:
 					self.rect.x = hit[0].rect.left - self.rect.width
 					for sprite in self.game.all_sprites:
-						sprite.rect.x += PLAYER_SPEED
+						sprite.rect.x += self.player_speed
 				if self.x_change < 0:
 					self.rect.x = hit[0].rect.right
 					for sprite in self.game.all_sprites:
-						sprite.rect.x -= PLAYER_SPEED
+						sprite.rect.x -= self.player_speed
 
 		if direction == 'y':
 			hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
@@ -200,11 +203,11 @@ class Player(pygame.sprite.Sprite):
 				if self.y_change > 0:
 					self.rect.y = hit[0].rect.top - self.rect.height
 					for sprite in self.game.all_sprites:
-						sprite.rect.y += PLAYER_SPEED
+						sprite.rect.y += self.player_speed
 				if self.y_change < 0:
 					self.rect.y = hit[0].rect.bottom
 					for sprite in self.game.all_sprites:
-						sprite.rect.y -= PLAYER_SPEED
+						sprite.rect.y -= self.player_speed
 
 class Block(pygame.sprite.Sprite):
 	def __init__(self, game, x, y, block_type, colision):
@@ -225,7 +228,7 @@ class Block(pygame.sprite.Sprite):
 		self.y = y
 		self.width = 64
 		self.height = 64
-		
+
 
 		self.block_type = block_type
 
@@ -236,7 +239,7 @@ class Block(pygame.sprite.Sprite):
 			self.image = self.game.terrain_spritesheet.get_image(1, 3, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'water':
 			self.image = self.game.terrain_spritesheet.get_image(3, 3, WIDTH, HEIGHT, SCALE, BLACK)
-		
+
 		#map border textures
 		if self.block_type == 'topWater':
 			self.image = self.game.terrain_spritesheet.get_image(2, 2, WIDTH, HEIGHT, SCALE, BLACK)
@@ -273,23 +276,23 @@ class Block(pygame.sprite.Sprite):
 		if self.block_type == 'bottomSandGrassT':
 			self.image = self.game.terrain_spritesheet.get_image(2, 1, WIDTH, HEIGHT, SCALE, BLACK)
 
-		#Fences
+		# Fences
 		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(6, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(4, 4, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'topRightFence':
-			self.image = self.game.terrain_spritesheet.get_image(5, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(5, 4, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'topFence':
-			self.image = self.game.terrain_spritesheet.get_image(4, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(1, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(3, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(8, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(7, 1, WIDTH, HEIGHT, SCALE, BLACK)
-		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(2, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(8, 4, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'sideFence':
+			self.image = self.game.terrain_spritesheet.get_image(1, 4, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'bottomLeftFence':
+			self.image = self.game.terrain_spritesheet.get_image(7, 4, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'bottomRightFence':
+			self.image = self.game.terrain_spritesheet.get_image(6, 4, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'topStopFence':
+			self.image = self.game.terrain_spritesheet.get_image(3, 4, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'bottomStopFence':
+			self.image = self.game.terrain_spritesheet.get_image(2, 4, WIDTH, HEIGHT, SCALE, BLACK)
 
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
@@ -419,7 +422,7 @@ class Crab(pygame.sprite.Sprite):
 
 
 class Bullet(pygame.sprite.Sprite):
-	
+
 
 
 	def __init__(self, game, x, y, destX, destY, speed):
@@ -430,7 +433,7 @@ class Bullet(pygame.sprite.Sprite):
 		self._layer = 2
 		self.groups = self.game.all_sprites, self.game.bullets
 		pygame.sprite.Sprite.__init__(self, self.groups)
-		
+
 
 		self.angle = ((self.getAngleBetweenPoints(x, y, destX, destY) / (6/4)   * 90) - 360 ) * (-1)
 
@@ -458,14 +461,12 @@ class Bullet(pygame.sprite.Sprite):
 		return a
 
 	def collisition(self):
-		# hit = pygame.sprite.spritecollide(self, self.game.enemies, False)
-		click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Damage1.ogg'))
-		click_sound.set_volume(0.05)
 		for enemies in self.game.enemies:
 			if pygame.sprite.collide_mask(self, enemies):
 				enemies.damaged(50)
-				click_sound.play()
+				self.game.damaged_sound.play()
 				self.kill()
+				break
 		hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
 		if hit:
 			self.kill()
