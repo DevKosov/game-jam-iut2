@@ -102,6 +102,7 @@ class Game:
         self.character_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/characters', 'doux.png')).convert_alpha())
         self.terrain_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha())
         self.crab_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests/Crab.png')).convert_alpha())
+        self.night_effet = pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha()
 
     def createTileMap(self):
         WIDTH, HEIGHT = 64, 64
@@ -167,9 +168,10 @@ class Game:
         self.enemies = pygame.sprite.LayeredUpdates()
         self.bullets = pygame.sprite.LayeredUpdates()
 
-        self.night_effect = pygame.Surface((1024, 768))
-        self.night_effect.set_alpha(115)
-        self.night_effect.fill((30,0,0))
+        # self.night_effect = pygame.Surface((1024, 768))
+        
+        # self.night_effect.set_alpha(115)
+        # self.night_effect.fill((30,0,0))
 
         self.createTileMap()
 
@@ -241,7 +243,7 @@ class Game:
         self.screen.blit(self.tips3,self.tips3_rect)
         self.screen.blit(self.timer,self.timer_rect)
         
-        self.screen.blit(self.night_effect, (0,0))
+        self.screen.blit(self.night_effet, (0,0))
         self.curseur()
         
         pygame.display.update()
