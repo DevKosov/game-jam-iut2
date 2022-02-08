@@ -105,7 +105,7 @@ class Game:
             pygame.image.load(os.path.join('assets/img/tests', 'overlayN.png')).convert_alpha(),
             pygame.image.load(os.path.join('assets/img/tests', 'overlayNormalRed.png')).convert_alpha(),
             pygame.image.load(os.path.join('assets/img/tests', 'overlayBeforeDeath.png')).convert_alpha()
-        ]
+        ] # lul
 
 
     def createTileMap(self):
