@@ -61,9 +61,6 @@ tilemap = [
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
 ]
-
-bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
-test_sound = pygame.mixer.Sound('assets/audio/se/Applause2.ogg')
 spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Up1.ogg'))
 click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Decision5.ogg'))
 
@@ -86,16 +83,19 @@ class Game:
         self.timer_init = 120 # 120s
         self.clock = pygame.time.Clock()
 
+        self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
+        self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Switch2.ogg'))
+
         pygame.mouse.set_visible(False)
 
         if self.fx_played==True:
-            test_sound.set_volume(0.1)
-            bullet_sound.set_volume(0.1)
+            self.bullet_sound.set_volume(0.1)
+            self.switch_weapon_sound.set_volume(0.08)
             spawn_sound.set_volume(0.1)
             click_sound.set_volume(0.1)
         else:
-            test_sound.set_volume(0)
-            bullet_sound.set_volume(0)
+            self.bullet_sound.set_volume(0)
+            self.switch_weapon_sound.set_volume(0)
             spawn_sound.set_volume(0)
             click_sound.set_volume(0)
 
@@ -189,17 +189,14 @@ class Game:
                 self.running = False
                 exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
+                self.player.switch_weapon(event)
                 if event.button == pygame.BUTTON_LEFT:
-                    bullet_sound.play()
-                    x, y = pygame.mouse.get_pos()
-                    Bullet(self, self.player.rect.centerx, self.player.rect.centery, x, y, 5)
+                    self.player.attacks()
                 if event.button == pygame.BUTTON_RIGHT:
                     spawn_sound.play()
                     Crab(self, self.player.x + (random.choice((-1,1))*random.randint(150,250)), self.player.y + (random.choice((-1,1))*random.randint(150,250)), 100,2)
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    test_sound.play()
-                elif event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_ESCAPE:
                     self.playing = False
                     self.menu = True
                 elif event.key == pygame.K_i:
@@ -418,13 +415,13 @@ class Game:
                     click_sound.play()
                     self.fx_played= not self.fx_played
                     if self.fx_played:
-                        test_sound.set_volume(0.1)
-                        bullet_sound.set_volume(0.1)
+                        self.bullet_sound.set_volume(0.1)
+                        self.switch_weapon_sound.set_volume(0.08)
                         spawn_sound.set_volume(0.1)
                         click_sound.set_volume(0.1)
                     else:
-                        test_sound.set_volume(0)
-                        bullet_sound.set_volume(0)
+                        self.bullet_sound.set_volume(0)
+                        self.switch_weapon_sound.set_volume(0)
                         spawn_sound.set_volume(0)
                         click_sound.set_volume(0)
                     self.options_screen()
