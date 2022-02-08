@@ -86,14 +86,6 @@ class Game:
         self.timer_init = 120 # 120s
         self.clock = pygame.time.Clock()
 
-
-        if self.music_played==True:
-            pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
-            pygame.mixer.music.set_volume(0.05)
-            pygame.mixer.music.play(fade_ms=2000)
-        else:
-            pygame.mixer.music.pause()
-
         pygame.mouse.set_visible(False)
 
         if self.fx_played==True:
@@ -251,9 +243,12 @@ class Game:
     def main(self):
         self.playing = True
 
-        pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town3.ogg'))
-        pygame.mixer.music.set_volume(0.05)
-        pygame.mixer.music.play(fade_ms=2000)
+        if self.music_played==True:
+            pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town3.ogg'))
+            pygame.mixer.music.set_volume(0.05)
+            pygame.mixer.music.play(fade_ms=2000)
+        else:
+            pygame.mixer.music.pause()
 
         while self.playing:
             self.draw()    
@@ -276,9 +271,12 @@ class Game:
         click_sound.play()
         self.menu = True
 
-        pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
-        pygame.mixer.music.set_volume(0.05)
-        pygame.mixer.music.play(fade_ms=2000)
+        if self.music_played==True:
+            pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
+            pygame.mixer.music.set_volume(0.05)
+            pygame.mixer.music.play(fade_ms=2000)
+        else:
+            pygame.mixer.music.pause()
 
         title = self.font.render('Pog Champs Game', True, BLACK)
         title_rect = title.get_rect(x=self.screen.get_width()/2-title.get_width()/2, y=100)
