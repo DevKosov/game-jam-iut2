@@ -17,7 +17,7 @@ class SpriteSheet():
 		return image
 
 class Player(pygame.sprite.Sprite):
-	def __init__(self, game, x, y):
+	def __init__(self, game, x, y, gameplay):
 		BLACK = (0,0,0)
 		WIDTH = 24
 		HEIGHT = 24
@@ -45,6 +45,8 @@ class Player(pygame.sprite.Sprite):
 		self.rect.x = self.x
 		self.rect.y = self.y
 
+		self.player_gameplay_ZQSD = gameplay
+
 	def update(self):
 		self.movement()
 		self.animate()
@@ -58,19 +60,50 @@ class Player(pygame.sprite.Sprite):
 	def movement(self):
 		PLAYER_SPEED = 5
 		
-		keys = pygame.key.get_pressed()
-		if keys[pygame.K_LEFT]:
-			self.x_change -= PLAYER_SPEED
-			self.facing = 'left'
-		if keys[pygame.K_RIGHT]:
-			self.x_change += PLAYER_SPEED
-			self.facing = 'right'
-		if keys[pygame.K_UP]:
-			self.y_change -= PLAYER_SPEED
-			self.facing = 'up'
-		if keys[pygame.K_DOWN]:
-			self.y_change += PLAYER_SPEED
-			self.facing = 'down'
+		if self.player_gameplay_ZQSD==False:
+			keys = pygame.key.get_pressed()
+			if keys[pygame.K_LEFT]:
+				for sprite in self.game.all_sprites:
+						sprite.rect.x += PLAYER_SPEED
+				self.x_change -= PLAYER_SPEED
+				self.facing = 'left'
+			if keys[pygame.K_RIGHT]:
+				for sprite in self.game.all_sprites:
+						sprite.rect.x -= PLAYER_SPEED
+				self.x_change += PLAYER_SPEED
+				self.facing = 'right'
+			if keys[pygame.K_UP]:
+				for sprite in self.game.all_sprites:
+						sprite.rect.y += PLAYER_SPEED
+				self.y_change -= PLAYER_SPEED
+				self.facing = 'up'
+			if keys[pygame.K_DOWN]:
+				for sprite in self.game.all_sprites:
+						sprite.rect.y -= PLAYER_SPEED
+				self.y_change += PLAYER_SPEED
+				self.facing = 'down'
+		else:
+			keys = pygame.key.get_pressed()
+			if keys[pygame.K_q]:
+				for sprite in self.game.all_sprites:
+						sprite.rect.x += PLAYER_SPEED
+				self.x_change -= PLAYER_SPEED
+				self.facing = 'left'
+			if keys[pygame.K_d]:
+				for sprite in self.game.all_sprites:
+						sprite.rect.x -= PLAYER_SPEED
+				self.x_change += PLAYER_SPEED
+				self.facing = 'right'
+			if keys[pygame.K_z]:
+				for sprite in self.game.all_sprites:
+						sprite.rect.y += PLAYER_SPEED
+				self.y_change -= PLAYER_SPEED
+				self.facing = 'up'
+			if keys[pygame.K_s]:
+				for sprite in self.game.all_sprites:
+						sprite.rect.y -= PLAYER_SPEED
+				self.y_change += PLAYER_SPEED
+				self.facing = 'down'
 
 	def animate(self):
 		BLACK = (0, 0, 0)
@@ -125,13 +158,14 @@ class Player(pygame.sprite.Sprite):
 				self.animation_loop += 0.1
 				if self.animation_loop >= 3:
 					self.animation_loop = 0
- 
+
 class Block(pygame.sprite.Sprite):
-	def __init__(self, game, x, y,block_type):
+	def __init__(self, game, x, y, block_type):
 		BLACK = (0,0,0)
-		WIDTH = 32
-		HEIGHT = 32
+		WIDTH = 64
+		HEIGHT = 64
 		SCALE = 1
+
 		self.game = game
 		self._layer = 1
 		self.groups = self.game.all_sprites, self.game.blocks

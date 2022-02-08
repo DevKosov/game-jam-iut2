@@ -73,7 +73,7 @@ class Game:
         self.font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 70)
         self.music_played = True
         self.fx_played = True
-        self.gameplay_ZQSD = False
+        self.gameplay_ZQSD = True
 
         if self.music_played==True:
             pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
@@ -93,6 +93,7 @@ class Game:
             test_sound.set_volume(0)
             bullet_sound.set_volume(0)
             spawn_sound.set_volume(0)
+            click_sound.set_volume(0)
 
         self.character_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/characters', 'doux.png')).convert_alpha())
         self.terrain_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha())
@@ -124,7 +125,7 @@ class Game:
                 if column == 'D':
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'leftWaterBord')
                 if column == 'P':
-                    Player(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT)
+                    Player(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT,self.gameplay_ZQSD)
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'sand')
         self.screen.blit(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0,0))
     def new(self):
@@ -311,23 +312,25 @@ class Game:
                     if self.fx_played:
                         test_sound.set_volume(0.1)
                         bullet_sound.set_volume(0.1)
+                        spawn_sound.set_volume(0.1)
+                        click_sound.set_volume(0.1)
                     else:
-                        test_sound.set_volume(0.1)
+                        test_sound.set_volume(0)
                         bullet_sound.set_volume(0)
+                        spawn_sound.set_volume(0)
+                        click_sound.set_volume(0)
                     self.options_screen()
-                elif event.type == pygame.MOUSEBUTTONUP and top_btn1.rect.collidepoint(pygame.mouse.get_pos()):
-                    self.gameplay_ZQSD = not self.gameplay_ZQSD
-                    if self.gameplay_ZQSD:
-                        print("Ok")
-                    else:
-                        print("Ok")
+                elif event.type == pygame.MOUSEBUTTONUP and (top_btn1.rect.collidepoint(pygame.mouse.get_pos())or
+                                                             bottom_btn1.rect.collidepoint(pygame.mouse.get_pos())or
+                                                             left_btn1.rect.collidepoint(pygame.mouse.get_pos())or
+                                                             right_btn1.rect.collidepoint(pygame.mouse.get_pos())):
+                    self.gameplay_ZQSD = True
                     self.options_screen()
-                elif event.type == pygame.MOUSEBUTTONUP and top_btn2.rect.collidepoint(pygame.mouse.get_pos()):
-                    self.gameplay_ZQSD = not self.gameplay_ZQSD
-                    if self.gameplay_ZQSD:
-                        print("Ok")
-                    else:
-                        print("Ok")
+                elif event.type == pygame.MOUSEBUTTONUP and (top_btn2.rect.collidepoint(pygame.mouse.get_pos())or
+                                                             bottom_btn2.rect.collidepoint(pygame.mouse.get_pos())or
+                                                             left_btn2.rect.collidepoint(pygame.mouse.get_pos())or
+                                                             right_btn2.rect.collidepoint(pygame.mouse.get_pos())):
+                    self.gameplay_ZQSD = False
                     self.options_screen()
 
             mouse_pos = pygame.mouse.get_pos()
@@ -360,6 +363,7 @@ class Game:
             self.clock.tick(FPS)
             self.curseur()
             pygame.display.update()
+    
     
     def credits_screen(self):
         click_sound.play()
