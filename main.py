@@ -73,7 +73,8 @@ class Game:
         self.font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 70)
         self.music_played = True
         self.fx_played = True
-        self.gameplay_ZQSD = True
+        self.gameplay_ZQSD = False
+        self.back_to_game = False
 
         if self.music_played==True:
             pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
@@ -169,12 +170,56 @@ class Game:
         pygame.display.update()
 
     def main(self):
-        #game loop
+        self.playing = True
+
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+
+        tips1 = font.render("Press 'esc' to quit party", True, BLACK)
+        tips1.set_alpha(150)
+        tips1_rect = tips1.get_rect(x=self.screen.get_width()/2-tips1.get_width()/2, y=100)
+
+        tips2 = font.render("Press 'ctrl' to open options", True, BLACK)
+        tips2.set_alpha(150)
+        tips2_rect = tips2.get_rect(x=self.screen.get_width()/2-tips2.get_width()/2, y=130)
+
+        tips3 = font.render("Press 'i' to toggle tips", True, BLACK)
+        tips3.set_alpha(150)
+        tips3_rect = tips3.get_rect(x=self.screen.get_width()/2-tips3.get_width()/2, y=160)
+
+        tips = True
+
         while self.playing:
             self.events()
             self.update()
             self.draw()
-        self.running = False
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.playing = False
+                    self.running = False
+                    exit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.playing = False
+                        self.menu = True
+                    elif event.key == pygame.K_i:
+                        tips = not tips
+                        if tips:
+                            tips1.set_alpha(150)
+                            tips2.set_alpha(150)
+                            tips3.set_alpha(150)
+                        else:
+                            tips1.set_alpha(0)
+                            tips2.set_alpha(0)
+                            tips3.set_alpha(0)
+                    elif event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
+                        self.playing = not self.playing
+                        self.options = not self.options
+                        self.back_to_game = True
+
+            self.screen.blit(tips1,tips1_rect)
+            self.screen.blit(tips2,tips2_rect)
+            self.screen.blit(tips3,tips3_rect)
+            pygame.display.update()
 
     def game_over(self):
         pass
@@ -291,7 +336,10 @@ class Game:
             left_btn2 = Button(590, 430, 110, 30, WHITE, BLACK, 'Arr. Left', 30)
             right_btn2 = Button(590, 460, 110, 30, WHITE, BLACK, "Arr. Right", 30)
 
-        back_button = Button((self.screen.get_width()/2)-100, 650, 200, 50, WHITE, BLACK, 'Back to menu', 30)
+        if self.back_to_game:
+            back_button = Button((self.screen.get_width()/2)-100, 650, 200, 50, WHITE, BLACK, 'Back to game', 30)
+        else:
+            back_button = Button((self.screen.get_width()/2)-100, 650, 200, 50, WHITE, BLACK, 'Back to menu', 30)
 
         while self.options:
             for event in pygame.event.get():
@@ -333,12 +381,16 @@ class Game:
                                                              right_btn2.rect.collidepoint(pygame.mouse.get_pos())):
                     self.gameplay_ZQSD = False
                     self.options_screen()
+                elif event.type == pygame.MOUSEBUTTONUP and back_button.rect.collidepoint(pygame.mouse.get_pos()) or (event.type == pygame.KEYDOWN and (event.key==K_RCTRL or event.key==K_LCTRL)):
+                    if self.back_to_game:
+                        self.options = False
+                        self.playing = True
+                    else:
+                        self.options = False
+                        self.menu = True
 
             mouse_pos = pygame.mouse.get_pos()
             mouse_pressed = pygame.mouse.get_pressed()
-            if back_button.is_pressed(mouse_pos,mouse_pressed):
-                self.options = False
-                self.menu = True
 
             self.screen.fill(BLUE)
             self.screen.blit(title, title_rect)
