@@ -210,6 +210,10 @@ class Game:
     def main(self):
         self.playing = True
 
+        pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town3.ogg'))
+        pygame.mixer.music.set_volume(0.05)
+        pygame.mixer.music.play(fade_ms=2000)
+
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
 
         tips1 = font.render("Press 'esc' to quit party", True, BLACK)
@@ -272,6 +276,10 @@ class Game:
     def intro_screen(self):
         click_sound.play()
         self.menu = True
+
+        pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
+        pygame.mixer.music.set_volume(0.05)
+        pygame.mixer.music.play(fade_ms=2000)
 
         title = self.font.render('Pog Champs Game', True, BLACK)
         title_rect = title.get_rect(x=self.screen.get_width()/2-title.get_width()/2, y=100)
