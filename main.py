@@ -60,9 +60,6 @@ tilemap = [   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE'
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
 ]
-
-bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
-test_sound = pygame.mixer.Sound('assets/audio/se/Applause2.ogg')
 spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Up1.ogg'))
 click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Decision5.ogg'))
 
@@ -85,16 +82,19 @@ class Game:
         self.timer_init = 120 # 120s
         self.clock = pygame.time.Clock()
 
+        self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
+        self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Switch2.ogg'))
+
         pygame.mouse.set_visible(False)
 
         if self.fx_played==True:
-            test_sound.set_volume(0.1)
-            bullet_sound.set_volume(0.1)
+            self.bullet_sound.set_volume(0.1)
+            self.switch_weapon_sound.set_volume(0.08)
             spawn_sound.set_volume(0.1)
             click_sound.set_volume(0.1)
         else:
-            test_sound.set_volume(0)
-            bullet_sound.set_volume(0)
+            self.bullet_sound.set_volume(0)
+            self.switch_weapon_sound.set_volume(0)
             spawn_sound.set_volume(0)
             click_sound.set_volume(0)
 
@@ -194,10 +194,11 @@ class Game:
         
         # self.night_effect.set_alpha(115)
         # self.night_effect.fill((30,0,0))
-
+        self.day_time = True
         self.createTileMap()
 
     def events(self):
+        self.back_to_game = False
         #game loop events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -205,17 +206,14 @@ class Game:
                 self.running = False
                 exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
+                self.player.switch_weapon(event)
                 if event.button == pygame.BUTTON_LEFT:
-                    bullet_sound.play()
-                    x, y = pygame.mouse.get_pos()
-                    Bullet(self, self.player.rect.centerx, self.player.rect.centery, x, y, 5)
+                    self.player.attacks()
                 if event.button == pygame.BUTTON_RIGHT:
                     spawn_sound.play()
                     Crab(self, self.player.x + (random.choice((-1,1))*random.randint(150,250)), self.player.y + (random.choice((-1,1))*random.randint(150,250)), 100,2)
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    test_sound.play()
-                elif event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_ESCAPE:
                     self.playing = False
                     self.menu = True
                 elif event.key == pygame.K_i:
@@ -232,6 +230,17 @@ class Game:
                     self.playing = not self.playing
                     self.options = not self.options
                     self.back_to_game = True
+
+    def events_day(self):
+        #game loop events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.playing = False
+                self.running = False
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == pygame.BUTTON_LEFT:
+                    self.day_time = False
 
     def update(self):
         #game llop events
@@ -269,6 +278,14 @@ class Game:
         self.curseur()
         
         pygame.display.update()
+    
+    def draw_day(self):
+        #game loop draw
+        self.screen.fill(BLACK)
+        self.clock.tick(FPS)
+        self.curseur()
+        
+        pygame.display.update()
 
     def main(self):
         self.playing = True
@@ -283,10 +300,23 @@ class Game:
             pygame.mixer.music.pause()
 
         while self.playing:
+<<<<<<< HEAD
             self.draw()    
             self.events() 
             self.update()
             self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
+            if self.timer_value==0:
+                d
+=======
+            if self.day_time:
+                self.draw_day()
+                self.events_day()
+            else:
+                self.draw()
+                self.events() 
+                self.update()
+                self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
+>>>>>>> 97cdd7fc2644fb87e0d198649bf9b1b6cf3cbfa6
         pygame.display.update()
 
     def game_over(self):
@@ -434,13 +464,13 @@ class Game:
                     click_sound.play()
                     self.fx_played= not self.fx_played
                     if self.fx_played:
-                        test_sound.set_volume(0.1)
-                        bullet_sound.set_volume(0.1)
+                        self.bullet_sound.set_volume(0.1)
+                        self.switch_weapon_sound.set_volume(0.08)
                         spawn_sound.set_volume(0.1)
                         click_sound.set_volume(0.1)
                     else:
-                        test_sound.set_volume(0)
-                        bullet_sound.set_volume(0)
+                        self.bullet_sound.set_volume(0)
+                        self.switch_weapon_sound.set_volume(0)
                         spawn_sound.set_volume(0)
                         click_sound.set_volume(0)
                     self.options_screen()

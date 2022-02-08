@@ -2,6 +2,7 @@
 from turtle import width
 import pygame, os, math
 #import spritesheet
+import sprite
 
 
 class SpriteSheet():
@@ -33,6 +34,8 @@ class Player(pygame.sprite.Sprite):
 		self.width = WIDTH
 		self.height = HEIGHT
 
+		self.current_weapon = "gun"
+
 		self.x_change = 0
 		self.y_change = 0
 
@@ -58,7 +61,6 @@ class Player(pygame.sprite.Sprite):
 
 		self.x_change = 0
 		self.y_change  = 0
-
 	def movement(self):
 		PLAYER_SPEED = 5
 		
@@ -118,12 +120,12 @@ class Player(pygame.sprite.Sprite):
 		image2 = pygame.transform.flip(self.game.character_spritesheet.get_image(3, 1, self.width, self.height, SCALE, BLACK), 1, 0)
 		image2.set_colorkey(BLACK)
 		left_animations = [image,
-                        	image1,
-                        	image2]
+							image1,
+							image2]
 
 		right_animations = [self.game.character_spritesheet.get_image(1, 1, self.width, self.height, SCALE, BLACK),
-                           self.game.character_spritesheet.get_image(2, 1, self.width, self.height, SCALE, BLACK),
-                           self.game.character_spritesheet.get_image(3, 1, self.width, self.height, SCALE, BLACK)]
+						   self.game.character_spritesheet.get_image(2, 1, self.width, self.height, SCALE, BLACK),
+						   self.game.character_spritesheet.get_image(3, 1, self.width, self.height, SCALE, BLACK)]
 
 		if self.facing == 'left':
 			if self.x_change == 0:
@@ -160,8 +162,21 @@ class Player(pygame.sprite.Sprite):
 				self.animation_loop += 0.1
 				if self.animation_loop >= 3:
 					self.animation_loop = 0
+					
+	def switch_weapon(self,event):
+		if event.button == 4:
+			self.game.switch_weapon_sound.play()
+			self.current_weapon = "knife"
+		if event.button == 5:
+			self.game.switch_weapon_sound.play()
+			self.current_weapon = "gun"
 
-
+	def attacks(self):
+		if (self.current_weapon == "gun"):
+			self.game.bullet_sound.play()
+			x, y = pygame.mouse.get_pos()
+			Bullet(self.game, self.rect.centerx, self.rect.centery, x, y, 5)
+		# else:
 
 	def collision(self, direction):
 		PLAYER_SPEED = 5
