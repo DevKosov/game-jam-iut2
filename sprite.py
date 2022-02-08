@@ -52,7 +52,9 @@ class Player(pygame.sprite.Sprite):
 		self.animate()
 
 		self.rect.x += self.x_change
+		self.collision('x')
 		self.rect.y += self.y_change
+		self.collision('y')
 
 		self.x_change = 0
 		self.y_change  = 0
@@ -159,8 +161,38 @@ class Player(pygame.sprite.Sprite):
 				if self.animation_loop >= 3:
 					self.animation_loop = 0
 
+
+
+	def collision(self, direction):
+		PLAYER_SPEED = 5
+
+
+		if direction == 'x':
+			hit = pygame.sprite.spritecollide(self, self.game.blocks, False)
+			if hit:
+				if self.x_change > 0:
+					self.rect.x = hit[0].rect.left - self.rect.width
+					for sprite in self.game.all_sprites:
+						sprite.rect.x += PLAYER_SPEED
+				if self.x_change < 0:
+					self.rect.x = hit[0].rect.right
+					for sprite in self.game.all_sprites:
+						sprite.rect.x -= PLAYER_SPEED
+
+		if direction == 'y':
+			hit = pygame.sprite.spritecollide(self, self.game.blocks, False)
+			if hit:
+				if self.y_change > 0:
+					self.rect.y = hit[0].rect.top - self.rect.height
+					for sprite in self.game.all_sprites:
+						sprite.rect.y += PLAYER_SPEED
+				if self.y_change < 0:
+					self.rect.y = hit[0].rect.bottom
+					for sprite in self.game.all_sprites:
+						sprite.rect.y -= PLAYER_SPEED
+
 class Block(pygame.sprite.Sprite):
-	def __init__(self, game, x, y, block_type):
+	def __init__(self, game, x, y, block_type, colision):
 		BLACK = (0,0,0)
 		WIDTH = 64
 		HEIGHT = 64
@@ -174,6 +206,7 @@ class Block(pygame.sprite.Sprite):
 		self.y = y
 		self.width = 64
 		self.height = 64
+		self.colision = colision
 
 		self.block_type = block_type
 
