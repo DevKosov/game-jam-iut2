@@ -16,10 +16,10 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 BLUE = (150, 252, 255)
 tilemap = ['.....',
-            '.....',
-            '..P..',
-            '.....',
-            '.....']
+            '.AAA.',
+            '.APA.',
+            '.AAA.',
+            '......']
 
 
 
@@ -48,13 +48,15 @@ class Game:
         pygame.mixer.music.play(fade_ms=2000)
 
         self.character_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/characters', 'doux.png')).convert_alpha())
-        self.terrain_spritesheet = SpriteSheet(pygame.transform.scale(pygame.image.load(os.path.join('assets/img/tilesets', 'ground.png')).convert_alpha(), (12, 12)))
+        self.terrain_spritesheet = SpriteSheet(pygame.transform.scale(pygame.image.load(os.path.join('assets/img/tilesets', 'asset_tilemap.png')).convert_alpha(), (12, 24)))
 
     def createTileMap(self):
         for i, row in enumerate(tilemap):
             for j, column in enumerate(row):
                 if column == '.':
-                    Block(self, (j+5)*32, (i+5)*32)
+                    Block(self, (j+5)*32, (i+5)*32, 'ground')
+                if column == 'A':
+                    Block(self, (j+5)*32, (i+5)*32, 'grass')
                 if column == 'P':
                     Player(self, (i+5)*32, (j+5)*32)
     def new(self):
