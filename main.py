@@ -81,6 +81,11 @@ class Game:
         self.fx_played = True
         self.gameplay_ZQSD = False
         self.back_to_game = False
+        self.tips = True
+        self.timer_value = 0
+        self.timer_init = 10 # 120s
+        self.clock = pygame.time.Clock()
+
 
         if self.music_played==True:
             pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
@@ -189,8 +194,7 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     test_sound.play()
-
-                if event.key == pygame.K_ESCAPE:
+                elif event.key == pygame.K_ESCAPE:
                     self.playing = False
                     self.menu = True
                 elif event.key == pygame.K_i:
@@ -214,24 +218,24 @@ class Game:
 
     def draw(self):
         #game loop draw
+
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+        self.timer = font.render("Time left:  "+str(self.timer_value)+"s", True, BLACK)
+        self.timer_rect = self.timer.get_rect(x=900, y=20)
 
-        
-        self.tips1 = font.render("Press 'esc' to quit party", True, BLACK)
-        self.tips1.set_alpha(150)
-        self.tips1_rect = self.tips1.get_rect(x=self.screen.get_width()/2-self.tips1.get_width()/2, y=100)
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+        if self.tips:
+            self.tips1 = font.render("Press 'esc' to quit party", True, BLACK)
+            self.tips1.set_alpha(150)
+            self.tips1_rect = self.tips1.get_rect(x=self.screen.get_width()/2-self.tips1.get_width()/2, y=100)
 
-        self.tips2 = font.render("Press 'ctrl' to open options", True, BLACK)
-        self.tips2.set_alpha(150)
-        self.tips2_rect = self.tips2.get_rect(x=self.screen.get_width()/2-self.tips2.get_width()/2, y=130)
+            self.tips2 = font.render("Press 'ctrl' to open options", True, BLACK)
+            self.tips2.set_alpha(150)
+            self.tips2_rect = self.tips2.get_rect(x=self.screen.get_width()/2-self.tips2.get_width()/2, y=130)
 
-        self.tips3 = font.render("Press 'i' to toggle tips", True, BLACK)
-        self.tips3.set_alpha(150)
-        self.tips3_rect = self.tips3.get_rect(x=self.screen.get_width()/2-self.tips3.get_width()/2, y=160)
-
-        self.tips = True
-
-
+            self.tips3 = font.render("Press 'i' to toggle tips", True, BLACK)
+            self.tips3.set_alpha(150)
+            self.tips3_rect = self.tips3.get_rect(x=self.screen.get_width()/2-self.tips3.get_width()/2, y=160)
 
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
@@ -239,6 +243,7 @@ class Game:
         self.screen.blit(self.tips1,self.tips1_rect)
         self.screen.blit(self.tips2,self.tips2_rect)
         self.screen.blit(self.tips3,self.tips3_rect)
+        self.screen.blit(self.timer,self.timer_rect)
         self.curseur()
         pygame.display.update()
 
@@ -250,10 +255,11 @@ class Game:
         pygame.mixer.music.play(fade_ms=2000)
 
         while self.playing:
-            self.events()
+            self.draw()    
+            self.events() 
             self.update()
-            self.draw()            
-            pygame.display.update()
+            self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
+        pygame.display.update()
 
     def game_over(self):
         pass
