@@ -113,7 +113,7 @@ class Game:
 
     def createTileMap(self):
         WIDTH, HEIGHT = 64, 64
-        OFFSETX, OFFSETY = 23.5, 15 
+        OFFSETX, OFFSETY = 23.5, 15
         for i, row in enumerate(tilemap):
             for j, column in enumerate(row):
 
@@ -173,7 +173,7 @@ class Game:
         self.blocks_collid = pygame.sprite.LayeredUpdates()
         self.blocks_no_collid = pygame.sprite.LayeredUpdates()
         self.enemies = pygame.sprite.LayeredUpdates()
-        self.balles = pygame.sprite.LayeredUpdates()
+        self.bullets = pygame.sprite.LayeredUpdates()
 
         self.createTileMap()
 
@@ -187,8 +187,10 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
                     bullet_sound.play()
-
+                    x, y = pygame.mouse.get_pos()
+                    Bullet(self, self.player.x, self.player.y, x, y, 5)
                 if event.button == pygame.BUTTON_RIGHT:
+                    print("f")
                     spawn_sound.play()
                     Crab(self, self.player.x + (random.choice((-1,1))*random.randint(150,250)), self.player.y + (random.choice((-1,1))*random.randint(150,250)), 100,2)
             elif event.type == pygame.KEYDOWN:
@@ -218,6 +220,15 @@ class Game:
 
     def draw(self):
         #game loop draw
+<<<<<<< HEAD
+=======
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+
+
+        self.tips1 = font.render("Press 'esc' to quit party", True, BLACK)
+        self.tips1.set_alpha(150)
+        self.tips1_rect = self.tips1.get_rect(x=self.screen.get_width()/2-self.tips1.get_width()/2, y=100)
+>>>>>>> 262672c3f9d824e8a621cf9aec757567a8a473db
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
         self.timer = font.render("Time left:  "+str(self.timer_value)+"s", True, BLACK)
@@ -258,8 +269,13 @@ class Game:
             self.draw()    
             self.events() 
             self.update()
+<<<<<<< HEAD
             self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
         pygame.display.update()
+=======
+            self.draw()
+            pygame.display.update()
+>>>>>>> 262672c3f9d824e8a621cf9aec757567a8a473db
 
     def game_over(self):
         pass
@@ -460,8 +476,8 @@ class Game:
             self.clock.tick(FPS)
             self.curseur()
             pygame.display.update()
-    
-    
+
+
     def credits_screen(self):
         click_sound.play()
         self.credits = True

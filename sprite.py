@@ -331,12 +331,20 @@ class Crab(pygame.sprite.Sprite):
 	def update(self):
 		self.movement()
 		self.animate()
-		# self.death()
+		self.shooted()
+		self.death()
 
 
-	# def death(self):
-	# 	if self.hp <= 0:
-	# 		self.groups.
+	def shooted(self):
+		mouse_pos = pygame.mouse.get_pos()
+		mouse_pressed = pygame.mouse.get_pressed()
+		if mouse_pressed[0]:
+			if self.rect.collidepoint(mouse_pos) == True:
+				self.hp += -20
+
+	def death(self):
+		if self.hp <= 0:
+			self.kill()
 
 	def movement(self):
 		if self.game.player.x > self.rect.x:
@@ -372,6 +380,42 @@ class Crab(pygame.sprite.Sprite):
 		if self.animation_loop >= 3:
 			self.animation_loop = 0
 
+
+class Bullet(pygame.sprite.Sprite):
+	
+
+
+	def __init__(self, game, x, y, destX, destY, speed):
+		self.x = x
+		self.y = y
+
+		self.game = game
+		self._layer = 2
+		self.groups = self.game.all_sprites, self.game.bullets
+		pygame.sprite.Sprite.__init__(self, self.groups)
+		
+
+		self.angle = ((self.getAngleBetweenPoints(x, y, destX, destY) / (6/4)   * 90) - 360 ) * (-1)
+
+		self.image = pygame.transform.rotate(pygame.transform.scale(pygame.image.load(os.path.join('assets/img/bullet', 'basic_bullet.png')).convert_alpha(), (30, 30)), self.angle - 90)
+
+		self.rect = self.image.get_rect()
+		self.rect.x = self.x
+		self.rect.y = self.y
+
+	def getAngleBetweenPoints(self, x_orig, y_orig, x_landmark, y_landmark):
+		deltaY = y_landmark - y_orig
+		deltaX = x_landmark - x_orig
+		t = math.atan2(deltaY, deltaX)
+		return self.angle_trunc(t)
+
+	def angle_trunc(self, a):
+		pi = 3.14159265359
+		while a < 0.0:
+			a += pi * 2
+		return a
+
+		
 
 # 		try:
 # 			self.sheet_image = pygame.image.load('assets/img/characters/doux.png').convert_alpha()
