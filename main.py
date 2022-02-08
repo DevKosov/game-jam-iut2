@@ -73,6 +73,7 @@ class Game:
         self.font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 70)
         self.music_played = True
         self.fx_played = True
+        self.gameplay_ZQSD = False
 
         if self.music_played==True:
             pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
@@ -269,6 +270,25 @@ class Game:
         right = font2.render('Right', True, BLACK)
         right_rect = right.get_rect(x=self.screen.get_width()/3-title.get_width()/2, y=460)
 
+        if self.gameplay_ZQSD==True:
+            top_btn1 = Button(700, 370, 60, 30, WHITE, BLACK, 'Z', 30)
+            bottom_btn1 = Button(700, 400, 60, 30, WHITE, BLACK, 'S', 30)
+            left_btn1 = Button(700, 430, 60, 30, WHITE, BLACK, 'Q', 30)
+            right_btn1 = Button(700, 460, 60, 30, WHITE, BLACK, "D", 30)
+            top_btn2 = Button(590, 370, 110, 30, BLACK, WHITE, 'Arr. Top', 30)
+            bottom_btn2 = Button(590, 400, 110, 30, BLACK, WHITE, 'Arr. Bottom', 30)
+            left_btn2 = Button(590, 430, 110, 30, BLACK, WHITE, 'Arr. Left', 30)
+            right_btn2 = Button(590, 460, 110, 30, BLACK, WHITE, "Arr. Right", 30)
+        else:
+            top_btn1 = Button(700, 370, 60, 30, BLACK, WHITE, 'Z', 30)
+            bottom_btn1 = Button(700, 400, 60, 30, BLACK, WHITE, 'S', 30)
+            left_btn1 = Button(700, 430, 60, 30, BLACK, WHITE, 'Q', 30)
+            right_btn1 = Button(700, 460, 60, 30, BLACK, WHITE, "D", 30)
+            top_btn2 = Button(590, 370, 110, 30, WHITE, BLACK, 'Arr. Top', 30)
+            bottom_btn2 = Button(590, 400, 110, 30, WHITE, BLACK, 'Arr. Bottom', 30)
+            left_btn2 = Button(590, 430, 110, 30, WHITE, BLACK, 'Arr. Left', 30)
+            right_btn2 = Button(590, 460, 110, 30, WHITE, BLACK, "Arr. Right", 30)
+
         back_button = Button((self.screen.get_width()/2)-100, 650, 200, 50, WHITE, BLACK, 'Back to menu', 30)
 
         while self.options:
@@ -295,6 +315,20 @@ class Game:
                         test_sound.set_volume(0.1)
                         bullet_sound.set_volume(0)
                     self.options_screen()
+                elif event.type == pygame.MOUSEBUTTONUP and top_btn1.rect.collidepoint(pygame.mouse.get_pos()):
+                    self.gameplay_ZQSD = not self.gameplay_ZQSD
+                    if self.gameplay_ZQSD:
+                        print("Ok")
+                    else:
+                        print("Ok")
+                    self.options_screen()
+                elif event.type == pygame.MOUSEBUTTONUP and top_btn2.rect.collidepoint(pygame.mouse.get_pos()):
+                    self.gameplay_ZQSD = not self.gameplay_ZQSD
+                    if self.gameplay_ZQSD:
+                        print("Ok")
+                    else:
+                        print("Ok")
+                    self.options_screen()
 
             mouse_pos = pygame.mouse.get_pos()
             mouse_pressed = pygame.mouse.get_pressed()
@@ -315,6 +349,14 @@ class Game:
             self.screen.blit(music_on_off.image, music_on_off.rect)
             self.screen.blit(fx_on_off.image, fx_on_off.rect)
             self.screen.blit(back_button.image, back_button.rect)
+            self.screen.blit(top_btn1.image, top_btn1.rect)
+            self.screen.blit(bottom_btn1.image, bottom_btn1.rect)
+            self.screen.blit(left_btn1.image, left_btn1.rect)
+            self.screen.blit(right_btn1.image, right_btn1.rect)
+            self.screen.blit(top_btn2.image, top_btn2.rect)
+            self.screen.blit(bottom_btn2.image, bottom_btn2.rect)
+            self.screen.blit(left_btn2.image, left_btn2.rect)
+            self.screen.blit(right_btn2.image, right_btn2.rect)
             self.clock.tick(FPS)
             self.curseur()
             pygame.display.update()

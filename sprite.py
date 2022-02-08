@@ -60,23 +60,15 @@ class Player(pygame.sprite.Sprite):
 		
 		keys = pygame.key.get_pressed()
 		if keys[pygame.K_LEFT]:
-			for sprite in self.game.all_sprites:
-					sprite.rect.x += PLAYER_SPEED
 			self.x_change -= PLAYER_SPEED
 			self.facing = 'left'
 		if keys[pygame.K_RIGHT]:
-			for sprite in self.game.all_sprites:
-					sprite.rect.x -= PLAYER_SPEED
 			self.x_change += PLAYER_SPEED
 			self.facing = 'right'
 		if keys[pygame.K_UP]:
-			for sprite in self.game.all_sprites:
-					sprite.rect.y += PLAYER_SPEED
 			self.y_change -= PLAYER_SPEED
 			self.facing = 'up'
 		if keys[pygame.K_DOWN]:
-			for sprite in self.game.all_sprites:
-					sprite.rect.y -= PLAYER_SPEED
 			self.y_change += PLAYER_SPEED
 			self.facing = 'down'
 
@@ -135,11 +127,10 @@ class Player(pygame.sprite.Sprite):
 					self.animation_loop = 0
  
 class Block(pygame.sprite.Sprite):
-	def __init__(self, game, x, y, block_type):
+	def __init__(self, game, x, y):
 		BLACK = (0,0,0)
-		WIDTH = 64
-		HEIGHT = 64
-		SCALE = 1
+		WIDTH = 32
+		HEIGHT = 32
 
 		self.game = game
 		self._layer = 1
