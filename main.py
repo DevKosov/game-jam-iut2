@@ -1,4 +1,5 @@
 #from cmath import rect
+import random
 import this
 import pygame, os
 from sprite import *
@@ -58,6 +59,9 @@ bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
 test_sound = pygame.mixer.Sound('assets/audio/se/Applause2.ogg')
 
 spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Up1.ogg'))
+
+# day_sound = pygame.mixer.Sound(os.path.join('assets/audio/bgm/Town3.ogg'))
+
 
 click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Load2.ogg'))
 
@@ -150,9 +154,10 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
                     bullet_sound.play()
+
                 if event.button == pygame.BUTTON_RIGHT:
                     spawn_sound.play()
-                    Crab(self, self.player.x + 10, self.player.y, 100)
+                    Crab(self, self.player.x + (random.choice((-1,1))*random.randint(150,250)), self.player.y + (random.choice((-1,1))*random.randint(150,250)), 100,2)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     test_sound.play()
