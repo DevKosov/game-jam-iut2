@@ -187,8 +187,8 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
                     bullet_sound.play()
-
                 if event.button == pygame.BUTTON_RIGHT:
+                    print("f")
                     spawn_sound.play()
                     Crab(self, self.player.x + (random.choice((-1,1))*random.randint(150,250)), self.player.y + (random.choice((-1,1))*random.randint(150,250)), 100,2)
             if event.type == pygame.KEYDOWN:
@@ -230,29 +230,29 @@ class Game:
             self.events()
             self.update()
             self.draw()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.playing = False
-                    self.running = False
-                    exit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        self.playing = False
-                        self.menu = True
-                    elif event.key == pygame.K_i:
-                        tips = not tips
-                        if tips:
-                            tips1.set_alpha(150)
-                            tips2.set_alpha(150)
-                            tips3.set_alpha(150)
-                        else:
-                            tips1.set_alpha(0)
-                            tips2.set_alpha(0)
-                            tips3.set_alpha(0)
-                    elif event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
-                        self.playing = not self.playing
-                        self.options = not self.options
-                        self.back_to_game = True
+            # for event in pygame.event.get():
+            #     if event.type == pygame.QUIT:
+            #         self.playing = False
+            #         self.running = False
+            #         exit()
+            #     elif event.type == pygame.KEYDOWN:
+            #         if event.key == pygame.K_ESCAPE:
+            #             self.playing = False
+            #             self.menu = True
+            #         elif event.key == pygame.K_i:
+            #             tips = not tips
+            #             if tips:
+            #                 tips1.set_alpha(150)
+            #                 tips2.set_alpha(150)
+            #                 tips3.set_alpha(150)
+            #             else:
+            #                 tips1.set_alpha(0)
+            #                 tips2.set_alpha(0)
+            #                 tips3.set_alpha(0)
+            #         elif event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
+            #             self.playing = not self.playing
+            #             self.options = not self.options
+            #             self.back_to_game = True
 
             self.screen.blit(tips1,tips1_rect)
             self.screen.blit(tips2,tips2_rect)

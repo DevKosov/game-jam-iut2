@@ -331,12 +331,22 @@ class Crab(pygame.sprite.Sprite):
 	def update(self):
 		self.movement()
 		self.animate()
-		# self.death()
+		self.shooted()
+		self.death()
 
 
-	# def death(self):
-	# 	if self.hp <= 0:
-	# 		self.groups.
+	def shooted(self):
+		mouse_pos = pygame.mouse.get_pos()
+		mouse_pressed = pygame.mouse.get_pressed()
+		print(mouse_pressed[0])
+		if mouse_pressed[0]:
+			print("SHOOOT")
+			if self.rect.collidepoint(mouse_pos) == True:
+				self.hp += -20
+
+	def death(self):
+		if self.hp <= 0:
+			self.kill()
 
 	def movement(self):
 		if self.game.player.x > self.rect.x:
