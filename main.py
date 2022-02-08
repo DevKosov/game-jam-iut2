@@ -105,34 +105,35 @@ class Game:
         for i, row in enumerate(tilemap):
             for j, column in enumerate(row):
                 if column == 'E':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'water', False)
-                # if column == 'S':
-                #     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'sand', False)
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'water', True)
+                if column == 'S':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'sand', False)
                 if column == 'T':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topWater', True)
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topWater', False)
                 if column == 'G':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topLeftWaterBord', True)
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topLeftWaterBord', False)
                 if column == 'R':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topRightWaterBord', True)
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topRightWaterBord', False)
                 if column == 'B':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomWaterBord', True)
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomWaterBord', False)
                 if column == 'V':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomLeftSand', True)
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomLeftSand', False)
                 if column == 'X':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomRightSand', True)
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomRightSand', False)
                 if column == 'l':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'rightWaterBord', True)
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'rightWaterBord', False)
                 if column == 'D':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'leftWaterBord', True)
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'leftWaterBord', False)
                 if column == 'P':
                     self.player = Player(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT,self.gameplay_ZQSD)
-                    #Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'sand', False)
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'sand', False)
         self.screen.blit(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0,0))
     def new(self):
         #a new game starts
         self.playing = True
         self.all_sprites = pygame.sprite.LayeredUpdates()
-        self.blocks = pygame.sprite.LayeredUpdates()
+        self.blocks_collid = pygame.sprite.LayeredUpdates()
+        self.blocks_no_collid = pygame.sprite.LayeredUpdates()
         self.enemies = pygame.sprite.LayeredUpdates()
         self.balles = pygame.sprite.LayeredUpdates()
 

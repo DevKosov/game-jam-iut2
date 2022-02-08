@@ -168,7 +168,7 @@ class Player(pygame.sprite.Sprite):
 
 
 		if direction == 'x':
-			hit = pygame.sprite.spritecollide(self, self.game.blocks, False)
+			hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
 			if hit:
 				if self.x_change > 0:
 					self.rect.x = hit[0].rect.left - self.rect.width
@@ -180,7 +180,7 @@ class Player(pygame.sprite.Sprite):
 						sprite.rect.x -= PLAYER_SPEED
 
 		if direction == 'y':
-			hit = pygame.sprite.spritecollide(self, self.game.blocks, False)
+			hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
 			if hit:
 				if self.y_change > 0:
 					self.rect.y = hit[0].rect.top - self.rect.height
@@ -197,16 +197,20 @@ class Block(pygame.sprite.Sprite):
 		WIDTH = 64
 		HEIGHT = 64
 		SCALE = 1
-
+		self.colision = colision
 		self.game = game
 		self._layer = 1
-		self.groups = self.game.all_sprites, self.game.blocks
-		pygame.sprite.Sprite.__init__(self, self.groups)
+		if colision:
+			self.groups = self.game.all_sprites, self.game.blocks_collid
+			pygame.sprite.Sprite.__init__(self, self.groups)
+		else:
+			self.groups = self.game.all_sprites, self.game.blocks_no_collid
+			pygame.sprite.Sprite.__init__(self, self.groups)
 		self.x = x
 		self.y = y
 		self.width = 64
 		self.height = 64
-		self.colision = colision
+		
 
 		self.block_type = block_type
 
