@@ -29,23 +29,23 @@ tilemap = [
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTREEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEGTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTREEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggggggggggggggggSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggggggggggggggggSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggggggggggggggggSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggggggggggggggggSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggggggggggggggggSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggggggggggggggggSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggPgggggggggggggSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggggggggggggggggSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggggggggggggggggSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggggggggggggggggSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggggggggggggggggSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggggggggggggggggSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggggggggggggggggSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSggggggggggggggggggggggggggSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSS1cccccccccccccccccccccccc2SSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggggPggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSS3xxxxxxxxxxxxxxxxxxxxxxxx4SSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEVBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBXEEEEEEEEEEEEEEEE',
@@ -116,12 +116,16 @@ class Game:
         OFFSETX, OFFSETY = 23.5, 15 
         for i, row in enumerate(tilemap):
             for j, column in enumerate(row):
+
+                # basic textures
                 if column == 'E':
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'water', True)
                 if column == 'S':
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'sand', False)
                 if column == 'g':
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'grass', False)
+
+                #map border textures
                 if column == 'T':
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topWater', True)
                 if column == 'G':
@@ -138,9 +142,29 @@ class Game:
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'rightWaterBord', True)
                 if column == 'D':
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'leftWaterBord', True)
+
+                #Sand + Grass Transition
+                if column == '1':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topLeftSandGrassT', False)
+                if column == '2':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topRightSandGrassT', False)
+                if column == 'c':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topSandGrassT', False)
+                if column == 'a':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'leftSandGrassT', False)
+                if column == 'b':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'rightSandGrassT', False)
+                if column == '4':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomRightSandGrassT', False)
+                if column == '3':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomleftSandGrassT', False)
+                if column == 'x':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomSandGrassT', False)
+
+                #Player pog
                 if column == 'P':
                     self.player = Player(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT,self.gameplay_ZQSD)
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'sand', False)
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'grass', False)
         self.screen.blit(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0,0))
     def new(self):
         #a new game starts

@@ -214,12 +214,15 @@ class Block(pygame.sprite.Sprite):
 
 		self.block_type = block_type
 
+		# basic textures
 		if self.block_type == 'sand':
 			self.image = self.game.terrain_spritesheet.get_image(2, 3, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'grass':
 			self.image = self.game.terrain_spritesheet.get_image(1, 3, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'water':
 			self.image = self.game.terrain_spritesheet.get_image(3, 3, WIDTH, HEIGHT, SCALE, BLACK)
+		
+		#map border textures
 		if self.block_type == 'topWater':
 			self.image = self.game.terrain_spritesheet.get_image(2, 2, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'topLeftWaterBord':
@@ -236,6 +239,24 @@ class Block(pygame.sprite.Sprite):
 			self.image = self.game.terrain_spritesheet.get_image(1, 2, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'leftWaterBord':
 			self.image = self.game.terrain_spritesheet.get_image(3, 2, WIDTH, HEIGHT, SCALE, BLACK)
+
+		#Sand + Grass Transition
+		if self.block_type == 'topLeftSandGrassT':
+			self.image = self.game.terrain_spritesheet.get_image(6, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'topRightSandGrassT':
+			self.image = self.game.terrain_spritesheet.get_image(5, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'topSandGrassT':
+			self.image = self.game.terrain_spritesheet.get_image(4, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'leftSandGrassT':
+			self.image = self.game.terrain_spritesheet.get_image(1, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'rightSandGrassT':
+			self.image = self.game.terrain_spritesheet.get_image(3, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'bottomRightSandGrassT':
+			self.image = self.game.terrain_spritesheet.get_image(8, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'bottomleftSandGrassT':
+			self.image = self.game.terrain_spritesheet.get_image(7, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'bottomSandGrassT':
+			self.image = self.game.terrain_spritesheet.get_image(2, 1, WIDTH, HEIGHT, SCALE, BLACK)
 
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
