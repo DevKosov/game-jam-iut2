@@ -59,6 +59,8 @@ test_sound = pygame.mixer.Sound('assets/audio/se/Applause2.ogg')
 
 spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Up1.ogg'))
 
+click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Load2.ogg'))
+
 class Game:
     def __init__(self):
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -85,13 +87,16 @@ class Game:
             test_sound.set_volume(0.1)
             bullet_sound.set_volume(0.1)
             spawn_sound.set_volume(0.1)
+            click_sound.set_volume(0.1)
         else:
             test_sound.set_volume(0)
             bullet_sound.set_volume(0)
+            spawn_sound.set_volume(0)
 
         self.character_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/characters', 'doux.png')).convert_alpha())
         self.terrain_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha())
         self.crab_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests/Crab.png')).convert_alpha())
+
     def createTileMap(self):
         WIDTH, HEIGHT = 64, 64
         OFFSETX, OFFSETY = 39, 13
@@ -179,6 +184,7 @@ class Game:
         self.screen.blit(CURSOR, CURSOR_RECT)
 
     def intro_screen(self):
+        click_sound.play()
         self.menu = True
 
         title = self.font.render('Pog Champs Game', True, BLACK)
@@ -221,6 +227,7 @@ class Game:
 
     def options_screen(self):
         self.options = True
+        click_sound.play()
 
         title = self.font.render('Options', True, BLACK)
         title_rect = title.get_rect(x=self.screen.get_width()/2-title.get_width()/2, y=100)
@@ -271,6 +278,7 @@ class Game:
                     self.running = False
                     exit()
                 if event.type == pygame.MOUSEBUTTONUP and music_on_off.rect.collidepoint(pygame.mouse.get_pos()):
+                    click_sound.play()
                     self.music_played= not self.music_played
                     if self.music_played:
                         pygame.mixer.music.unpause()
@@ -278,6 +286,7 @@ class Game:
                         pygame.mixer.music.pause()
                     self.options_screen()
                 elif event.type == pygame.MOUSEBUTTONUP and fx_on_off.rect.collidepoint(pygame.mouse.get_pos()):
+                    click_sound.play()
                     self.fx_played= not self.fx_played
                     if self.fx_played:
                         test_sound.set_volume(0.1)
@@ -311,6 +320,7 @@ class Game:
             pygame.display.update()
     
     def credits_screen(self):
+        click_sound.play()
         self.credits = True
 
         title = self.font.render('Credits', True, BLACK)
