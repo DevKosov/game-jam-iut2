@@ -178,7 +178,7 @@ class Game:
         
         # self.night_effect.set_alpha(115)
         # self.night_effect.fill((30,0,0))
-
+        self.day_time = True
         self.createTileMap()
 
     def events(self):
@@ -213,6 +213,17 @@ class Game:
                     self.playing = not self.playing
                     self.options = not self.options
                     self.back_to_game = True
+
+    def events_day(self):
+        #game loop events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.playing = False
+                self.running = False
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == pygame.BUTTON_LEFT:
+                    self.day_time = False
 
     def update(self):
         #game llop events
@@ -250,6 +261,14 @@ class Game:
         self.curseur()
         
         pygame.display.update()
+    
+    def draw_day(self):
+        #game loop draw
+        self.screen.fill(BLACK)
+        self.clock.tick(FPS)
+        self.curseur()
+        
+        pygame.display.update()
 
     def main(self):
         self.playing = True
@@ -264,10 +283,14 @@ class Game:
             pygame.mixer.music.pause()
 
         while self.playing:
-            self.draw()    
-            self.events() 
-            self.update()
-            self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
+            if self.day_time:
+                self.draw_day()
+                self.events_day()
+            else:
+                self.draw()
+                self.events() 
+                self.update()
+                self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
         pygame.display.update()
 
     def game_over(self):
