@@ -127,11 +127,11 @@ class Player(pygame.sprite.Sprite):
 					self.animation_loop = 0
  
 class Block(pygame.sprite.Sprite):
-	def __init__(self, game, x, y):
+	def __init__(self, game, x, y,block_type):
 		BLACK = (0,0,0)
 		WIDTH = 32
 		HEIGHT = 32
-
+		SCALE = 1
 		self.game = game
 		self._layer = 1
 		self.groups = self.game.all_sprites, self.game.blocks
