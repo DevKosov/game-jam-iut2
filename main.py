@@ -300,14 +300,6 @@ class Game:
             pygame.mixer.music.pause()
 
         while self.playing:
-<<<<<<< HEAD
-            self.draw()    
-            self.events() 
-            self.update()
-            self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
-            if self.timer_value==0:
-                d
-=======
             if self.day_time:
                 self.draw_day()
                 self.events_day()
@@ -316,7 +308,6 @@ class Game:
                 self.events() 
                 self.update()
                 self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
->>>>>>> 97cdd7fc2644fb87e0d198649bf9b1b6cf3cbfa6
         pygame.display.update()
 
     def game_over(self):
