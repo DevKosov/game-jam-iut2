@@ -272,35 +272,82 @@ class Button:
 		return False
 
 class Crab(pygame.sprite.Sprite):
-	def __init__(self, game, x, y, hp):
+	def __init__(self, game, x, y, hp,speed):
 		BLACK = (0,0,0)
 		WIDTH = 100
 		HEIGHT = 79
-		SCALE = 3
+		SCALE = 0.7
 
 		self._layer = 3
 		self.game = game
+		self.animation_loop = 0
+		self.speed = speed
 
 		self.groups = self.game.all_sprites, self.game.enemies
 		pygame.sprite.Sprite.__init__(self, self.groups)
 
 		self.x = x
 		self.y = y
+
+		#Image variable
 		self.width = WIDTH
 		self.height = HEIGHT
+		self.scale = SCALE
+		self.black = BLACK
+
 		self.hp = hp
 
 
 
-		self.image = self.game.character_spritesheet.get_image(1, 1, self.width, self.height, SCALE, BLACK)
+		self.image = self.game.crab_spritesheet.get_image(1, 1, self.width, self.height, self.scale, BLACK)
 
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
 		self.rect.y = self.y
 
+	def update(self):
+		self.movement()
+		self.animate()
+		# self.death()
 
 
-		
+	# def death(self):
+	# 	if self.hp <= 0:
+	# 		self.groups.
+
+	def movement(self):
+		if self.game.player.x > self.rect.x:
+			self.rect.x += self.speed
+		if self.game.player.x < self.rect.x:
+			self.rect.x += -self.speed
+		if self.game.player.y > self.rect.y:
+			self.rect.y += self.speed
+		if self.game.player.y < self.rect.y:
+			self.rect.y += -self.speed
+
+
+	def animate(self):
+
+		VITESSE_ANIMATION = 0.1
+
+		image = pygame.transform.flip(self.game.crab_spritesheet.get_image(1, 1, self.width, self.height, self.scale, self.black ), 1, 0)
+		image.set_colorkey(self.black )
+		image1 = pygame.transform.flip(self.game.crab_spritesheet.get_image(2, 1, self.width, self.height, self.scale, self.black ), 1, 0)
+		image1.set_colorkey(self.black )
+		image2 = pygame.transform.flip(self.game.crab_spritesheet.get_image(3, 1, self.width, self.height, self.scale, self.black ), 1, 0)
+		image2.set_colorkey(self.black )
+
+		self.animation_loop += VITESSE_ANIMATION
+
+		if self.animation_loop < 1:
+			self.image = image
+		if self.animation_loop < 2:
+			self.image = image1
+		elif self.animation_loop < 3:
+			self.image = image2
+
+		if self.animation_loop >= 3:
+			self.animation_loop = 0
 
 
 # 		try:
