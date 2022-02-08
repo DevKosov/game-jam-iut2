@@ -214,7 +214,7 @@ class Block(pygame.sprite.Sprite):
 
 		self.block_type = block_type
 
-		# basic textures
+	# basic textures
 		if self.block_type == 'sand':
 			self.image = self.game.terrain_spritesheet.get_image(2, 3, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'grass':
@@ -256,6 +256,24 @@ class Block(pygame.sprite.Sprite):
 		if self.block_type == 'bottomleftSandGrassT':
 			self.image = self.game.terrain_spritesheet.get_image(7, 1, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'bottomSandGrassT':
+			self.image = self.game.terrain_spritesheet.get_image(2, 1, WIDTH, HEIGHT, SCALE, BLACK)
+
+		#Fences
+		if self.block_type == 'topLeftFence':
+			self.image = self.game.terrain_spritesheet.get_image(6, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'topRightFence':
+			self.image = self.game.terrain_spritesheet.get_image(5, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'topFence':
+			self.image = self.game.terrain_spritesheet.get_image(4, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'topLeftFence':
+			self.image = self.game.terrain_spritesheet.get_image(1, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'topLeftFence':
+			self.image = self.game.terrain_spritesheet.get_image(3, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'topLeftFence':
+			self.image = self.game.terrain_spritesheet.get_image(8, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'topLeftFence':
+			self.image = self.game.terrain_spritesheet.get_image(7, 1, WIDTH, HEIGHT, SCALE, BLACK)
+		if self.block_type == 'topLeftFence':
 			self.image = self.game.terrain_spritesheet.get_image(2, 1, WIDTH, HEIGHT, SCALE, BLACK)
 
 		self.rect = self.image.get_rect()
