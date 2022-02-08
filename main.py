@@ -83,6 +83,8 @@ class Game:
         self.timer_value = 0
         self.timer_init = 120 # 120s
         self.clock = pygame.time.Clock()
+        self.xTopLefIsland = 0
+        self.yTopLefIsland = 0
 
         self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
         self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Switch2.ogg'))
@@ -117,9 +119,10 @@ class Game:
     def createTileMap(self):
         WIDTH, HEIGHT = 64, 64
         OFFSETX, OFFSETY = 23.5, 15
+        self.xTopLefIsland = (0-OFFSETX)*WIDTH
+        self.yTopLefIsland = (0-OFFSETY)*HEIGHT
         for i, row in enumerate(tilemap):
             for j, column in enumerate(row):
-
                 # basic textures
                 if column == 'E':
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'water', True)
@@ -186,6 +189,7 @@ class Game:
                 if column == 'P':
                     self.player = Player(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT,self.gameplay_ZQSD)
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'grass', False)
+
         self.screen.blit(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0,0))
     def new(self):
         #a new game starts
@@ -293,6 +297,9 @@ class Game:
         self.curseur()
 
         pygame.display.update()
+        print(self.xTopLefIsland)
+        print(self.yTopLefIsland)
+        print('---')
 
     def draw_day(self):
         #game loop draw

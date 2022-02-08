@@ -353,6 +353,8 @@ class Crab(pygame.sprite.Sprite):
 		self.height = HEIGHT
 		self.scale = SCALE
 		self.black = BLACK
+		self.x_change = 0
+		self.y_change = 0
 
 		self.hp = hp
 
@@ -367,7 +369,34 @@ class Crab(pygame.sprite.Sprite):
 	def update(self):
 		self.movement()
 		self.animate()
+
+		self.rect.x += self.x_change
+		self.collision('x')
+		self.rect.y += self.y_change
+		self.collision('y')
+
+		self.x_change = 0
+		self.y_change  = 0
+
 		self.death()
+
+	def collision(self, direction):
+
+		if direction == 'x':
+			hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
+			if hit:
+				if self.x_change > 0:
+					self.rect.x = hit[0].rect.left - self.rect.width
+				if self.x_change < 0:
+					self.rect.x = hit[0].rect.right
+
+		if direction == 'y':
+			hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
+			if hit:
+				if self.y_change > 0:
+					self.rect.y = hit[0].rect.top - self.rect.height
+				if self.y_change < 0:
+					self.rect.y = hit[0].rect.bottom
 
 
 	def damaged(self,damaged):
@@ -388,13 +417,27 @@ class Crab(pygame.sprite.Sprite):
 
 	def movement(self):
 		if self.game.player.x > self.rect.x:
-			self.rect.x += self.speed
+			if self.game.player.x - self.rect.x < self.speed:
+				self.x_change += self.game.player.x - self.rect.x
+			else:
+				self.x_change += self.speed
 		if self.game.player.x < self.rect.x:
-			self.rect.x += -self.speed
+			if self.rect.x - self.game.player.x < self.speed:
+				self.x_change -= self.rect.x - self.game.player.x
+			else:
+				self.x_change -= self.speed
 		if self.game.player.y > self.rect.y:
-			self.rect.y += self.speed
+			if self.game.player.y - self.rect.y < self.speed:
+				self.y_change += self.game.player.y - self.rect.y
+			else:
+				self.y_change += self.speed
+			
 		if self.game.player.y < self.rect.y:
-			self.rect.y += -self.speed
+			if self.rect.y - self.game.player.y < self.speed:
+				self.y_change -= self.rect.y - self.game.player.y
+			else:
+				self.y_change -= self.speed
+			
 
 
 	def animate(self):
@@ -429,6 +472,8 @@ class Bullet(pygame.sprite.Sprite):
 		self.x = x
 		self.y = y
 
+		VITESSE_BULLET = 50
+
 		self.game = game
 		self._layer = 2
 		self.groups = self.game.all_sprites, self.game.bullets
@@ -441,6 +486,11 @@ class Bullet(pygame.sprite.Sprite):
 
 		self.deplacementX = (destX - x) / 10
 		self.deplacementY = (destY - y) / 10
+
+		self.deplacementTotal = abs(self.deplacementX) + abs(self.deplacementY)
+
+		self.deplacementX = self.deplacementX * (VITESSE_BULLET / self.deplacementTotal)
+		self.deplacementY = self.deplacementY * (VITESSE_BULLET / self.deplacementTotal)
 
 
 
@@ -477,7 +527,6 @@ class Bullet(pygame.sprite.Sprite):
 		self.collisition()
 		self.rect.x += self.deplacementX
 		self.rect.y += self.deplacementY
-
 		
 
 # 		try:
