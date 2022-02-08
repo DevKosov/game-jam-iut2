@@ -57,6 +57,8 @@ tilemap = [
 bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
 test_sound = pygame.mixer.Sound('assets/audio/se/Applause2.ogg')
 
+spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Up1.ogg'))
+
 class Game:
     def __init__(self):
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -82,13 +84,14 @@ class Game:
         if self.fx_played==True:
             test_sound.set_volume(0.1)
             bullet_sound.set_volume(0.1)
+            spawn_sound.set_volume(0.1)
         else:
             test_sound.set_volume(0)
             bullet_sound.set_volume(0)
 
         self.character_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/characters', 'doux.png')).convert_alpha())
         self.terrain_spritesheet = SpriteSheet(pygame.transform.scale(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (12, 24)))
-
+        self.crab_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests/Crab.png')).convert_alpha())
     def createTileMap(self):
         for i, row in enumerate(tilemap):
             for j, column in enumerate(row):
@@ -133,7 +136,11 @@ class Game:
                 self.running = False
                 exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                bullet_sound.play()
+                if event.button == pygame.BUTTON_LEFT:
+                    bullet_sound.play()
+                if event.button == pygame.BUTTON_RIGHT:
+                    spawn_sound.play()
+                    Crab(self,1024/2,768/2,100)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     test_sound.play()

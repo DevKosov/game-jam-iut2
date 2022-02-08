@@ -209,6 +209,33 @@ class Button:
 			return False
 		return False
 
+class Crab:
+	def __init__(self,game, x, y, hp):
+		BLACK = (0,0,0)
+		WIDTH = 100
+		HEIGHT = 79
+
+		self._layer = 2
+		self.game = game
+
+		self.groups = self.game.all_sprites, self.game.enemies
+		pygame.sprite.Sprite.__init__(self.game.enemies)
+
+		self.x = x
+		self.y = y
+		self.width = WIDTH
+		self.height = HEIGHT
+		self.hp = hp
+
+
+
+		self.image = self.game.character_spritesheet.get_image(1, 1, self.width, self.height, 3, BLACK)
+
+		self.rect = self.image.get_rect()
+		self.rect.x = self.x
+		self.rect.y = self.y
+
+
 # 		try:
 # 			self.sheet_image = pygame.image.load('assets/img/characters/doux.png').convert_alpha()
 # 		except pygame.error as e:
