@@ -1,4 +1,5 @@
 #from cmath import rect
+import this
 import pygame, os
 from sprite import *
 import sys
@@ -37,7 +38,11 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
         self.running = True
-        self.font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 32)
+        self.menu = True
+        self.playing = False
+        self.options = False
+        self.credits = False
+        self.font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 70)
 
         
 
@@ -113,114 +118,116 @@ class Game:
         self.screen.blit(CURSOR, CURSOR_RECT)
 
     def intro_screen(self):
-        intro = True
+        self.menu = True
 
-        title = self.font.render('Nom Jeu', True, BLACK)
-        title_rect = title.get_rect(x=10, y=10)
+        title = self.font.render('Pog Champs Game', True, BLACK)
+        title_rect = title.get_rect(x=self.screen.get_width()/2-title.get_width()/2, y=100)
 
-        play_button = Button(10, 50, 100, 50, WHITE, BLACK, 'Play', 32)
+        play_button = Button((self.screen.get_width()/2)-100, 250, 200, 50, WHITE, BLACK, 'Play', 40)
+        option_button = Button((self.screen.get_width()/2)-100, 350, 200, 50, WHITE, BLACK, 'Options', 40)
+        credits_button = Button((self.screen.get_width()/2)-100, 450, 200, 50, WHITE, BLACK, 'Credits', 40)
+        exit_button = Button((self.screen.get_width()/2)-100, 550, 200, 50, WHITE, BLACK, 'Exit', 40)
 
-        while intro:
+        while self.menu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    intro = False
+                    self.menu = False
                     self.running = False
                     exit()
             mouse_pos = pygame.mouse.get_pos()
             mouse_pressed = pygame.mouse.get_pressed()
 
             if play_button.is_pressed(mouse_pos, mouse_pressed):
-                intro = False
+                self.menu = False
+                self.playing = True
+            elif option_button.is_pressed(mouse_pos,mouse_pressed):
+                self.menu = False
+                self.options = True
+            elif credits_button.is_pressed(mouse_pos,mouse_pressed):
+                self.menu = False
+                self.credits = True
+            elif exit_button.is_pressed(mouse_pos,mouse_pressed):
+                exit()
             self.screen.fill(BLUE)
             self.screen.blit(title, title_rect)
             self.screen.blit(play_button.image, play_button.rect)
+            self.screen.blit(option_button.image, option_button.rect)
+            self.screen.blit(credits_button.image, credits_button.rect)
+            self.screen.blit(exit_button.image, exit_button.rect)
+            self.clock.tick(FPS)
+            self.curseur()
+            pygame.display.update()
+
+    def options_screen(self):
+        self.options = True
+
+        title = self.font.render('Options', True, BLACK)
+        title_rect = title.get_rect(x=self.screen.get_width()/2-title.get_width()/2, y=100)
+
+        back_button = Button((self.screen.get_width()/2)-100, 650, 200, 50, WHITE, BLACK, 'Back to menu', 30)
+
+        while self.options:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.options = False
+                    self.running = False
+                    exit()
+            mouse_pos = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+            if back_button.is_pressed(mouse_pos,mouse_pressed):
+                self.options = False
+                self.menu = True
+
+            self.screen.fill(BLUE)
+            self.screen.blit(title, title_rect)
+            self.screen.blit(back_button.image, back_button.rect)
+
+            self.clock.tick(FPS)
+            self.curseur()
+            pygame.display.update()
+    
+    def credits_screen(self):
+        self.credits = True
+
+        title = self.font.render('Credits', True, BLACK)
+        title_rect = title.get_rect(x=self.screen.get_width()/2-title.get_width()/2, y=100)
+
+        back_button = Button((self.screen.get_width()/2)-100, 650, 200, 50, WHITE, BLACK, 'Back to menu', 30)
+
+        while self.credits:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.credits = False
+                    self.running = False
+                    exit()
+            mouse_pos = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+            if back_button.is_pressed(mouse_pos,mouse_pressed):
+                self.credits = False
+                self.menu = True
+
+            self.screen.fill(BLUE)
+            self.screen.blit(title, title_rect)
+            self.screen.blit(back_button.image, back_button.rect)
+
             self.clock.tick(FPS)
             self.curseur()
             pygame.display.update()
 
 
 g = Game()
-g.intro_screen()
-g.new()
-g.main()
-g.game_over()
+while g.running==True:
+
+    if g.menu==True:
+        g.intro_screen()
+    elif g.options==True:
+        g.options_screen()
+    elif g.credits==True:
+        g.credits_screen()
+    elif g.playing==True:
+        g.new()
+        g.main()
+        g.game_over()
 
 pygame.quit()
 sys.exit()
-
-
-
-
-    
-
-#     MENU = 1
-#     PARTY = 0
-#     OPTIONS = 0
-#     CREDITS = 0
-
-#     while running:
-#         clock.tick(FPS)
-
-#         screen.fill(BACKGROUND)
-
-#         ################################################################################################################
-#         # VIEW
-#         ################################################################################################################
-
-#         if (MENU==1):
-#             menu = viewMenu.viewMenu()
-#             menu.draw(screen)
-        
-#         elif (OPTIONS==1):
-#             option = viewOption.viewOption()
-#             option.draw(screen)
-        
-#         elif (CREDITS==1):
-#             credit = viewCredits.viewCredits()
-#             credit.draw(screen)
-
-#         elif (PARTY==1):
-#             # party = viewParty.viewParty()
-#             # party.draw(screen)
-#             screen.blit(BACKGROUND2,(-1024,-1024))
-#             player.update()
-#             player.draw(screen)
-
-#         ################################################################################################################
-#         # EVENT LISTENER
-#         ################################################################################################################
-
-#         for event in pygame.event.get():
-#             if PARTY:
-#                 player.sprites().__getitem__(0).player_input(event)
-#             if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.exit_event.collidepoint(event.pos):
-#                 running = False
-#                 exit()
-#             elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.play_event.collidepoint(event.pos):
-#                 MENU=0
-#                 CREDITS=0
-#                 OPTIONS=0
-#                 PARTY=1
-#             elif event.type == pygame.MOUSEBUTTONUP and event.button==1 and menu.opt_event.collidepoint(event.pos) and MENU==1:
-#                 MENU=0
-#                 PARTY=0
-#                 CREDITS=0
-#                 OPTIONS=1
-#             elif event.type == pygame.MOUSEBUTTONUP and event.button==1 :
-#                 if menu.cred_event.collidepoint(event.pos) and MENU==1:
-#                     MENU=0
-#                     PARTY=0
-#                     OPTIONS=0
-#                     CREDITS=1
-#             elif event.type == pygame.MOUSEBUTTONUP and event.button==1:
-#                 if  option.back_event.collidepoint(event.pos):
-#                     OPTIONS=0
-#                     PARTY=0
-#                     CREDITS=0
-#                     MENU=1
-#             elif event.type == pygame.MOUSEBUTTONUP and event.button==1:
-#                 if credit.back_event_credit.collidepoint(event.pos):
-#                     CREDITS=0
-#                     OPTIONS=0
-#                     PARTY=0
-#                     MENU=1
