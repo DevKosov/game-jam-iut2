@@ -168,7 +168,7 @@ class Game:
         self.blocks_collid = pygame.sprite.LayeredUpdates()
         self.blocks_no_collid = pygame.sprite.LayeredUpdates()
         self.enemies = pygame.sprite.LayeredUpdates()
-        self.balles = pygame.sprite.LayeredUpdates()
+        self.bullets = pygame.sprite.LayeredUpdates()
 
         self.createTileMap()
 
@@ -182,6 +182,8 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
                     bullet_sound.play()
+                    x, y = pygame.mouse.get_pos()
+                    Bullet(self, self.player.x, self.player.y, x, y, 5)
                 if event.button == pygame.BUTTON_RIGHT:
                     print("f")
                     spawn_sound.play()
