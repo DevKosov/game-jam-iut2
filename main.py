@@ -17,7 +17,8 @@ FPS = 60
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 BLUE = (150, 252, 255)
-tilemap = [   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+tilemap = [
+   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
@@ -32,18 +33,18 @@ tilemap = [   'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE'
    'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSS1cccccccccccccccccccccccc2SSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggg]ppppp[bSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggygggggybSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggtgggggtbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSagggggggggggPgggggipppppubSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSa]pp[ggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaoggyggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaogggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaogggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaoggtggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaippuggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggggPggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSS3xxxxxxxxxxxxxxxxxxxxxxxx4SSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
@@ -84,6 +85,7 @@ class Game:
 
         self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
         self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Switch2.ogg'))
+        self.damaged_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Damage1.ogg'))
 
         pygame.mouse.set_visible(False)
 
@@ -92,11 +94,14 @@ class Game:
             self.switch_weapon_sound.set_volume(0.08)
             spawn_sound.set_volume(0.1)
             click_sound.set_volume(0.1)
+            self.damaged_sound.set_volume(0.05)
+
         else:
             self.bullet_sound.set_volume(0)
             self.switch_weapon_sound.set_volume(0)
             spawn_sound.set_volume(0)
             click_sound.set_volume(0)
+            self.damaged_sound.set_volume(0)
 
         self.character_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/characters', 'doux.png')).convert_alpha())
         self.terrain_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha())
@@ -158,23 +163,6 @@ class Game:
                 if column == 'x':
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomSandGrassT', False)
 
-                #Fences
-                if column == ']':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topLeftFence', True)
-                if column == '[':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topRightFence', True)
-                if column == 'p':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topFence', True)
-                if column == 'o':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'sideFence', True)
-                if column == 'i':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomLeftFence', True)
-                if column == 'u':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomRightFence', True)
-                if column == 'y':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'topStopFence', True)
-                if column == 't':
-                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'bottomStopFence', True)
 
                 #Player pog
                 if column == 'P':
@@ -191,14 +179,13 @@ class Game:
         self.bullets = pygame.sprite.LayeredUpdates()
 
         # self.night_effect = pygame.Surface((1024, 768))
-        
+
         # self.night_effect.set_alpha(115)
         # self.night_effect.fill((30,0,0))
         self.day_time = True
         self.createTileMap()
 
     def events(self):
-        self.back_to_game = False
         #game loop events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -242,9 +229,15 @@ class Game:
                 if event.button == pygame.BUTTON_LEFT:
                     self.day_time = False
 
-    def update(self):
+    def update_night(self):
         #game llop events
         self.all_sprites.update()
+        #crabSpawn
+        if (random.randint(0,60*3)) == 0:
+            self.crab_spawn(100)
+
+    def crab_spawn(self,hp):
+        Crab(self, self.player.x + (random.choice((-1, 1)) * random.randint(150, 250)),self.player.y + (random.choice((-1, 1)) * random.randint(150, 250)), 100, 2)
 
     def draw(self):
         #game loop draw
@@ -273,18 +266,18 @@ class Game:
         self.screen.blit(self.tips2,self.tips2_rect)
         self.screen.blit(self.tips3,self.tips3_rect)
         self.screen.blit(self.timer,self.timer_rect)
-        
+
         self.screen.blit(self.night_effet[0], (0,0))
         self.curseur()
-        
+
         pygame.display.update()
-    
+
     def draw_day(self):
         #game loop draw
         self.screen.fill(BLACK)
         self.clock.tick(FPS)
         self.curseur()
-        
+
         pygame.display.update()
 
     def main(self):
@@ -305,8 +298,8 @@ class Game:
                 self.events_day()
             else:
                 self.draw()
-                self.events() 
-                self.update()
+                self.events()
+                self.update_night()
                 self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
         pygame.display.update()
 
@@ -459,11 +452,14 @@ class Game:
                         self.switch_weapon_sound.set_volume(0.08)
                         spawn_sound.set_volume(0.1)
                         click_sound.set_volume(0.1)
+                        self.damaged_sound.set_volume(0.05)
                     else:
                         self.bullet_sound.set_volume(0)
                         self.switch_weapon_sound.set_volume(0)
                         spawn_sound.set_volume(0)
                         click_sound.set_volume(0)
+                        self.damaged_sound.set_volume(0)
+
                     self.options_screen()
                 elif event.type == pygame.MOUSEBUTTONUP and (top_btn1.rect.collidepoint(pygame.mouse.get_pos())or
                                                              bottom_btn1.rect.collidepoint(pygame.mouse.get_pos())or
