@@ -23,6 +23,7 @@ class Player(pygame.sprite.Sprite):
 		WIDTH = 24
 		HEIGHT = 24
 
+		#HIhihiha
 
 		self.game = game
 		self._layer = 2
