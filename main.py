@@ -125,7 +125,7 @@ class Game:
                 if column == 'D':
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'leftWaterBord')
                 if column == 'P':
-                    Player(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT,self.gameplay_ZQSD)
+                    self.player = Player(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT,self.gameplay_ZQSD)
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'sand')
         self.screen.blit(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0,0))
     def new(self):
