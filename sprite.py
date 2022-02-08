@@ -234,17 +234,18 @@ class Button:
 			return False
 		return False
 
-class Crab:
-	def __init__(self,game, x, y, hp):
+class Crab(pygame.sprite.Sprite):
+	def __init__(self, game, x, y, hp):
 		BLACK = (0,0,0)
 		WIDTH = 100
 		HEIGHT = 79
+		SCALE = 3
 
-		self._layer = 2
+		self._layer = 3
 		self.game = game
 
 		self.groups = self.game.all_sprites, self.game.enemies
-		pygame.sprite.Sprite.__init__(self.game.enemies)
+		pygame.sprite.Sprite.__init__(self, self.groups)
 
 		self.x = x
 		self.y = y
@@ -254,11 +255,15 @@ class Crab:
 
 
 
-		self.image = self.game.character_spritesheet.get_image(1, 1, self.width, self.height, 3, BLACK)
+		self.image = self.game.character_spritesheet.get_image(1, 1, self.width, self.height, SCALE, BLACK)
 
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
 		self.rect.y = self.y
+
+
+
+		
 
 
 # 		try:

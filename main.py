@@ -150,7 +150,7 @@ class Game:
                     bullet_sound.play()
                 if event.button == pygame.BUTTON_RIGHT:
                     spawn_sound.play()
-                    Crab(self,1024/2,768/2,100)
+                    Crab(self, self.player.x + 10, self.player.y, 100)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     test_sound.play()
