@@ -3,7 +3,7 @@ from turtle import width
 import pygame, os, math
 #import spritesheet
 import sprite
-
+import time
 
 class SpriteSheet():
 	def __init__(self, image):
@@ -36,9 +36,6 @@ class Player(pygame.sprite.Sprite):
 		self.height = 18
 		self.hp = 150
 
-		self.current_weapon = "gun"
-		self.player_speed = 5
-
 		self.x_change = 0
 		self.y_change = 0
 
@@ -53,6 +50,16 @@ class Player(pygame.sprite.Sprite):
 
 		self.player_gameplay_ZQSD = gameplay
 
+		# Gestion Invulnératibilité
+		self.player_invulnerability = False
+		self.player_time_left = 0
+		self.player_time_invulnerability = 3 * 60 # nb secondes * 60 ( Je crois )
+
+		#Player Game Night State
+		self.current_weapon = "gun"
+		self.player_speed = 5
+
+
 	def update(self):
 		self.movement()
 		self.animate()
@@ -66,6 +73,10 @@ class Player(pygame.sprite.Sprite):
 
 		self.x_change = 0
 		self.y_change  = 0
+
+		self.damaged()
+
+
 	def movement(self):
 
 		if self.player_gameplay_ZQSD==False:
@@ -112,6 +123,46 @@ class Player(pygame.sprite.Sprite):
 						sprite.rect.y -= self.player_speed
 				self.y_change += self.player_speed
 				self.facing = 'down'
+
+	def damaged(self):
+		if not self.player_invulnerability:
+			for enemies in self.game.enemies:
+				if pygame.sprite.collide_mask(self, enemies):
+
+					#Calcul de déplacement
+					diff_x = self.rect.x - enemies.rect.x
+					diff_y = self.rect.y - enemies.rect.y
+
+					# Push le joueur out
+					if abs(diff_x) > abs(diff_y):
+						if diff_x < 0:
+							self.rect.x -= 50
+							for sprite in self.game.all_sprites:
+								sprite.rect.x += 50
+						else:
+							self.rect.x -= -50
+							for sprite in self.game.all_sprites:
+								sprite.rect.x += -50
+					else:
+						if diff_y < 0:
+							self.rect.y -= 50
+							for sprite in self.game.all_sprites:
+								sprite.rect.y += 50
+						else:
+							self.rect.y -= -50
+							for sprite in self.game.all_sprites:
+								sprite.rect.y += -50
+
+					# Invulnératibilité pour (player_time_invulnerability) de temps
+					self.game.damaged_sound.play()
+					self.player_invulnerability = True
+					break
+		else:
+			if (self.player_time_left >= self.player_time_invulnerability):
+				self.player_time_left = 0
+				self.player_invulnerability = False
+			else:
+				self.player_time_left += 1
 
 	def animate(self):
 		BLACK = (0, 0, 0)
@@ -182,8 +233,8 @@ class Player(pygame.sprite.Sprite):
 			Bullet(self.game, self.rect.centerx, self.rect.centery, x, y, 5)
 		# else:
 
-	def sprint(self):
-		print("f")
+	# def sprint(self):
+	# 	print("f")
 
 	def collision(self, direction):
 
