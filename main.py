@@ -297,7 +297,6 @@ class Game:
         spawn_sound.play()
         # Crab(self, self.player.x + (random.choice((-1, 1)) * random.randint(150, 250)),self.player.y + (random.choice((-1, 1)) * random.randint(150, 250)), 100, 2)
         position = random.randint(1,5)
-        print(position)
         if position == 1: # Corner Top Left
             Crab(self, self.xTopLefIsland, self.yTopLefIsland, self.hpCrab, random.randint(CRAB_VITESSE_MIN, CRAB_VITESSE_MAX))
         elif position == 2: # Corner Top Right
@@ -325,7 +324,6 @@ class Game:
         current_defense_label_rect = current_defense_label.get_rect(x=860, y=650)
 
         if self.player.current_weapon=="gun":
-            current_defense = font.render("Gun", True, BLACK)
             font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
             current_ammo = font.render(str(self.player.gun_ammo), True, BLACK)
             current_ammo_label_rect = current_ammo.get_rect(x=30, y=30)
@@ -333,8 +331,8 @@ class Game:
             max_ammo = font.render("/"+str(self.player.gun_max_ammo), True, BLACK)
             max_ammo_label_rect = current_ammo.get_rect(x=80, y=55)
         else:
-            current_defense = font.render("Knife", True, BLACK)
-        current_defense_rect = current_defense.get_rect(x=910, y=680)
+            knife_img1 = pygame.image.load("assets/img/tests/knife.png")
+            knife_img2 = pygame.transform.rotate(knife_img1,45)
 
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
@@ -342,19 +340,19 @@ class Game:
         self.screen.blit(self.timer,self.timer_rect)
         self.screen.blit(self.crabs_killed,self.crabs_killed_rect)
         self.screen.blit(current_defense_label,current_defense_label_rect)
-        self.screen.blit(current_defense,current_defense_rect)
         if self.player.current_weapon=="gun":
             self.screen.blit(current_ammo,current_ammo_label_rect)
             self.screen.blit(max_ammo,max_ammo_label_rect)
-
+        else:
+            self.screen.blit(knife_img2, (900,680))
         if (self.player.player_health == 3):
             self.screen.blit(self.night_effet[0], (0,0))
         elif (self.player.player_health == 2):
             self.screen.blit(self.night_effet[1], (0,0))
         else:
             self.screen.blit(self.night_effet[2], (0,0))
-        self.curseur()
 
+        self.curseur()
         pygame.display.update()
 
     def draw_day(self):
@@ -458,20 +456,28 @@ class Game:
         label_knife_dam = font.render("Knife damage", True, BLACK)
         label_knife_dam_rect = label_knife_dam.get_rect(x=545, y=310)
 
+        knife_img1 = pygame.image.load("assets/img/tests/knife.png")
+        knife_img2 = pygame.transform.rotate(knife_img1,45)
+        knife_img3 = pygame.transform.scale(knife_img2,(100,100))
+
+        bullet_img1 = pygame.image.load("assets/img/tests/bullet_26x64.png")
+        bullet_img2 = pygame.transform.scale(bullet_img1,(30,90))
+
         label_stamina = font.render("Max stamina", True, BLACK)
         label_stamina_rect = label_stamina.get_rect(x=775, y=310)
 
         #############################################################
-        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 70)
         gun_dam_value = font.render(str(self.player.damaged_gun), True, BLACK)
-        gun_dam_rect_value = gun_dam_value.get_rect(x=165, y=390)
+        gun_dam_rect_value = gun_dam_value.get_rect(x=165, y=450)
 
         gun_ammo_value = font.render(str(self.player.gun_ammo), True, BLACK)
-        gun_ammo_rect_value = gun_ammo_value.get_rect(x=390, y=390)
+        gun_ammo_rect_value = gun_ammo_value.get_rect(x=440, y=450)
 
         knife_dam_value = font.render(str(self.player.damaged_knife), True, BLACK)
-        knife_dam_rect_value = knife_dam_value.get_rect(x=605, y=390)
+        knife_dam_rect_value = knife_dam_value.get_rect(x=660, y=450)
 
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
         stamina_value = font.render(str(self.player.max_stamina), True, BLACK)
         stamina_rect_value = stamina_value.get_rect(x=800, y=390)
         
@@ -507,12 +513,14 @@ class Game:
         self.screen.blit(gun_ammo_value, gun_ammo_rect_value)
         self.screen.blit(res_btn2.image, res_btn2.rect)
         self.screen.blit(corn_img2, (320,505))
+        self.screen.blit(bullet_img2,(385,350))
         self.screen.blit(self.buy_btn2.image, self.buy_btn2.rect)
         pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(520, 300, 200, 200)) # knife damage
         self.screen.blit(label_knife_dam, label_knife_dam_rect)
         self.screen.blit(knife_dam_value, knife_dam_rect_value)
         self.screen.blit(res_btn3.image, res_btn3.rect)
         self.screen.blit(potato_img2, (530,505))
+        self.screen.blit(knife_img3,(560,350))
         self.screen.blit(self.buy_btn3.image, self.buy_btn3.rect)
         pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(740, 300, 200, 200)) # stamina
         self.screen.blit(label_stamina, label_stamina_rect)
