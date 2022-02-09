@@ -309,7 +309,7 @@ class Game:
             current_ammo_label_rect = current_ammo.get_rect(x=30, y=30)
             font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 30)
             max_ammo = font.render("/"+str(self.player.gun_max_ammo), True, BLACK)
-            max_ammo_label_rect = current_ammo.get_rect(x=60, y=55)
+            max_ammo_label_rect = current_ammo.get_rect(x=80, y=55)
         else:
             current_defense = font.render("Knife", True, BLACK)
         current_defense_rect = current_defense.get_rect(x=910, y=680)
