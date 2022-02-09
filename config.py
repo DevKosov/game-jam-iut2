@@ -45,3 +45,8 @@ HP_CRAB = 100
 TIME_SPAWN_CRAB = 180 # /60 = nombre de seconde moyenne entre chaque spawn
 CRAB_VITESSE_MIN = 1
 CRAB_VITESSE_MAX = 5
+
+GROW_MINTIME_STAGE1 = 480 #/60 = 1sec
+GROW_MAXTIME_STAGE1 = 720 #/60 = 1sec
+
+POTATO_APPEAR_TIME = 240 #/60 = seconde ( doit être > 69)

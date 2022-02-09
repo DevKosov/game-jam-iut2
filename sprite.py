@@ -1,6 +1,7 @@
 # from tkinter import Y
-from turtle import width
+from turtle import update, width
 import pygame, os, math
+import random
 from config import *
 #import spritesheet
 import sprite
@@ -344,6 +345,10 @@ class Block(pygame.sprite.Sprite):
 			self.height = TILE_HEIGHT
 
 			self.block_type = block_type
+			if self.block_type == 'firstStagePotato':
+				self.growStage = 1
+				self.time = 0
+				self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
 
 	# basic textures
 		if self.block_type == 'sand':
@@ -417,6 +422,27 @@ class Block(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
 		self.rect.y = self.y
+
+	def update(self):
+		if self.block_type == 'firstStagePotato':
+			if self.growStage == 1:
+				self.time += 1
+				if self.time >= self.timeToGrow:
+					self.image = self.game.terrain_spritesheet.get_image(6, 3, self.width, self.height, self.scale, BLACK)
+					self.growStage += 1
+					self.time = 0
+					self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
+			elif self.growStage == 2:
+				self.time += 1
+				if self.time >= self.timeToGrow:
+					self.image = self.game.terrain_spritesheet.get_image(7, 3, self.width, self.height, self.scale, BLACK)
+					self.growStage += 1
+					self.time = 0
+					self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
+			elif self.growStage == 3:
+				self.time += 1
+				if self.time >= self.timeToGrow:
+					self.image = self.game.terrain_spritesheet.get_image(8, 3, self.width, self.height, self.scale, BLACK)
 
 
 class Button:

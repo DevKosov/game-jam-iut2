@@ -421,7 +421,7 @@ class Game:
 
     def update_day(self):
         # game llop events
-        if random.randint(1,600) == 69:
+        if random.randint(1,POTATO_APPEAR_TIME) == 69:
             if random.randint(1,2) == 2:
                 patateX = random.randint(38,42)
                 patateY = random.randint(16,19)
