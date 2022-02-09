@@ -60,6 +60,7 @@ class Player(pygame.sprite.Sprite):
 		self.corn_counter = 50
 		self.damaged_knife = 0
 		self.damaged_gun = 0
+		self.player_health = 3
 
 		#Gestion Gun
 		self.gun_ammo = 5
@@ -89,6 +90,11 @@ class Player(pygame.sprite.Sprite):
 
 		self.damaged()
 		self.stamina()
+		self.death()
+
+	def death(self):
+		if self.player_health == 0:
+			self.game.game_over()
 
 	def movement(self):
 
@@ -170,6 +176,8 @@ class Player(pygame.sprite.Sprite):
 								sprite.rect.y += -50
 							self.game.yTopLefIsland -= 50
 
+					#Gestion des overlay de vie
+					self.player_health -= 1
 					# Invulnératibilité pour (player_time_invulnerability) de temps
 					self.game.damaged_sound.play()
 					self.player_invulnerability = True
@@ -494,16 +502,19 @@ class Crab(pygame.sprite.Sprite):
 			if hit:
 				if self.x_change > 0:
 					self.rect.x = hit[0].rect.left - self.rect.width
+					# self.rect.y += self.speed * 2
 				if self.x_change < 0:
 					self.rect.x = hit[0].rect.right
-
-		if direction == 'y':
+					# self.rect.y += self.speed * 2
+		elif direction == 'y':
 			hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
 			if hit:
 				if self.y_change > 0:
 					self.rect.y = hit[0].rect.top - self.rect.height
+					# self.rect.x += self.speed * 2
 				if self.y_change < 0:
 					self.rect.y = hit[0].rect.bottom
+					# self.rect.x += self.speed * 2
 
 
 	def damaged(self,damaged):
@@ -624,8 +635,6 @@ class Bullet(pygame.sprite.Sprite):
 		hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
 		if hit:
 			self.kill()
-
-
 
 	def update(self):
 		self.collisition()
