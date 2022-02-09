@@ -35,7 +35,7 @@ tilemap = [
    'EEEEEEEEEEEEEEEEDSSagggggggggggggggggg/////gbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSagggggggggggggggggt/////tbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSagggggggggggPgggggipppppubSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSa]pp[ggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSa]pp[ggggggg*ggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//yggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
@@ -86,14 +86,27 @@ class Game:
         self.recolteTimeAct = 0;
         self.recolteTimeTotal = 60;
 
+        self.passerDayAct = 0;
+        self.passerDayTotal = 20;
+
         self.xTopLefIsland = 0
         self.yTopLefIsland = 0
         self.hpCrab = HP_CRAB
         self.FireBullet = False
 
+        self.campFireGrandit = True
+        self.campFireReduit = False
+        self.campFireXMax = random.randint(240, 500)
+        self.campFireXMin = 0
+        self.campFireYMin = 0
+        self.campFireXAct = 240
+        self.campfireYAct = 240
+
         self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
         self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Switch2.ogg'))
         self.damaged_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Damage1.ogg'))
+
+        #self.xTopLefIsland + (31-17) * TILE_WIDTH, self.yTopLefIsland + (21-12) * TILE_HEIGHT, 64, 64) fire tile
 
         pygame.mouse.set_visible(False)
 
@@ -123,6 +136,7 @@ class Game:
             pygame.image.load(os.path.join('assets/img/tests', 'overlayBeforeDeath.png')).convert_alpha()
         ]  # lul
         self.fireEffect = pygame.image.load(os.path.join('assets/img/tests', 'gunfire_overlay.png')).convert_alpha()
+        self.campFireEffect = pygame.image.load(os.path.join('assets/img/tests', 'fire_overlay.png')).convert_alpha()
 
     def createTileMap(self):
         
@@ -193,6 +207,8 @@ class Game:
                     Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topStopFence', True, False)
                 if column == 't':
                     Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomStopFence', True, False)
+                if column == '*':
+                    self.campFire = Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'campFire', True, False)
 
                 #potato
                 if column == ':':
@@ -271,10 +287,7 @@ class Game:
                 self.running = False
                 exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    self.day_time = False
-                    self.farm_time = True
-                elif event.key == pygame.K_i:
+                if event.key == pygame.K_i:
                     self.tips = not self.tips
                     if self.tips:
                         self.tips1.set_alpha(150)
@@ -365,7 +378,7 @@ class Game:
         if self.FireBullet:
             self.screen.blit(self.fireEffect, (self.player.rect.centerx - self.fireEffect.get_width() / 2, self.player.rect.centery - self.fireEffect.get_height() / 2))
             self.FireBullet = False
-
+        self.campFireAnimation()
         self.curseur()
         pygame.display.update()
 
@@ -388,6 +401,8 @@ class Game:
 
         corn_img1 = pygame.image.load("assets/img/tests/corna.png")
         corn_img2 = pygame.transform.scale(corn_img1, (40,40))
+
+        
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
         if self.tips:
@@ -427,7 +442,7 @@ class Game:
             for block in self.blocks_no_collid_farm:
                 if pygame.sprite.collide_mask(self.player, block):
                     if self.recolteTimeAct < self.recolteTimeTotal :
-                        self.recolteTimeAct = self.animationLoading(self.recolteTimeTotal, self.recolteTimeAct)
+                        self.recolteTimeAct = self.animationLoading(self.recolteTimeTotal, self.recolteTimeAct, GREEN_VALIDATION)
                     else:
                         if block.block_type == 'firstStageCorn':
                             self.player.corn_counter += 1
@@ -436,9 +451,50 @@ class Game:
                         block.kill()
             if not(pygame.sprite.spritecollide(self.player, self.blocks_no_collid_farm, False)): # si bug
                     self.recolteTimeAct = 0
+
+            if self.campFire.rect.collidepoint(pygame.mouse.get_pos()):
+                    if self.passerDayAct < self.passerDayTotal :
+                        self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
+                    else:
+                        self.day_time = False
+                        self.farm_time = True
+        self.campFireAnimation()
         self.curseur()
 
         pygame.display.update()
+
+
+
+
+        # self.campFireGrandit = True
+        # self.campFireReduit = False
+        # self.campFireXMax = random.randint(512, 812)
+        # self.campFireYMax = random.randint(384, 609)
+        # self.campFireXMin = 0
+        # self.campFireYMin = 0
+        # self.campFireXAct = 512
+        # self.campfireYAct = 384
+
+
+    def campFireAnimation(self):
+        if self.campFireGrandit:
+            if self.campFireXMax > self.campFireXAct:
+                self.campFireXAct += 1
+            else:
+                self.campFireGrandit = False
+                self.campFireReduit = True
+                self.campFireXMin = random.randint(150, 240)
+        else:
+            if self.campFireXMin < self.campFireXAct:
+                self.campFireXAct -= 1
+            else:
+                self.campFireGrandit = True
+                self.campFireReduit = False
+                self.campFireXMax = random.randint(240, 500)
+        self.campfireYAct = self.campFireXAct
+        self.campFireEffect = pygame.transform.scale(self.campFireEffect, (self.campFireXAct, self.campfireYAct))
+        self.screen.blit(self.campFireEffect, ((self.xTopLefIsland + (31-16.5) * TILE_WIDTH) - self.campFireEffect.get_width() / 2, (self.yTopLefIsland + (21-11.5) * TILE_HEIGHT) - self.campFireEffect.get_height() / 2))
+
 
     def update_day(self):
         # game llop events
@@ -969,9 +1025,9 @@ class Game:
             self.curseur()
             pygame.display.update()
 
-    def animationLoading(self, animationTotalTime, animationTime):
+    def animationLoading(self, animationTotalTime, animationTime, color):
         pygame.draw.rect(self.screen, BLACK, pygame.Rect(self.player.rect.centerx - 34, self.player.rect.centery - 50, 74, 20), 2)
-        pygame.draw.rect(self.screen, GREEN_VALIDATION, pygame.Rect(self.player.rect.centerx - 32, self.player.rect.centery - 48, ((animationTime * 74 ) // animationTotalTime ) - 4, 16))
+        pygame.draw.rect(self.screen, color, pygame.Rect(self.player.rect.centerx - 32, self.player.rect.centery - 48, ((animationTime * 74 ) // animationTotalTime ) - 4, 16))
 
         animationTime += 1
         return animationTime

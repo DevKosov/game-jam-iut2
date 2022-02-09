@@ -473,6 +473,9 @@ class Block(pygame.sprite.Sprite):
 		if self.block_type == 'bottomStopFence':
 			self.image = self.game.terrain_spritesheet.get_image(2, 4, self.width, self.height, self.scale, BLACK)
 
+		if self.block_type == 'campFire':
+			self.image = self.game.terrain_spritesheet.get_image(4, 5, self.width, self.height, self.scale, BLACK)
+
 
 		if self.block_type == 'firstStagePotato':
 			self.image = self.game.terrain_spritesheet.get_image(5, 3, self.width, self.height, self.scale, BLACK)
