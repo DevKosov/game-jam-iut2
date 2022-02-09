@@ -349,6 +349,10 @@ class Block(pygame.sprite.Sprite):
 				self.growStage = 1
 				self.time = 0
 				self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
+			if self.block_type == 'firstStageCorn':
+				self.growStage = 1
+				self.time = 0
+				self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
 
 	# basic textures
 		if self.block_type == 'sand':
@@ -418,6 +422,8 @@ class Block(pygame.sprite.Sprite):
 
 		if self.block_type == 'firstStagePotato':
 			self.image = self.game.terrain_spritesheet.get_image(5, 3, self.width, self.height, self.scale, BLACK)
+		if self.block_type == 'firstStageCorn':
+			self.image = self.game.terrain_spritesheet.get_image(1, 5, self.width, self.height, self.scale, BLACK)
 
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
@@ -436,6 +442,26 @@ class Block(pygame.sprite.Sprite):
 				self.time += 1
 				if self.time >= self.timeToGrow:
 					self.image = self.game.terrain_spritesheet.get_image(7, 3, self.width, self.height, self.scale, BLACK)
+					self.growStage += 1
+					self.time = 0
+					self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
+			elif self.growStage == 3:
+				self.time += 1
+				if self.time >= self.timeToGrow:
+					self.image = self.game.terrain_spritesheet.get_image(8, 3, self.width, self.height, self.scale, BLACK)
+
+		elif self.block_type == 'firstStageCorn':
+			if self.growStage == 1:
+				self.time += 1
+				if self.time >= self.timeToGrow:
+					self.image = self.game.terrain_spritesheet.get_image(2, 5, self.width, self.height, self.scale, BLACK)
+					self.growStage += 1
+					self.time = 0
+					self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
+			elif self.growStage == 2:
+				self.time += 1
+				if self.time >= self.timeToGrow:
+					self.image = self.game.terrain_spritesheet.get_image(3, 5, self.width, self.height, self.scale, BLACK)
 					self.growStage += 1
 					self.time = 0
 					self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)

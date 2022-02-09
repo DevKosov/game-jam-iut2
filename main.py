@@ -282,8 +282,12 @@ class Game:
                 if event.button == pygame.BUTTON_LEFT:
                     for block in self.blocks_no_collid_farm:
                         if pygame.sprite.collide_mask(self.player, block):
+                            if block.block_type == 'firstStageCorn':
+                                self.player.corn_counter += 1
+                            else:
+                                self.player.potat_counter += 1
                             block.kill()
-                            self.player.potat_counter += 1
+                            
             if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LSHIFT:
                     self.player.sprint(event)
@@ -422,13 +426,18 @@ class Game:
         # game llop events
         if random.randint(1,POTATO_APPEAR_TIME) == 69:
             if random.randint(1,2) == 2:
+                element = 'Potato'
+            else:
+                element = 'Corn'
+
+            if random.randint(1,2) == 2:
                 patateX = random.randint(38,42)
                 patateY = random.randint(16,19)
-                Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStagePotato', True, True)
+                Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStage' + element, True, True)
             else:
                 patateX = random.randint(21,22)
                 patateY = random.randint(22,25)
-                Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStagePotato', True, True)
+                Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStage' + element, True, True)
 
 
         self.all_sprites.update()
