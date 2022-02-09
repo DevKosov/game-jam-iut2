@@ -37,6 +37,8 @@ class Player(pygame.sprite.Sprite):
 		self.recharge = False
 		self.recolting = False
 
+		self.takingDamage = 0
+
 
 		self.x_change = 0
 		self.y_change = 0
@@ -78,6 +80,11 @@ class Player(pygame.sprite.Sprite):
 		self.basic_speed = self.player_speed
 		self.speed_upgrade_with_sprint = 3
 
+
+		self.takingDamage = False
+		self.nbTickDamage = 0
+		
+
 	def update(self):
 		self.movement()
 		self.animate()
@@ -92,7 +99,32 @@ class Player(pygame.sprite.Sprite):
 		self.x_change = 0
 		self.y_change  = 0
 
-		self.damaged()
+
+		if not(self.takingDamage):
+			if not self.player_invulnerability:
+				for enemies in self.game.enemies:
+					if pygame.sprite.collide_mask(self, enemies):
+						self.damageDealerEnemy = enemies
+						self.takingDamage = True
+						self.player_health -= 1
+						# Invulnératibilité pour (player_time_invulnerability) de temps
+						self.game.damaged_sound.play()
+						self.player_invulnerability = True
+						break
+			else:
+				if (self.player_time_left >= self.player_time_invulnerability):
+					self.player_time_left = 0
+					self.player_invulnerability = False
+				else:
+					self.player_time_left += 1
+		else:
+			if self.nbTickDamage <= KNOCKBACK:
+				self.damaged(self.damageDealerEnemy)
+				self.nbTickDamage += 1
+			else:
+				self.nbTickDamage = 0
+				self.takingDamage = False
+		
 		self.stamina()
 		self.death()
 
@@ -106,92 +138,110 @@ class Player(pygame.sprite.Sprite):
 			keys = pygame.key.get_pressed()
 			if keys[pygame.K_LEFT]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.x += self.player_speed
+					sprite.rect.x += self.player_speed
 				self.x_change -= self.player_speed
 				self.facing = 'left'
 			if keys[pygame.K_RIGHT]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.x -= self.player_speed
+					sprite.rect.x -= self.player_speed
 				self.x_change += self.player_speed
 				self.facing = 'right'
 			if keys[pygame.K_UP]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.y += self.player_speed
+					sprite.rect.y += self.player_speed
 				self.y_change -= self.player_speed
 				self.facing = 'up'
 			if keys[pygame.K_DOWN]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.y -= self.player_speed
+					sprite.rect.y -= self.player_speed
 				self.y_change += self.player_speed
 				self.facing = 'down'
 		else:
 			keys = pygame.key.get_pressed()
 			if keys[pygame.K_q]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.x += self.player_speed
+					sprite.rect.x += self.player_speed
 				self.x_change -= self.player_speed
 				self.facing = 'left'
 			if keys[pygame.K_d]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.x -= self.player_speed
+					sprite.rect.x -= self.player_speed
 				self.x_change += self.player_speed
 				self.facing = 'right'
 			if keys[pygame.K_z]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.y += self.player_speed
+					sprite.rect.y += self.player_speed
 				self.y_change -= self.player_speed
 				self.facing = 'up'
 			if keys[pygame.K_s]:
 				for sprite in self.game.all_sprites:
-						sprite.rect.y -= self.player_speed
+					sprite.rect.y -= self.player_speed
 				self.y_change += self.player_speed
 				self.facing = 'down'
 
-	def damaged(self):
-		if not self.player_invulnerability:
-			for enemies in self.game.enemies:
-				if pygame.sprite.collide_mask(self, enemies):
+	def damaged(self, enemies):
+		#Calcul de déplacement
+		diff_x = self.rect.x - enemies.rect.x
+		diff_y = self.rect.y - enemies.rect.y
 
-					#Calcul de déplacement
-					diff_x = self.rect.x - enemies.rect.x
-					diff_y = self.rect.y - enemies.rect.y
+		# Push le joueur out
+		if abs(diff_x) > abs(diff_y):
+			if diff_x < 0:
+				self.rect.x -= PUSHBACK_POWER
+				for sprite in self.game.all_sprites:
+					sprite.rect.x += PUSHBACK_POWER
+				self.game.xTopLefIsland += PUSHBACK_POWER
 
-					# Push le joueur out
-					if abs(diff_x) > abs(diff_y):
-						if diff_x < 0:
-							self.rect.x -= 50
-							for sprite in self.game.all_sprites:
-								sprite.rect.x += 50
-							self.game.xTopLefIsland += 50
-						else:
-							self.rect.x -= -50
-							for sprite in self.game.all_sprites:
-								sprite.rect.x += -50
-							self.game.xTopLefIsland -= 50
-					else:
-						if diff_y < 0:
-							self.rect.y -= 50
-							for sprite in self.game.all_sprites:
-								sprite.rect.y += 50
-							self.game.yTopLefIsland += 50
-						else:
-							self.rect.y -= -50
-							for sprite in self.game.all_sprites:
-								sprite.rect.y += -50
-							self.game.yTopLefIsland -= 50
-
-					#Gestion des overlay de vie
-					self.player_health -= 1
-					# Invulnératibilité pour (player_time_invulnerability) de temps
-					self.game.damaged_sound.play()
-					self.player_invulnerability = True
-					break
-		else:
-			if (self.player_time_left >= self.player_time_invulnerability):
-				self.player_time_left = 0
-				self.player_invulnerability = False
+				hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
+				if hit:
+					self.rect.x += PUSHBACK_POWER
+					for sprite in self.game.all_sprites:
+						sprite.rect.x -= PUSHBACK_POWER
+					self.game.xTopLefIsland -= PUSHBACK_POWER
+					
 			else:
-				self.player_time_left += 1
+				self.rect.x -= -PUSHBACK_POWER
+				for sprite in self.game.all_sprites:
+					sprite.rect.x += -PUSHBACK_POWER
+				self.game.xTopLefIsland -= PUSHBACK_POWER
+				hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
+				if hit:
+					self.rect.x -= PUSHBACK_POWER
+					for sprite in self.game.all_sprites:
+						sprite.rect.x += PUSHBACK_POWER
+					self.game.xTopLefIsland += PUSHBACK_POWER
+					
+				
+		else:
+			if diff_y < 0:
+				self.rect.y -= PUSHBACK_POWER
+				for sprite in self.game.all_sprites:
+					sprite.rect.y += PUSHBACK_POWER
+				self.game.yTopLefIsland += PUSHBACK_POWER
+				hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
+				if hit:
+					self.rect.y += PUSHBACK_POWER
+					for sprite in self.game.all_sprites:
+						sprite.rect.y -= PUSHBACK_POWER
+					self.game.yTopLefIsland -= PUSHBACK_POWER
+					
+			else:
+				self.rect.y -= -PUSHBACK_POWER
+				for sprite in self.game.all_sprites:
+					sprite.rect.y += -PUSHBACK_POWER
+				self.game.yTopLefIsland -= PUSHBACK_POWER
+				hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
+				if hit:
+					self.rect.y -= PUSHBACK_POWER
+					for sprite in self.game.all_sprites:
+						sprite.rect.y += PUSHBACK_POWER
+					self.game.yTopLefIsland += PUSHBACK_POWER
+					
+				
+
+		#Gestion des overlay de vie
+		
+		
 
 	def animate(self):
 		SCALE = 3
