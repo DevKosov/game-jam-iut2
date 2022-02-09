@@ -43,7 +43,7 @@ tilemap = [
    'EEEEEEEEEEEEEEEEDSSa]pp[ggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//yggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao:/gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//tggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSaippuggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSS3xxxxxxxxxxxxxxxxxxxxxxxx4SSlEEEEEEEEEEEEEEEE',
@@ -89,6 +89,11 @@ class Game:
         self.xTopLefIsland = 0
         self.yTopLefIsland = 0
 
+        TILEWIDTH, TILEHEIGHT = 64, 64
+
+        self.islandWidth = TILEWIDTH * 31
+        self.islandHeight = TILEHEIGHT * 19
+
         self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
         self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Switch2.ogg'))
         self.damaged_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Damage1.ogg'))
@@ -130,72 +135,76 @@ class Game:
             for j, column in enumerate(row):
                 # basic textures
                 if column == 'E':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'water', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'water', True, False)
                 if column == 'S':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'sand', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'sand', False, False)
                 if column == 'g':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'grass', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'grass', False, False)
                 if column == '/':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'dirt', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'dirt', False, False)
 
                 # map border textures
                 if column == 'T':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topWater', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topWater', True, False)
                 if column == 'G':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topLeftWaterBord', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topLeftWaterBord', True, False)
                 if column == 'R':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topRightWaterBord', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topRightWaterBord', True, False)
                 if column == 'B':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomWaterBord', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomWaterBord', True, False)
                 if column == 'V':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomLeftSand', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomLeftSand', True, False)
                 if column == 'X':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomRightSand', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomRightSand', True, False)
                 if column == 'l':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'rightWaterBord', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'rightWaterBord', True, False)
                 if column == 'D':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'leftWaterBord', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'leftWaterBord', True, False)
 
                 # Sand + Grass Transition
                 if column == '1':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topLeftSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topLeftSandGrassT', False, False)
                 if column == '2':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topRightSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topRightSandGrassT', False, False)
                 if column == 'c':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topSandGrassT', False, False)
                 if column == 'a':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'leftSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'leftSandGrassT', False, False)
                 if column == 'b':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'rightSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'rightSandGrassT', False, False)
                 if column == '4':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomRightSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomRightSandGrassT', False, False)
                 if column == '3':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomleftSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomleftSandGrassT', False, False)
                 if column == 'x':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomSandGrassT', False, False)
 
                 # Fences
                 if column == ']':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topLeftFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topLeftFence', True, False)
                 if column == '[':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topRightFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topRightFence', True, False)
                 if column == 'p':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topFence', True, False)
                 if column == 'o':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'sideFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'sideFence', True, False)
                 if column == 'i':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomLeftFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomLeftFence', True, False)
                 if column == 'u':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomRightFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomRightFence', True, False)
                 if column == 'y':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topStopFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topStopFence', True, False)
                 if column == 't':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomStopFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomStopFence', True, False)
+
+                #potato
+                if column == ':':
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'firstStagePotato', True, True)
 
                 # Player pog
                 if column == 'P':
                     self.player = Player(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, self.gameplay_ZQSD)
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'grass', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'grass', False, False)
 
         self.screen.blit(
             pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0, 0))
@@ -204,8 +213,9 @@ class Game:
         # a new game starts
         self.playing = True
         self.all_sprites = pygame.sprite.LayeredUpdates()
+        self.blocks_no_collid_not_farm = pygame.sprite.LayeredUpdates()
+        self.blocks_no_collid_farm = pygame.sprite.LayeredUpdates()
         self.blocks_collid = pygame.sprite.LayeredUpdates()
-        self.blocks_no_collid = pygame.sprite.LayeredUpdates()
         self.enemies = pygame.sprite.LayeredUpdates()
         self.bullets = pygame.sprite.LayeredUpdates()
 
@@ -301,6 +311,12 @@ class Game:
 
         if self.player.current_weapon=="gun":
             current_defense = font.render("Gun", True, BLACK)
+            font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
+            current_ammo = font.render(str(self.player.gun_ammo), True, BLACK)
+            current_ammo_label_rect = current_ammo.get_rect(x=30, y=30)
+            font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 30)
+            max_ammo = font.render("/"+str(self.player.gun_max_ammo), True, BLACK)
+            max_ammo_label_rect = current_ammo.get_rect(x=60, y=55)
         else:
             current_defense = font.render("Knife", True, BLACK)
         current_defense_rect = current_defense.get_rect(x=910, y=680)
@@ -312,6 +328,9 @@ class Game:
         self.screen.blit(self.crabs_killed,self.crabs_killed_rect)
         self.screen.blit(current_defense_label,current_defense_label_rect)
         self.screen.blit(current_defense,current_defense_rect)
+        if self.player.current_weapon=="gun":
+            self.screen.blit(current_ammo,current_ammo_label_rect)
+            self.screen.blit(max_ammo,max_ammo_label_rect)
         self.screen.blit(self.night_effet[0], (0,0))
         self.curseur()
 
@@ -360,25 +379,52 @@ class Game:
         title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
-        subtitle = font.render("Improve your weapon damage", True, WHITE)
+        subtitle = font.render("Improve your skills and damages", True, WHITE)
         subtitle_rect = subtitle.get_rect(x=self.screen.get_width() / 2 - subtitle.get_width() / 2, y=150)
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
         label_nb_ress1 = font.render("Number of Potat : 10", True, WHITE)  # à changer une fois les ressources crées
         label_nb_ress1_rect = subtitle.get_rect(x=self.screen.get_width() / 3 - label_nb_ress1.get_width() / 2, y=230)
         label_nb_ress2 = font.render("Number of Corn : 7", True, WHITE)  # à changer une fois les ressources crées
-        label_nb_ress2_rect = subtitle.get_rect(x=350 + self.screen.get_width() / 3 - label_nb_ress2.get_width() / 2,
-                                                y=230)
+        label_nb_ress2_rect = subtitle.get_rect(x=350 + self.screen.get_width() / 3 - label_nb_ress2.get_width() / 2,y=230)
 
-        res_btn1 = Button(80, 500, 120, 50, BLACK, BLUE, '10 Potat', 30)
-        res_btn2 = Button(300, 500, 120, 50, BLACK, BLUE, '10 Corn', 30)
-        res_btn3 = Button(520, 500, 120, 50, BLACK, BLUE, '10 Potat', 30)
-        res_btn4 = Button(740, 500, 120, 50, BLACK, BLUE, '10 Corn', 30)
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
+        label_gun_dam = font.render("Gun", True, BLACK)
+        label_gun_dam_rect = label_gun_dam.get_rect(x=160, y=310)
 
-        buy_btn1 = Button(200, 500, 80, 50, BLACK, WHITE, 'Buy', 30)
-        buy_btn2 = Button(420, 500, 80, 50, BLACK, WHITE, 'Buy', 30)
-        buy_btn3 = Button(640, 500, 80, 50, BLACK, WHITE, 'Buy', 30)
-        buy_btn4 = Button(860, 500, 80, 50, BLACK, WHITE, 'Buy', 30)
+        label_gun_ammo = font.render("Gun Ammo", True, BLACK)
+        label_gun_ammo_rect = label_gun_ammo.get_rect(x=350, y=310)
+
+        label_knife_dam = font.render("Knife", True, BLACK)
+        label_knife_dam_rect = label_knife_dam.get_rect(x=590, y=310)
+
+        label_stamina = font.render("Stamina", True, BLACK)
+        label_stamina_rect = label_stamina.get_rect(x=800, y=310)
+
+        #############################################################
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
+        gun_dam_value = font.render(str(self.player.damaged_gun), True, BLACK)
+        gun_dam_rect_value = gun_dam_value.get_rect(x=165, y=390)
+
+        gun_ammo_value = font.render(str(self.player.gun_ammo), True, BLACK)
+        gun_ammo_rect_value = gun_ammo_value.get_rect(x=390, y=390)
+
+        knife_dam_value = font.render(str(self.player.damaged_knife), True, BLACK)
+        knife_dam_rect_value = knife_dam_value.get_rect(x=605, y=390)
+
+        stamina_value = font.render(str(self.player.player_speed), True, BLACK)
+        stamina_rect_value = stamina_value.get_rect(x=830, y=390)
+        
+
+        res_btn1 = Button(80, 500, 120, 50, BLACK, (78, 85, 115), '10 Potat', 30)
+        res_btn2 = Button(300, 500, 120, 50, BLACK, (78, 85, 115), '10 Corn', 30)
+        res_btn3 = Button(520, 500, 120, 50, BLACK, (78, 85, 115), '10 Potat', 30)
+        res_btn4 = Button(740, 500, 120, 50, BLACK, (78, 85, 115), '10 Corn', 30)
+
+        buy_btn1 = Button(200, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
+        buy_btn2 = Button(420, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
+        buy_btn3 = Button(640, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
+        buy_btn4 = Button(860, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
 
         self.screen.fill(BLACK)
         self.clock.tick(FPS)
@@ -386,16 +432,24 @@ class Game:
         self.screen.blit(subtitle, subtitle_rect)
         self.screen.blit(label_nb_ress1, label_nb_ress1_rect)
         self.screen.blit(label_nb_ress2, label_nb_ress2_rect)
-        pygame.draw.rect(self.screen, RED, pygame.Rect(80, 300, 200, 200))
+        pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(80, 300, 200, 200)) # gun damage
+        self.screen.blit(label_gun_dam, label_gun_dam_rect)
+        self.screen.blit(gun_dam_value, gun_dam_rect_value)
         self.screen.blit(res_btn1.image, res_btn1.rect)
         self.screen.blit(buy_btn1.image, buy_btn1.rect)
-        pygame.draw.rect(self.screen, RED, pygame.Rect(300, 300, 200, 200))
+        pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(300, 300, 200, 200)) # gun ammo
+        self.screen.blit(label_gun_ammo, label_gun_ammo_rect)
+        self.screen.blit(gun_ammo_value, gun_ammo_rect_value)
         self.screen.blit(res_btn2.image, res_btn2.rect)
         self.screen.blit(buy_btn2.image, buy_btn2.rect)
-        pygame.draw.rect(self.screen, RED, pygame.Rect(520, 300, 200, 200))
+        pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(520, 300, 200, 200)) # knife damage
+        self.screen.blit(label_knife_dam, label_knife_dam_rect)
+        self.screen.blit(knife_dam_value, knife_dam_rect_value)
         self.screen.blit(res_btn3.image, res_btn3.rect)
         self.screen.blit(buy_btn3.image, buy_btn3.rect)
-        pygame.draw.rect(self.screen, RED, pygame.Rect(740, 300, 200, 200))
+        pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(740, 300, 200, 200)) # stamina
+        self.screen.blit(label_stamina, label_stamina_rect)
+        self.screen.blit(stamina_value, stamina_rect_value)
         self.screen.blit(res_btn4.image, res_btn4.rect)
         self.screen.blit(buy_btn4.image, buy_btn4.rect)
         self.curseur()
