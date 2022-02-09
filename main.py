@@ -382,11 +382,17 @@ class Game:
         subtitle = font.render("Improve your skills and damages", True, WHITE)
         subtitle_rect = subtitle.get_rect(x=self.screen.get_width() / 2 - subtitle.get_width() / 2, y=150)
 
+        potato_img1 = pygame.image.load("assets/img/tests/potato.png")
+        potato_img2 = pygame.transform.scale(potato_img1, (40,40))
+
+        corn_img1 = pygame.image.load("assets/img/tests/corna.png")
+        corn_img2 = pygame.transform.scale(corn_img1, (40,40))
+ 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
-        label_nb_ress1 = font.render("Number of Potat : 10", True, WHITE)  # à changer une fois les ressources crées
-        label_nb_ress1_rect = subtitle.get_rect(x=self.screen.get_width() / 3 - label_nb_ress1.get_width() / 2, y=230)
-        label_nb_ress2 = font.render("Number of Corn : 7", True, WHITE)  # à changer une fois les ressources crées
-        label_nb_ress2_rect = subtitle.get_rect(x=350 + self.screen.get_width() / 3 - label_nb_ress2.get_width() / 2,y=230)
+        label_nb_ress1 = font.render(str(self.player.potat_counter), True, WHITE)  # à changer une fois les ressources crées
+        label_nb_ress1_rect = subtitle.get_rect(x=450, y=230)
+        label_nb_ress2 = font.render(str(self.player.corn_counter), True, WHITE)  # à changer une fois les ressources crées
+        label_nb_ress2_rect = subtitle.get_rect(x=630,y=230)
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
         label_gun_dam = font.render("Gun", True, BLACK)
@@ -416,15 +422,15 @@ class Game:
         stamina_rect_value = stamina_value.get_rect(x=830, y=390)
         
 
-        res_btn1 = Button(80, 500, 120, 50, BLACK, (78, 85, 115), '10 Potat', 30)
-        res_btn2 = Button(300, 500, 120, 50, BLACK, (78, 85, 115), '10 Corn', 30)
-        res_btn3 = Button(520, 500, 120, 50, BLACK, (78, 85, 115), '10 Potat', 30)
-        res_btn4 = Button(740, 500, 120, 50, BLACK, (78, 85, 115), '10 Corn', 30)
+        res_btn1 = Button(80, 500, 120, 50, BLACK, (78, 85, 115), '.   10', 30)
+        res_btn2 = Button(300, 500, 120, 50, BLACK, (78, 85, 115), '.        10', 30)
+        res_btn3 = Button(520, 500, 120, 50, BLACK, (78, 85, 115), '.   10', 30)
+        res_btn4 = Button(740, 500, 120, 50, BLACK, (78, 85, 115), '.        10', 30)
 
-        buy_btn1 = Button(200, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
-        buy_btn2 = Button(420, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
-        buy_btn3 = Button(640, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
-        buy_btn4 = Button(860, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
+        self.buy_btn1 = Button(200, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
+        self.buy_btn2 = Button(420, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
+        self.buy_btn3 = Button(640, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
+        self.buy_btn4 = Button(860, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
 
         self.screen.fill(BLACK)
         self.clock.tick(FPS)
@@ -432,26 +438,34 @@ class Game:
         self.screen.blit(subtitle, subtitle_rect)
         self.screen.blit(label_nb_ress1, label_nb_ress1_rect)
         self.screen.blit(label_nb_ress2, label_nb_ress2_rect)
+
+        self.screen.blit(potato_img1, (370,210))
+        self.screen.blit(corn_img1, (550,210))
+
         pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(80, 300, 200, 200)) # gun damage
         self.screen.blit(label_gun_dam, label_gun_dam_rect)
         self.screen.blit(gun_dam_value, gun_dam_rect_value)
         self.screen.blit(res_btn1.image, res_btn1.rect)
-        self.screen.blit(buy_btn1.image, buy_btn1.rect)
+        self.screen.blit(potato_img2, (90,505))
+        self.screen.blit(self.buy_btn1.image, self.buy_btn1.rect)
         pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(300, 300, 200, 200)) # gun ammo
         self.screen.blit(label_gun_ammo, label_gun_ammo_rect)
         self.screen.blit(gun_ammo_value, gun_ammo_rect_value)
         self.screen.blit(res_btn2.image, res_btn2.rect)
-        self.screen.blit(buy_btn2.image, buy_btn2.rect)
+        self.screen.blit(corn_img2, (320,505))
+        self.screen.blit(self.buy_btn2.image, self.buy_btn2.rect)
         pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(520, 300, 200, 200)) # knife damage
         self.screen.blit(label_knife_dam, label_knife_dam_rect)
         self.screen.blit(knife_dam_value, knife_dam_rect_value)
         self.screen.blit(res_btn3.image, res_btn3.rect)
-        self.screen.blit(buy_btn3.image, buy_btn3.rect)
+        self.screen.blit(potato_img2, (530,505))
+        self.screen.blit(self.buy_btn3.image, self.buy_btn3.rect)
         pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(740, 300, 200, 200)) # stamina
         self.screen.blit(label_stamina, label_stamina_rect)
         self.screen.blit(stamina_value, stamina_rect_value)
         self.screen.blit(res_btn4.image, res_btn4.rect)
-        self.screen.blit(buy_btn4.image, buy_btn4.rect)
+        self.screen.blit(corn_img2, (760,505))
+        self.screen.blit(self.buy_btn4.image, self.buy_btn4.rect)
         self.curseur()
 
         pygame.display.update()
@@ -467,6 +481,28 @@ class Game:
                 if event.key == pygame.K_p:
                     self.farm_time = False
                     self.night_time = True
+            if event.type == pygame.MOUSEBUTTONUP and self.buy_btn1.rect.collidepoint(pygame.mouse.get_pos()):
+                if (self.player.potat_counter>0):
+                    self.player.potat_counter-=10
+                    # add gun damage
+                    self.player.damaged_gun+=1
+            if event.type == pygame.MOUSEBUTTONUP and self.buy_btn2.rect.collidepoint(pygame.mouse.get_pos()):
+                if (self.player.corn_counter>0):
+                    self.player.corn_counter-=10
+                    # add gun ammo
+                    self.player.gun_ammo+=1
+                    self.player.gun_max_ammo+=1
+            if event.type == pygame.MOUSEBUTTONUP and self.buy_btn3.rect.collidepoint(pygame.mouse.get_pos()):
+                if (self.player.potat_counter>0):
+                    self.player.potat_counter-=10
+                    # add knife damage
+                    self.player.damaged_knife+=1
+            if event.type == pygame.MOUSEBUTTONUP and self.buy_btn4.rect.collidepoint(pygame.mouse.get_pos()):
+                if (self.player.corn_counter>0):
+                    self.player.corn_counter-=10
+                    # add stamina
+                    self.player.player_speed+=1
+                
 
     def main(self):
         self.playing = True
