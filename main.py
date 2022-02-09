@@ -67,6 +67,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.menu = True
+        self.rules = False
         self.playing = False
         self.options = False
         self.credits = False
@@ -641,13 +642,14 @@ class Game:
         else:
             pygame.mixer.music.pause()
 
-        title = self.font.render('Pog Champs Game', True, BLACK)
+        title = self.font.render('Crab Island', True, BLACK)
         title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
 
         play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, WHITE, BLACK, 'Play', 40)
-        option_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, WHITE, BLACK, 'Options', 40)
-        credits_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, WHITE, BLACK, 'Credits', 40)
-        exit_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, WHITE, BLACK, 'Exit', 40)
+        rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, WHITE, BLACK, 'Rules of play', 40)
+        option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, WHITE, BLACK, 'Options', 40)
+        credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, WHITE, BLACK, 'Credits', 40)
+        exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, WHITE, BLACK, 'Exit', 40)
 
         while self.menu:
             for event in pygame.event.get():
@@ -661,6 +663,9 @@ class Game:
             if play_button.is_pressed(mouse_pos, mouse_pressed):
                 self.menu = False
                 self.playing = True
+            elif rules_button.is_pressed(mouse_pos, mouse_pressed):
+                self.menu = False
+                self.rules = True
             elif option_button.is_pressed(mouse_pos, mouse_pressed):
                 self.menu = False
                 self.options = True
@@ -672,6 +677,7 @@ class Game:
             self.screen.fill(BLUE)
             self.screen.blit(title, title_rect)
             self.screen.blit(play_button.image, play_button.rect)
+            self.screen.blit(rules_button.image, rules_button.rect)
             self.screen.blit(option_button.image, option_button.rect)
             self.screen.blit(credits_button.image, credits_button.rect)
             self.screen.blit(exit_button.image, exit_button.rect)
@@ -839,14 +845,107 @@ class Game:
                     self.credits = False
                     self.running = False
                     exit()
-            mouse_pos = pygame.mouse.get_pos()
-            mouse_pressed = pygame.mouse.get_pressed()
-            if back_button.is_pressed(mouse_pos, mouse_pressed):
-                self.credits = False
-                self.menu = True
+                elif event.type == pygame.MOUSEBUTTONUP and back_button.rect.collidepoint(pygame.mouse.get_pos()):
+                    if self.back_to_game:
+                        self.credits = False
+                        self.playing = True
+                    else:
+                        self.credits = False
+                        self.menu = True
 
             self.screen.fill(BLUE)
             self.screen.blit(title, title_rect)
+            self.screen.blit(back_button.image, back_button.rect)
+
+            self.clock.tick(FPS)
+            self.curseur()
+            pygame.display.update()
+
+    def rules_screen(self):
+        click_sound.play()
+        self.rules = True
+
+        title = self.font.render('Rules of play', True, BLACK)
+        title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
+
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 30)
+        rules_desc1 = font.render('The rules are simple!', True, BLACK)
+        rules_desc1_rect = rules_desc1.get_rect(x=self.screen.get_width() / 2 - rules_desc1.get_width() / 2, y=200)
+
+        rules_desc2 = font.render('You will play a character who, during the day, must', True, BLACK)
+        rules_desc2_rect = rules_desc2.get_rect(x=self.screen.get_width() / 2 - rules_desc2.get_width() / 2, y=220)
+
+        rules_desc3 = font.render('harvest potatoes and corn to buy ammunition at the market.', True, BLACK)
+        rules_desc3_rect = rules_desc3.get_rect(x=self.screen.get_width() / 2 - rules_desc3.get_width() / 2, y=240)
+
+        rules_desc4 = font.render('Once night falls, you have to survive the nasty little crabs...', True, BLACK)
+        rules_desc4_rect = rules_desc4.get_rect(x=self.screen.get_width() / 2 - rules_desc4.get_width() / 2, y=260)
+
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
+        rules_desc5 = font.render('To move the character :', True, BLACK)
+        rules_desc5_rect = rules_desc5.get_rect(x=230, y=350)
+
+        btn1 = Button(620,340,180,40,WHITE,RED,"ZQSD or Arrows",30)
+
+        rules_desc6 = font.render('To target crabs :', True, BLACK)
+        rules_desc6_rect = rules_desc6.get_rect(x=230, y=400)
+
+        btn2 = Button(620,390,80,40,WHITE,RED,"Mouse",30)
+
+        rules_desc7 = font.render('To shoot :', True, BLACK)
+        rules_desc7_rect = rules_desc7.get_rect(x=230, y=450)
+
+        btn3 = Button(620,440,150,40,WHITE,RED,"Right click",30)
+
+        rules_desc8 = font.render('To collect potatoes/corn :', True, BLACK)
+        rules_desc8_rect = rules_desc8.get_rect(x=230, y=500)
+
+        btn4 = Button(620,490,150,40,WHITE,RED,"Left click",30)
+
+        rules_desc9 = font.render('To change weapons :', True, BLACK)
+        rules_desc9_rect = rules_desc9.get_rect(x=230, y=550)
+
+        btn5 = Button(620,540,150,40,WHITE,RED,"Mouse wheel",30)
+
+        rules_desc10 = font.render('To reload the gun :', True, BLACK)
+        rules_desc10_rect = rules_desc10.get_rect(x=230, y=600)
+
+        btn6 = Button(620,590,40,40,WHITE,RED,"R",30)
+
+        back_button = Button((self.screen.get_width() / 2) - 100, 670, 200, 50, WHITE, BLACK, 'Back to menu', 30)
+
+        while self.rules:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.rules = False
+                    self.running = False
+                    exit()
+                elif event.type == pygame.MOUSEBUTTONUP and back_button.rect.collidepoint(pygame.mouse.get_pos()):
+                    if self.back_to_game:
+                        self.rules = False
+                        self.playing = True
+                    else:
+                        self.rules = False
+                        self.menu = True
+
+            self.screen.fill(BLUE)
+            self.screen.blit(title, title_rect)
+            self.screen.blit(rules_desc1, rules_desc1_rect)
+            self.screen.blit(rules_desc2, rules_desc2_rect)
+            self.screen.blit(rules_desc3, rules_desc3_rect)
+            self.screen.blit(rules_desc4, rules_desc4_rect)
+            self.screen.blit(rules_desc5, rules_desc5_rect)
+            self.screen.blit(rules_desc6, rules_desc6_rect)
+            self.screen.blit(rules_desc7, rules_desc7_rect)
+            self.screen.blit(rules_desc8, rules_desc8_rect)
+            self.screen.blit(rules_desc9, rules_desc9_rect)
+            self.screen.blit(rules_desc10, rules_desc10_rect)
+            self.screen.blit(btn1.image, btn1.rect)
+            self.screen.blit(btn2.image, btn2.rect)
+            self.screen.blit(btn3.image, btn3.rect)
+            self.screen.blit(btn4.image, btn4.rect)
+            self.screen.blit(btn5.image, btn5.rect)
+            self.screen.blit(btn6.image, btn6.rect)
             self.screen.blit(back_button.image, back_button.rect)
 
             self.clock.tick(FPS)
@@ -859,6 +958,8 @@ while g.running == True:
 
     if g.menu == True:
         g.intro_screen()
+    if g.rules == True:
+        g.rules_screen()
     elif g.options == True:
         g.options_screen()
     elif g.credits == True:
