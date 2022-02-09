@@ -218,19 +218,25 @@ class Game:
         self.night_time = False
         self.createTileMap()
 
-    def events(self):
+    def events_night(self):
         # game loop events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
                 self.running = False
                 exit()
+            if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LSHIFT:
+                    self.player.sprint(event)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.player.switch_weapon(event)
                 if event.button == pygame.BUTTON_LEFT:
                     self.player.attacks()
                 if event.button == pygame.BUTTON_RIGHT:
                     self.crab_spawn(self.hpCrab)
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_r:
+                    self.player.reloading()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.playing = False
@@ -276,9 +282,6 @@ class Game:
         # game llop events
         self.all_sprites.update()
         # crabSpawn
-        print(self.xTopLefIsland)
-        print(self.yTopLefIsland)
-        print('---')
         if (random.randint(0, TIME_SPAWN_CRAB)) == 0:
             self.crab_spawn(self.hpCrab)
 
@@ -471,7 +474,7 @@ class Game:
                 self.events_farm()
             elif self.night_time:
                 self.draw()
-                self.events()
+                self.events_night()
                 self.update_night()
                 self.timer_value = int(self.timer_init - (pygame.time.get_ticks()) / 1000)
         pygame.display.update()

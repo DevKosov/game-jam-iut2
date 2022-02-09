@@ -60,9 +60,17 @@ class Player(pygame.sprite.Sprite):
 		self.corn_counter = 0
 		self.damaged_knife = 0
 		self.damaged_gun = 0
+
+		#Gestion Gun
 		self.gun_ammo = 5
 		self.gun_max_ammo = 5
+		self.in_realoding = False
 
+		#sprint
+		self.in_running = False
+		self.current_stamina = 100
+		self.basic_speed = self.player_speed
+		self.speed_upgrade_with_sprint = 3
 
 	def update(self):
 		self.movement()
@@ -79,7 +87,7 @@ class Player(pygame.sprite.Sprite):
 		self.y_change  = 0
 
 		self.damaged()
-
+		self.stamina()
 
 	def movement(self):
 
@@ -226,25 +234,49 @@ class Player(pygame.sprite.Sprite):
 					self.animation_loop = 0
 
 	def switch_weapon(self,event):
-		if event.button == 4:
+		if event.button == 4 and self.current_weapon == "gun":
 			self.game.switch_weapon_sound.play()
 			self.current_weapon = "knife"
-		if event.button == 5:
+		if event.button == 5 and self.current_weapon == "knife":
 			self.game.switch_weapon_sound.play()
 			self.current_weapon = "gun"
 
 	def attacks(self):
 		if (self.current_weapon == "gun"):
-			self.game.bullet_sound.play()
-			x, y = pygame.mouse.get_pos()
-			Bullet(self.game, self.rect.centerx, self.rect.centery, x, y, 5)
-		# else:
+			if (self.gun_ammo != 0):
+				self.game.bullet_sound.play()
+				x, y = pygame.mouse.get_pos()
+				Bullet(self.game, self.rect.centerx, self.rect.centery, x, y, 5)
+				self.gun_ammo -= 1
+		else:
+			print("knife")
 
-	# def sprint(self):
-	# 	print("f")
+	def sprint(self,event):
+		if event.type == pygame.KEYUP :
+			self.player_speed = self.basic_speed
+			self.in_running = False
+		if event.type == pygame.KEYDOWN and self.current_stamina != 0:
+			self.player_speed = self.basic_speed + self.speed_upgrade_with_sprint
+			self.in_running = True
+
+	def stamina(self):
+		if self.in_running:
+			if not self.current_stamina <= 0:
+				self.current_stamina -= 1
+			else:
+				self.current_stamina = 0
+				self.player_speed = self.basic_speed
+		else:
+			if self.current_stamina < 100:
+				self.current_stamina += 0.5
+
+	def reloading(self):
+		if (not self.in_realoding) and (self.current_weapon == "gun"):
+			print("REALOD")
+			self.gun_ammo = self.gun_max_ammo
+
 
 	def collision(self, direction):
-
 		if direction == 'x':
 			hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
 			if hit:
@@ -258,7 +290,6 @@ class Player(pygame.sprite.Sprite):
 					for sprite in self.game.all_sprites:
 						sprite.rect.x -= self.player_speed
 					self.game.xTopLefIsland -= self.player_speed
-
 		if direction == 'y':
 			hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
 			if hit:
@@ -489,6 +520,7 @@ class Crab(pygame.sprite.Sprite):
 
 	def death(self):
 		if self.hp <= 0:
+			self.game.nb_crabs_killed += 1
 			self.kill()
 
 	def movement(self):
