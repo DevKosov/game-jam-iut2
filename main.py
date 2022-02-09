@@ -83,6 +83,7 @@ class Game:
         self.timer_value = 0
         self.timer_init = 120 # 120s
         self.clock = pygame.time.Clock()
+
         self.xTopLefIsland = 0
         self.yTopLefIsland = 0
 
@@ -259,6 +260,9 @@ class Game:
     def update_night(self):
         #game llop events
         self.all_sprites.update()
+        print(self.xTopLefIsland)
+        print(self.yTopLefIsland)
+        print('----')
         #crabSpawn
         if (random.randint(0,60*3)) == 0:
             self.crab_spawn(100)

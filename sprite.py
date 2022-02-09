@@ -58,8 +58,10 @@ class Player(pygame.sprite.Sprite):
 		self.animate()
 
 		self.rect.x += self.x_change
+		self.game.xTopLefIsland += self.x_change
 		self.collision('x')
 		self.rect.y += self.y_change
+		self.game.yTopLefIsland += self.y_change
 		self.collision('y')
 
 		self.x_change = 0
