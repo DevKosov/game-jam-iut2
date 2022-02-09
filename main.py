@@ -80,6 +80,7 @@ class Game:
         self.timer_init = 120  # 120s
         self.clock = pygame.time.Clock()
         self.nb_crabs_killed = 0
+        self.gun_level = 1
 
         self.xTopLefIsland = 0
         self.yTopLefIsland = 0
@@ -432,11 +433,18 @@ class Game:
         label_gun_dam = font.render("Gun damage", True, BLACK)
         label_gun_dam_rect = label_gun_dam.get_rect(x=110, y=310)
 
-        label_gun_ammo = font.render("Gun Ammo", True, BLACK)
+        label_gun_ammo = font.render("Gun ammo", True, BLACK)
         label_gun_ammo_rect = label_gun_ammo.get_rect(x=350, y=310)
 
         label_knife_dam = font.render("Knife damage", True, BLACK)
         label_knife_dam_rect = label_knife_dam.get_rect(x=545, y=310)
+
+        if self.gun_level==1:
+            gun_img1 = pygame.image.load("assets/img/tests/gunNormal2.png")
+            gun_img2 = pygame.transform.scale(gun_img1,(100,70))
+        elif self.gun_level==2:
+            gun_img1 = pygame.image.load("assets/img/tests/gunUpgraded2.png")
+            gun_img2 = pygame.transform.scale(gun_img1,(100,70))
 
         knife_img1 = pygame.image.load("assets/img/tests/knife.png")
         knife_img2 = pygame.transform.rotate(knife_img1,45)
@@ -449,15 +457,15 @@ class Game:
         label_stamina_rect = label_stamina.get_rect(x=775, y=310)
 
         #############################################################
-        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 70)
-        gun_dam_value = font.render(str(self.player.damaged_gun), True, BLACK)
-        gun_dam_rect_value = gun_dam_value.get_rect(x=165, y=450)
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 60)
+        gun_dam_value = font.render("+"+str(self.player.damaged_gun), True, BLACK)
+        gun_dam_rect_value = gun_dam_value.get_rect(x=200, y=450)
 
-        gun_ammo_value = font.render(str(self.player.gun_ammo), True, BLACK)
-        gun_ammo_rect_value = gun_ammo_value.get_rect(x=440, y=450)
+        gun_ammo_value = font.render("+"+str(self.player.gun_ammo), True, BLACK)
+        gun_ammo_rect_value = gun_ammo_value.get_rect(x=420, y=450)
 
-        knife_dam_value = font.render(str(self.player.damaged_knife), True, BLACK)
-        knife_dam_rect_value = knife_dam_value.get_rect(x=660, y=450)
+        knife_dam_value = font.render("+"+str(self.player.damaged_knife), True, BLACK)
+        knife_dam_rect_value = knife_dam_value.get_rect(x=640, y=450)
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
         stamina_value = font.render(str(self.player.max_stamina), True, BLACK)
@@ -468,6 +476,8 @@ class Game:
         res_btn2 = Button(300, 500, 120, 50, BLACK, (78, 85, 115), '.        10', 30)
         res_btn3 = Button(520, 500, 120, 50, BLACK, (78, 85, 115), '.   10', 30)
         res_btn4 = Button(740, 500, 120, 50, BLACK, (78, 85, 115), '.        10', 30)
+
+        self.start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, WHITE, RED, 'Start', 40)
 
         self.buy_btn1 = Button(200, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
         self.buy_btn2 = Button(420, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
@@ -489,6 +499,7 @@ class Game:
         self.screen.blit(gun_dam_value, gun_dam_rect_value)
         self.screen.blit(res_btn1.image, res_btn1.rect)
         self.screen.blit(potato_img2, (90,505))
+        self.screen.blit(gun_img2,(130,360))
         self.screen.blit(self.buy_btn1.image, self.buy_btn1.rect)
         pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(300, 300, 200, 200)) # gun ammo
         self.screen.blit(label_gun_ammo, label_gun_ammo_rect)
@@ -509,6 +520,7 @@ class Game:
         self.screen.blit(stamina_value, stamina_rect_value)
         self.screen.blit(res_btn4.image, res_btn4.rect)
         self.screen.blit(corn_img2, (760,505))
+        self.screen.blit(self.start_before_farm.image, self.start_before_farm.rect)
         self.screen.blit(self.buy_btn4.image, self.buy_btn4.rect)
         self.curseur()
 
@@ -530,6 +542,8 @@ class Game:
                     self.player.potat_counter-=10
                     # add gun damage
                     self.player.damaged_gun+=1
+                    if self.player.damaged_gun>=5:
+                        self.gun_level=2
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn2.rect.collidepoint(pygame.mouse.get_pos()):
                 if (self.player.corn_counter>0):
                     self.player.corn_counter-=10
@@ -546,6 +560,9 @@ class Game:
                     self.player.corn_counter-=10
                     # add stamina
                     self.player.max_stamina+=10
+            if event.type == pygame.MOUSEBUTTONUP and self.start_before_farm.rect.collidepoint(pygame.mouse.get_pos()):
+                self.farm_time = False
+                self.night_time = True
                 
 
     def main(self):
