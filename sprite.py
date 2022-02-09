@@ -68,7 +68,8 @@ class Player(pygame.sprite.Sprite):
 
 		#sprint
 		self.in_running = False
-		self.current_stamina = 100
+		self.max_stamina = 100
+		self.current_stamina = self.max_stamina
 		self.basic_speed = self.player_speed
 		self.speed_upgrade_with_sprint = 3
 
@@ -267,7 +268,7 @@ class Player(pygame.sprite.Sprite):
 				self.current_stamina = 0
 				self.player_speed = self.basic_speed
 		else:
-			if self.current_stamina < 100:
+			if self.current_stamina < self.max_stamina:
 				self.current_stamina += 0.5
 
 	def reloading(self):
