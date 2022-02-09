@@ -283,7 +283,7 @@ class Player(pygame.sprite.Sprite):
 					self.rect.x = hit[0].rect.left - self.rect.width
 					for sprite in self.game.all_sprites:
 						sprite.rect.x += self.player_speed
-					self.game.xTopLefIsland -= self.player_speed
+					self.game.xTopLefIsland += self.player_speed
 				if self.x_change < 0:
 					self.rect.x = hit[0].rect.right
 					for sprite in self.game.all_sprites:
@@ -296,7 +296,7 @@ class Player(pygame.sprite.Sprite):
 					self.rect.y = hit[0].rect.top - self.rect.height
 					for sprite in self.game.all_sprites:
 						sprite.rect.y += self.player_speed
-					self.game.yTopLefIsland -= self.player_speed
+					self.game.yTopLefIsland += self.player_speed
 				if self.y_change < 0:
 					self.rect.y = hit[0].rect.bottom
 					for sprite in self.game.all_sprites:
