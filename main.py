@@ -230,8 +230,7 @@ class Game:
                 if event.button == pygame.BUTTON_LEFT:
                     self.player.attacks()
                 if event.button == pygame.BUTTON_RIGHT:
-                    spawn_sound.play()
-                    Crab(self, self.xTopLefIsland, self.yTopLefIsland, 100, random.randint(1, 5))
+                    self.crab_spawn(100)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.playing = False
