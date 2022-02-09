@@ -43,7 +43,7 @@ tilemap = [
    'EEEEEEEEEEEEEEEEDSSa]pp[ggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//yggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao:/gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//tggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSaippuggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSS3xxxxxxxxxxxxxxxxxxxxxxxx4SSlEEEEEEEEEEEEEEEE',
@@ -135,72 +135,76 @@ class Game:
             for j, column in enumerate(row):
                 # basic textures
                 if column == 'E':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'water', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'water', True, False)
                 if column == 'S':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'sand', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'sand', False, False)
                 if column == 'g':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'grass', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'grass', False, False)
                 if column == '/':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'dirt', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'dirt', False, False)
 
                 # map border textures
                 if column == 'T':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topWater', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topWater', True, False)
                 if column == 'G':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topLeftWaterBord', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topLeftWaterBord', True, False)
                 if column == 'R':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topRightWaterBord', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topRightWaterBord', True, False)
                 if column == 'B':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomWaterBord', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomWaterBord', True, False)
                 if column == 'V':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomLeftSand', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomLeftSand', True, False)
                 if column == 'X':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomRightSand', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomRightSand', True, False)
                 if column == 'l':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'rightWaterBord', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'rightWaterBord', True, False)
                 if column == 'D':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'leftWaterBord', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'leftWaterBord', True, False)
 
                 # Sand + Grass Transition
                 if column == '1':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topLeftSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topLeftSandGrassT', False, False)
                 if column == '2':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topRightSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topRightSandGrassT', False, False)
                 if column == 'c':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topSandGrassT', False, False)
                 if column == 'a':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'leftSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'leftSandGrassT', False, False)
                 if column == 'b':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'rightSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'rightSandGrassT', False, False)
                 if column == '4':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomRightSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomRightSandGrassT', False, False)
                 if column == '3':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomleftSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomleftSandGrassT', False, False)
                 if column == 'x':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomSandGrassT', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomSandGrassT', False, False)
 
                 # Fences
                 if column == ']':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topLeftFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topLeftFence', True, False)
                 if column == '[':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topRightFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topRightFence', True, False)
                 if column == 'p':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topFence', True, False)
                 if column == 'o':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'sideFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'sideFence', True, False)
                 if column == 'i':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomLeftFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomLeftFence', True, False)
                 if column == 'u':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomRightFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomRightFence', True, False)
                 if column == 'y':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topStopFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'topStopFence', True, False)
                 if column == 't':
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomStopFence', True)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'bottomStopFence', True, False)
+
+                #potato
+                if column == ':':
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'firstStagePotato', True, True)
 
                 # Player pog
                 if column == 'P':
                     self.player = Player(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, self.gameplay_ZQSD)
-                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'grass', False)
+                    Block(self, (j - OFFSETX) * WIDTH, (i - OFFSETY) * HEIGHT, 'grass', False, False)
 
         self.screen.blit(
             pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0, 0))
@@ -209,8 +213,9 @@ class Game:
         # a new game starts
         self.playing = True
         self.all_sprites = pygame.sprite.LayeredUpdates()
+        self.blocks_no_collid_not_farm = pygame.sprite.LayeredUpdates()
+        self.blocks_no_collid_farm = pygame.sprite.LayeredUpdates()
         self.blocks_collid = pygame.sprite.LayeredUpdates()
-        self.blocks_no_collid = pygame.sprite.LayeredUpdates()
         self.enemies = pygame.sprite.LayeredUpdates()
         self.bullets = pygame.sprite.LayeredUpdates()
 

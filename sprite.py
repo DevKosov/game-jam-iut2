@@ -277,27 +277,40 @@ class Player(pygame.sprite.Sprite):
 					self.game.yTopLefIsland -= self.player_speed
 
 class Block(pygame.sprite.Sprite):
-	def __init__(self, game, x, y, block_type, colision):
+	def __init__(self, game, x, y, block_type, colision, farm):
 		BLACK = (0,0,0)
 		WIDTH = 64
 		HEIGHT = 64
 		SCALE = 1
+
 		self.colision = colision
 		self.game = game
 		self._layer = 1
-		if colision:
-			self.groups = self.game.all_sprites, self.game.blocks_collid
-			pygame.sprite.Sprite.__init__(self, self.groups)
+
+		if not(farm):
+			
+			if colision:
+				self.groups = self.game.all_sprites, self.game.blocks_collid
+				pygame.sprite.Sprite.__init__(self, self.groups)
+			else:
+				self.groups = self.game.all_sprites, self.game.blocks_no_collid_not_farm
+				pygame.sprite.Sprite.__init__(self, self.groups)
+			self.x = x
+			self.y = y
+			self.width = 64
+			self.height = 64
+
+			self.block_type = block_type
+
 		else:
-			self.groups = self.game.all_sprites, self.game.blocks_no_collid
+			self.groups = self.game.all_sprites, self.game.blocks_no_collid_farm
 			pygame.sprite.Sprite.__init__(self, self.groups)
-		self.x = x
-		self.y = y
-		self.width = 64
-		self.height = 64
+			self.x = x
+			self.y = y
+			self.width = 64
+			self.height = 64
 
-
-		self.block_type = block_type
+			self.block_type = block_type
 
 	# basic textures
 		if self.block_type == 'sand':
@@ -363,6 +376,10 @@ class Block(pygame.sprite.Sprite):
 			self.image = self.game.terrain_spritesheet.get_image(3, 4, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'bottomStopFence':
 			self.image = self.game.terrain_spritesheet.get_image(2, 4, WIDTH, HEIGHT, SCALE, BLACK)
+
+
+		if self.block_type == 'firstStagePotato':
+			self.image = self.game.terrain_spritesheet.get_image(5, 3, WIDTH, HEIGHT, SCALE, BLACK)
 
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
