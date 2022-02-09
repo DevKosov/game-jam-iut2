@@ -279,7 +279,7 @@ class Game:
         spawn_sound.play()
         # Crab(self, self.player.x + (random.choice((-1, 1)) * random.randint(150, 250)),self.player.y + (random.choice((-1, 1)) * random.randint(150, 250)), 100, 2)
         Crab(self,self.xTopLefIsland,self.yTopLefIsland,100,random.randint(1,5))
-    def draw(self):
+    def draw_night(self):
         #game loop draw
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
         self.timer = font.render("Time left:  "+str(self.timer_value)+"s", True, BLACK)
@@ -396,8 +396,8 @@ class Game:
                 self.playing = False
                 self.running = False
                 exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == pygame.BUTTON_LEFT:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
                     self.farm_time = False
                     self.night_time = True
             elif event.type == pygame.KEYDOWN:
