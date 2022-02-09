@@ -35,16 +35,16 @@ tilemap = [
    'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSS1cccccccccccccccccccccccc2SSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSaggggggggggggggggg]ppppp[bSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggygggggybSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggtgggggtbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggy.....ybSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggg.....gbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggg/////gbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggt//...tbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSagggggggggggPgggggipppppubSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSa]pp[ggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaoggyggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaogggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaogggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaoggtggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao//yggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao..gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao/.tggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSaippuggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSS3xxxxxxxxxxxxxxxxxxxxxxxx4SSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
@@ -83,6 +83,7 @@ class Game:
         self.timer_value = 0
         self.timer_init = 120 # 120s
         self.clock = pygame.time.Clock()
+
         self.xTopLefIsland = 0
         self.yTopLefIsland = 0
         self.nb_crabs_killed = 0 # pour romain
@@ -107,7 +108,7 @@ class Game:
             click_sound.set_volume(0)
             self.damaged_sound.set_volume(0)
 
-        self.character_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/characters', 'doux.png')).convert_alpha())
+        self.character_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/characters', 'doux2.png')).convert_alpha())
         self.terrain_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha())
         self.crab_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests/Crab.png')).convert_alpha())
         self.night_effet = [
@@ -131,6 +132,10 @@ class Game:
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'sand', False)
                 if column == 'g':
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'grass', False)
+                if column == '/':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'dirt', False)
+                if column == '.':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'growingPotato', False)
 
                 #map border textures
                 if column == 'T':
@@ -240,8 +245,8 @@ class Game:
                 self.playing = False
                 self.running = False
                 exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == pygame.BUTTON_LEFT:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
                     self.day_time = False
                     self.farm_time = True
             elif event.type == pygame.KEYDOWN:
@@ -272,9 +277,9 @@ class Game:
 
     def crab_spawn(self,hp):
         spawn_sound.play()
-        Crab(self, self.player.x + (random.choice((-1, 1)) * random.randint(150, 250)),self.player.y + (random.choice((-1, 1)) * random.randint(150, 250)), 100, 2)
-
-    def draw_night(self):
+        # Crab(self, self.player.x + (random.choice((-1, 1)) * random.randint(150, 250)),self.player.y + (random.choice((-1, 1)) * random.randint(150, 250)), 100, 2)
+        Crab(self,self.xTopLefIsland,self.yTopLefIsland,100,random.randint(1,5))
+    def draw(self):
         #game loop draw
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
         self.timer = font.render("Time left:  "+str(self.timer_value)+"s", True, BLACK)
@@ -303,9 +308,6 @@ class Game:
         self.curseur()
 
         pygame.display.update()
-        print(self.xTopLefIsland)
-        print(self.yTopLefIsland)
-        print('---')
 
     def draw_day(self):
 
@@ -329,10 +331,15 @@ class Game:
 
         #game loop draw
         self.screen.fill(BLACK)
+        self.all_sprites.draw(self.screen)
         self.clock.tick(FPS)
         self.curseur()
 
         pygame.display.update()
+
+    def update_day(self):
+        #game llop events
+        self.all_sprites.update()
     
     def draw_farm(self):
 
