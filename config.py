@@ -8,6 +8,7 @@ BLACK = (0,0,0)
 WHITE = (255, 255, 255)
 BLUE = (150, 252, 255)
 RED = (255, 0, 0)
+GREEN_VALIDATION = (35, 220, 61)
 
 
 #layer :
