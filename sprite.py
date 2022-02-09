@@ -32,8 +32,8 @@ class Player(pygame.sprite.Sprite):
 
 		self.x = x
 		self.y = y
-		self.width = WIDTH
-		self.height = HEIGHT
+		self.width = 15
+		self.height = 18
 		self.hp = 150
 
 		self.current_weapon = "gun"

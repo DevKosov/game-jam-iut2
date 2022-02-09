@@ -106,7 +106,7 @@ class Game:
             click_sound.set_volume(0)
             self.damaged_sound.set_volume(0)
 
-        self.character_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/characters', 'doux.png')).convert_alpha())
+        self.character_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/characters', 'doux2.png')).convert_alpha())
         self.terrain_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha())
         self.crab_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests/Crab.png')).convert_alpha())
         self.night_effet = [
@@ -249,8 +249,8 @@ class Game:
                 self.playing = False
                 self.running = False
                 exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == pygame.BUTTON_LEFT:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
                     self.day_time = False
                     self.farm_time = True
 
@@ -297,17 +297,19 @@ class Game:
         self.curseur()
 
         pygame.display.update()
-        print(self.xTopLefIsland)
-        print(self.yTopLefIsland)
-        print('---')
 
     def draw_day(self):
         #game loop draw
         self.screen.fill(BLACK)
+        self.all_sprites.draw(self.screen)
         self.clock.tick(FPS)
         self.curseur()
 
         pygame.display.update()
+
+    def update_day(self):
+        #game llop events
+        self.all_sprites.update()
     
     def draw_farm(self):
 
@@ -376,6 +378,7 @@ class Game:
             if self.day_time:
                 self.draw_day()
                 self.events_day()
+                self.update_day()
             elif self.farm_time:
                 self.draw_farm()
                 self.events_farm()
