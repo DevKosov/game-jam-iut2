@@ -34,6 +34,9 @@ class Player(pygame.sprite.Sprite):
 		self.width = PLAYER_SPRITE_WIDTH
 		self.height = PLAYER_SPRITE_HEIGHT
 		self.hp = PLAYER_HP
+		self.recharge = False
+		self.recolting = False
+
 
 		self.x_change = 0
 		self.y_change = 0

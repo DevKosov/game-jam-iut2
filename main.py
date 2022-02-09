@@ -83,6 +83,9 @@ class Game:
         self.nb_crabs_killed = 0
         self.gun_level = 1
 
+        self.recolteTimeAct = 0;
+        self.recolteTimeTotal = 60;
+
         self.xTopLefIsland = 0
         self.yTopLefIsland = 0
         self.hpCrab = HP_CRAB
@@ -279,16 +282,9 @@ class Game:
                         self.tips1.set_alpha(0)
                         self.tips2.set_alpha(0)
                         self.tips3.set_alpha(0)
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == pygame.BUTTON_LEFT:
-                    for block in self.blocks_no_collid_farm:
-                        if pygame.sprite.collide_mask(self.player, block):
-                            if block.block_type == 'firstStageCorn':
-                                self.player.corn_counter += 1
-                            else:
-                                self.player.potat_counter += 1
-                            block.kill()
-                            
+            if event.type == pygame.MOUSEBUTTONUP:
+                self.recolteTimeAct = 0
+
             if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LSHIFT:
                     self.player.sprint(event)
@@ -404,7 +400,7 @@ class Game:
 
         self.collectMessage = font.render("Clique gauche pour manger une patate", True, BLACK)
         self.collectMessage_rect = self.collectMessage.get_rect(x=WINDOW_WIDTH / 2 - self.collectMessage.get_width() / 2, y=WINDOW_HEIGHT / 2 - self.collectMessage.get_height() / 2)
-        
+
         # game loop draw
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
@@ -419,6 +415,21 @@ class Game:
         self.clock.tick(FPS)
         if pygame.sprite.spritecollide(self.player, self.blocks_no_collid_farm, False):
             self.screen.blit(self.collectMessage, self.collectMessage_rect)
+
+        mouse = pygame.mouse.get_pressed()[0]
+        if mouse:
+            for block in self.blocks_no_collid_farm:
+                if pygame.sprite.collide_mask(self.player, block):
+                    if self.recolteTimeAct < self.recolteTimeTotal :
+                        self.recolteTimeAct = self.animationLoading(self.recolteTimeTotal, self.recolteTimeAct)
+                    else:
+                        if block.block_type == 'firstStageCorn':
+                            self.player.corn_counter += 1
+                        else:
+                            self.player.potat_counter += 1
+                        block.kill()
+            if not(pygame.sprite.spritecollide(self.player, self.blocks_no_collid_farm, False)): # si bug
+                    self.recolteTimeAct = 0
         self.curseur()
 
         pygame.display.update()
@@ -951,6 +962,13 @@ class Game:
             self.clock.tick(FPS)
             self.curseur()
             pygame.display.update()
+
+    def animationLoading(self, animationTotalTime, animationTime):
+        pygame.draw.rect(self.screen, BLACK, pygame.Rect(self.player.rect.centerx - 34, self.player.rect.centery - 50, 74, 20), 2)
+        pygame.draw.rect(self.screen, GREEN_VALIDATION, pygame.Rect(self.player.rect.centerx - 32, self.player.rect.centery - 48, ((animationTime * 74 ) // animationTotalTime ) - 4, 16))
+
+        animationTime += 1
+        return animationTime
 
 
 g = Game()
