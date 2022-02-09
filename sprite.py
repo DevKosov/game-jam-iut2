@@ -272,7 +272,6 @@ class Player(pygame.sprite.Sprite):
 
 	def reloading(self):
 		if (not self.in_realoding) and (self.current_weapon == "gun"):
-			print("REALOD")
 			self.gun_ammo = self.gun_max_ammo
 
 
@@ -586,7 +585,7 @@ class Bullet(pygame.sprite.Sprite):
 
 		self.angle = ((self.getAngleBetweenPoints(x, y, destX, destY) / (6/4)   * 90) - 360 ) * (-1)
 
-		self.image = pygame.transform.rotate(pygame.transform.scale(pygame.image.load(os.path.join('assets/img/bullet', 'basic_bullet.png')).convert_alpha(), (30, 30)), self.angle - 90)
+		self.image = pygame.transform.rotate(pygame.transform.scale(pygame.image.load(os.path.join('assets/img/tests', 'bullet_26x64.png')).convert_alpha(), (13, 32)), self.angle - 90)
 
 		self.deplacementX = (destX - x) / 10
 		self.deplacementY = (destY - y) / 10
