@@ -38,7 +38,7 @@ tilemap = [
    'EEEEEEEEEEEEEEEEDSSa]pp[ggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//yggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSao:/gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//tggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSaippuggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSS3xxxxxxxxxxxxxxxxxxxxxxxx4SSlEEEEEEEEEEEEEEEE',
@@ -189,8 +189,8 @@ class Game:
 
                 #potato
                 if column == ':':
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'dirt', False, False)
                     Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'firstStagePotato', True, True)
-
                 # Player pog
                 if column == 'P':
                     self.player = Player(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, self.gameplay_ZQSD)
@@ -277,6 +277,14 @@ class Game:
                         self.tips1.set_alpha(0)
                         self.tips2.set_alpha(0)
                         self.tips3.set_alpha(0)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == pygame.BUTTON_LEFT:
+                    for block in self.blocks_no_collid_farm:
+                        if pygame.sprite.collide_mask(self.player, block):
+                            block.kill()
+                            self.player.potat_counter += 1
+                
+
 
     def update_night(self):
         # game llop events
@@ -363,6 +371,9 @@ class Game:
             self.tips3.set_alpha(150)
             self.tips3_rect = self.tips3.get_rect(x=self.screen.get_width() / 2 - self.tips3.get_width() / 2, y=160)
 
+        self.collectMessage = font.render("Clique gauche pour manger une patate", True, BLACK)
+        self.collectMessage_rect = self.collectMessage.get_rect(x=WINDOW_WIDTH / 2 - self.collectMessage.get_width() / 2, y=WINDOW_HEIGHT / 2 - self.collectMessage.get_height() / 2)
+        
         # game loop draw
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
@@ -375,12 +386,25 @@ class Game:
         self.screen.blit(label_nb_ress1,label_nb_ress1_rect)
         self.screen.blit(label_nb_ress2,label_nb_ress2_rect)
         self.clock.tick(FPS)
+        if pygame.sprite.spritecollide(self.player, self.blocks_no_collid_farm, False):
+            self.screen.blit(self.collectMessage, self.collectMessage_rect)
         self.curseur()
 
         pygame.display.update()
 
     def update_day(self):
         # game llop events
+        if random.randint(1,600) == 69:
+            if random.randint(1,2) == 2:
+                patateX = random.randint(38,42)
+                patateY = random.randint(16,19)
+                Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStagePotato', True, True)
+            else:
+                patateX = random.randint(21,22)
+                patateY = random.randint(22,25)
+                Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStagePotato', True, True)
+
+
         self.all_sprites.update()
 
     def draw_farm(self):
