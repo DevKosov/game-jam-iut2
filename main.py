@@ -38,7 +38,7 @@ tilemap = [
    'EEEEEEEEEEEEEEEEDSSa]pp[ggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//yggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSao:/gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//tggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSaippuggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSS3xxxxxxxxxxxxxxxxxxxxxxxx4SSlEEEEEEEEEEEEEEEE',
@@ -189,8 +189,8 @@ class Game:
 
                 #potato
                 if column == ':':
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'dirt', False, False)
                     Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'firstStagePotato', True, True)
-
                 # Player pog
                 if column == 'P':
                     self.player = Player(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, self.gameplay_ZQSD)
@@ -277,6 +277,14 @@ class Game:
                         self.tips1.set_alpha(0)
                         self.tips2.set_alpha(0)
                         self.tips3.set_alpha(0)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == pygame.BUTTON_LEFT:
+                    for block in self.blocks_no_collid_farm:
+                        if pygame.sprite.collide_mask(self.player, block):
+                            block.kill()
+                            self.player.potat_counter += 1
+                
+
 
     def update_night(self):
         # game llop events
@@ -332,9 +340,22 @@ class Game:
     def draw_day(self):
 
         # game loop draw
-        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 35)
         self.timer = font.render("Time left:  " + str(self.timer_value) + "s", True, BLACK)
-        self.timer_rect = self.timer.get_rect(x=900, y=20)
+        self.timer_rect = self.timer.get_rect(x=20, y=20)
+
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 35)
+        label_nb_ress1 = font.render(str(self.player.potat_counter), True, BLACK)
+        label_nb_ress1_rect = label_nb_ress1.get_rect(x=940, y=30)
+
+        label_nb_ress2 = font.render(str(self.player.corn_counter), True, BLACK) 
+        label_nb_ress2_rect = label_nb_ress1.get_rect(x=940,y=90)
+
+        potato_img1 = pygame.image.load("assets/img/tests/potato.png")
+        potato_img2 = pygame.transform.scale(potato_img1, (40,40))
+
+        corn_img1 = pygame.image.load("assets/img/tests/corna.png")
+        corn_img2 = pygame.transform.scale(corn_img1, (40,40))
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
         if self.tips:
@@ -350,6 +371,9 @@ class Game:
             self.tips3.set_alpha(150)
             self.tips3_rect = self.tips3.get_rect(x=self.screen.get_width() / 2 - self.tips3.get_width() / 2, y=160)
 
+        self.collectMessage = font.render("Clique gauche pour manger une patate", True, BLACK)
+        self.collectMessage_rect = self.collectMessage.get_rect(x=WINDOW_WIDTH / 2 - self.collectMessage.get_width() / 2, y=WINDOW_HEIGHT / 2 - self.collectMessage.get_height() / 2)
+        
         # game loop draw
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
@@ -357,13 +381,30 @@ class Game:
         self.screen.blit(self.tips2, self.tips2_rect)
         self.screen.blit(self.tips3, self.tips3_rect)
         self.screen.blit(self.timer, self.timer_rect)
+        self.screen.blit(potato_img2, (970,20))
+        self.screen.blit(corn_img2, (970,80))
+        self.screen.blit(label_nb_ress1,label_nb_ress1_rect)
+        self.screen.blit(label_nb_ress2,label_nb_ress2_rect)
         self.clock.tick(FPS)
+        if pygame.sprite.spritecollide(self.player, self.blocks_no_collid_farm, False):
+            self.screen.blit(self.collectMessage, self.collectMessage_rect)
         self.curseur()
 
         pygame.display.update()
 
     def update_day(self):
         # game llop events
+        if random.randint(1,600) == 69:
+            if random.randint(1,2) == 2:
+                patateX = random.randint(38,42)
+                patateY = random.randint(16,19)
+                Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStagePotato', True, True)
+            else:
+                patateX = random.randint(21,22)
+                patateY = random.randint(22,25)
+                Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStagePotato', True, True)
+
+
         self.all_sprites.update()
 
     def draw_farm(self):
@@ -382,23 +423,23 @@ class Game:
         corn_img2 = pygame.transform.scale(corn_img1, (40,40))
  
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
-        label_nb_ress1 = font.render(str(self.player.potat_counter), True, WHITE)  # à changer une fois les ressources crées
+        label_nb_ress1 = font.render(str(self.player.potat_counter), True, WHITE)
         label_nb_ress1_rect = subtitle.get_rect(x=450, y=230)
-        label_nb_ress2 = font.render(str(self.player.corn_counter), True, WHITE)  # à changer une fois les ressources crées
+        label_nb_ress2 = font.render(str(self.player.corn_counter), True, WHITE) 
         label_nb_ress2_rect = subtitle.get_rect(x=630,y=230)
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
-        label_gun_dam = font.render("Gun", True, BLACK)
-        label_gun_dam_rect = label_gun_dam.get_rect(x=160, y=310)
+        label_gun_dam = font.render("Gun damage", True, BLACK)
+        label_gun_dam_rect = label_gun_dam.get_rect(x=110, y=310)
 
         label_gun_ammo = font.render("Gun Ammo", True, BLACK)
         label_gun_ammo_rect = label_gun_ammo.get_rect(x=350, y=310)
 
-        label_knife_dam = font.render("Knife", True, BLACK)
-        label_knife_dam_rect = label_knife_dam.get_rect(x=590, y=310)
+        label_knife_dam = font.render("Knife damage", True, BLACK)
+        label_knife_dam_rect = label_knife_dam.get_rect(x=545, y=310)
 
-        label_stamina = font.render("Stamina", True, BLACK)
-        label_stamina_rect = label_stamina.get_rect(x=800, y=310)
+        label_stamina = font.render("Max stamina", True, BLACK)
+        label_stamina_rect = label_stamina.get_rect(x=775, y=310)
 
         #############################################################
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
@@ -411,8 +452,8 @@ class Game:
         knife_dam_value = font.render(str(self.player.damaged_knife), True, BLACK)
         knife_dam_rect_value = knife_dam_value.get_rect(x=605, y=390)
 
-        stamina_value = font.render(str(self.player.player_speed), True, BLACK)
-        stamina_rect_value = stamina_value.get_rect(x=830, y=390)
+        stamina_value = font.render(str(self.player.max_stamina), True, BLACK)
+        stamina_rect_value = stamina_value.get_rect(x=800, y=390)
         
 
         res_btn1 = Button(80, 500, 120, 50, BLACK, (78, 85, 115), '.   10', 30)
@@ -494,7 +535,7 @@ class Game:
                 if (self.player.corn_counter>0):
                     self.player.corn_counter-=10
                     # add stamina
-                    self.player.player_speed+=1
+                    self.player.max_stamina+=10
                 
 
     def main(self):
