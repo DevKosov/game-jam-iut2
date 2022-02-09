@@ -325,6 +325,12 @@ class Game:
         current_defense_label_rect = current_defense_label.get_rect(x=860, y=650)
 
         if self.player.current_weapon=="gun":
+            if self.gun_level==1:
+                gun_img1 = pygame.image.load("assets/img/tests/gunNormal2.png")
+                gun_img2 = pygame.transform.scale(gun_img1,(70,45))
+            elif self.gun_level==2:
+                gun_img1 = pygame.image.load("assets/img/tests/gunUpgraded2.png")
+                gun_img2 = pygame.transform.scale(gun_img1,(70,45))
             font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
             current_ammo = font.render(str(self.player.gun_ammo), True, BLACK)
             current_ammo_label_rect = current_ammo.get_rect(x=30, y=30)
@@ -342,6 +348,7 @@ class Game:
         self.screen.blit(self.crabs_killed,self.crabs_killed_rect)
         self.screen.blit(current_defense_label,current_defense_label_rect)
         if self.player.current_weapon=="gun":
+            self.screen.blit(gun_img2, (900,680))
             self.screen.blit(current_ammo,current_ammo_label_rect)
             self.screen.blit(max_ammo,max_ammo_label_rect)
         else:
