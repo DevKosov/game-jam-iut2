@@ -4,7 +4,7 @@ import this
 import pygame, os
 from sprite import *
 import sys
-
+0
 from sys import exit
 from pygame.locals import *
 
