@@ -89,6 +89,7 @@ class Game:
         self.xTopLefIsland = 0
         self.yTopLefIsland = 0
         self.hpCrab = HP_CRAB
+        self.FireBullet = False
 
         self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
         self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Switch2.ogg'))
@@ -121,6 +122,7 @@ class Game:
             pygame.image.load(os.path.join('assets/img/tests', 'overlayNormalRed.png')).convert_alpha(),
             pygame.image.load(os.path.join('assets/img/tests', 'overlayBeforeDeath.png')).convert_alpha()
         ]  # lul
+        self.fireEffect = pygame.image.load(os.path.join('assets/img/tests', 'gunfire_overlay.png')).convert_alpha()
 
     def createTileMap(self):
         
@@ -360,6 +362,9 @@ class Game:
             self.screen.blit(self.night_effet[1], (0,0))
         else:
             self.screen.blit(self.night_effet[2], (0,0))
+        if self.FireBullet:
+            self.screen.blit(self.fireEffect, (self.player.rect.centerx - self.fireEffect.get_width() / 2, self.player.rect.centery - self.fireEffect.get_height() / 2))
+            self.FireBullet = False
 
         self.curseur()
         pygame.display.update()
@@ -585,25 +590,25 @@ class Game:
                     self.farm_time = False
                     self.night_time = True
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn1.rect.collidepoint(pygame.mouse.get_pos()):
-                if (self.player.potat_counter>0):
+                if (self.player.potat_counter>=10):
                     self.player.potat_counter-=10
                     # add gun damage
                     self.player.damaged_gun+=1
                     if self.player.damaged_gun>=5:
                         self.gun_level=2
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn2.rect.collidepoint(pygame.mouse.get_pos()):
-                if (self.player.corn_counter>0):
+                if (self.player.corn_counter>=10):
                     self.player.corn_counter-=10
                     # add gun ammo
                     self.player.gun_ammo+=1
                     self.player.gun_max_ammo+=1
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn3.rect.collidepoint(pygame.mouse.get_pos()):
-                if (self.player.potat_counter>0):
+                if (self.player.potat_counter>=10):
                     self.player.potat_counter-=10
                     # add knife damage
                     self.player.damaged_knife+=1
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn4.rect.collidepoint(pygame.mouse.get_pos()):
-                if (self.player.corn_counter>0):
+                if (self.player.corn_counter>=10):
                     self.player.corn_counter-=10
                     # add stamina
                     self.player.max_stamina+=10
