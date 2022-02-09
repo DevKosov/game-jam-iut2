@@ -398,8 +398,9 @@ class Game:
             self.tips3.set_alpha(150)
             self.tips3_rect = self.tips3.get_rect(x=self.screen.get_width() / 2 - self.tips3.get_width() / 2, y=160)
 
-        self.collectMessage = font.render("Clique gauche pour manger une patate", True, BLACK)
-        self.collectMessage_rect = self.collectMessage.get_rect(x=WINDOW_WIDTH / 2 - self.collectMessage.get_width() / 2, y=WINDOW_HEIGHT / 2 - self.collectMessage.get_height() / 2)
+        self.collectMessage = font.render("Left click to collect", True, BLACK)
+        self.collectMessage.set_alpha(150)
+        self.collectMessage_rect = self.collectMessage.get_rect(x=WINDOW_WIDTH / 2 - self.collectMessage.get_width() / 2, y=700)
 
         # game loop draw
         self.screen.fill(BLACK)

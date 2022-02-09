@@ -60,8 +60,8 @@ class Player(pygame.sprite.Sprite):
 		#Player Game Night State
 		self.current_weapon = "gun"
 		self.player_speed = PLAYER_SPEED
-		self.potat_counter = 50
-		self.corn_counter = 50
+		self.potat_counter = 0
+		self.corn_counter = 0
 		self.damaged_knife = 0
 		self.damaged_gun = 0
 		self.player_health = 3
