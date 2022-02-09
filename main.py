@@ -73,7 +73,7 @@ class Game:
         self.font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 70)
         self.music_played = True
         self.fx_played = True
-        self.gameplay_ZQSD = False
+        self.gameplay_ZQSD = True
         self.back_to_game = False
         self.tips = True
         self.timer_value = 0
@@ -283,9 +283,9 @@ class Game:
                         if pygame.sprite.collide_mask(self.player, block):
                             block.kill()
                             self.player.potat_counter += 1
-                
-
-
+            if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LSHIFT:
+                    self.player.sprint(event)
     def update_night(self):
         # game llop events
         self.all_sprites.update()
@@ -296,7 +296,21 @@ class Game:
     def crab_spawn(self, hp):
         spawn_sound.play()
         # Crab(self, self.player.x + (random.choice((-1, 1)) * random.randint(150, 250)),self.player.y + (random.choice((-1, 1)) * random.randint(150, 250)), 100, 2)
-        Crab(self, self.xTopLefIsland, self.yTopLefIsland, self.hpCrab, random.randint(CRAB_VITESSE_MIN, CRAB_VITESSE_MAX))
+        position = random.randint(1,5)
+        print(position)
+        if position == 1: # Corner Top Left
+            Crab(self, self.xTopLefIsland, self.yTopLefIsland, self.hpCrab, random.randint(CRAB_VITESSE_MIN, CRAB_VITESSE_MAX))
+        elif position == 2: # Corner Top Right
+            Crab(self, self.xTopLefIsland + ISLANDWIDTH, self.yTopLefIsland, self.hpCrab, random.randint(CRAB_VITESSE_MIN, CRAB_VITESSE_MAX))
+        elif position == 3: # Corner Bottom Left
+            Crab(self, self.xTopLefIsland, self.yTopLefIsland + ISLANDHEIGHT, self.hpCrab, random.randint(CRAB_VITESSE_MIN, CRAB_VITESSE_MAX))
+        elif position == 4: # Corner Bottom Right
+            Crab(self, self.xTopLefIsland + ISLANDWIDTH, self.yTopLefIsland + ISLANDHEIGHT, self.hpCrab, random.randint(CRAB_VITESSE_MIN, CRAB_VITESSE_MAX))
+        elif position == 5: # Tous en même temps
+            Crab(self, self.xTopLefIsland, self.yTopLefIsland, self.hpCrab, random.randint(CRAB_VITESSE_MIN, CRAB_VITESSE_MAX))
+            Crab(self, self.xTopLefIsland + ISLANDWIDTH, self.yTopLefIsland, self.hpCrab, random.randint(CRAB_VITESSE_MIN, CRAB_VITESSE_MAX))
+            Crab(self, self.xTopLefIsland, self.yTopLefIsland + ISLANDHEIGHT, self.hpCrab, random.randint(CRAB_VITESSE_MIN, CRAB_VITESSE_MAX))
+            Crab(self, self.xTopLefIsland + ISLANDWIDTH, self.yTopLefIsland + ISLANDHEIGHT, self.hpCrab, random.randint(CRAB_VITESSE_MIN, CRAB_VITESSE_MAX))
 
     def draw(self):
         #game loop draw
@@ -332,7 +346,13 @@ class Game:
         if self.player.current_weapon=="gun":
             self.screen.blit(current_ammo,current_ammo_label_rect)
             self.screen.blit(max_ammo,max_ammo_label_rect)
-        self.screen.blit(self.night_effet[0], (0,0))
+
+        if (self.player.player_health == 3):
+            self.screen.blit(self.night_effet[0], (0,0))
+        elif (self.player.player_health == 2):
+            self.screen.blit(self.night_effet[1], (0,0))
+        else:
+            self.screen.blit(self.night_effet[2], (0,0))
         self.curseur()
 
         pygame.display.update()
@@ -557,7 +577,9 @@ class Game:
         pygame.display.update()
 
     def game_over(self):
-        pass
+        self.player.kill()
+        self.intro_screen()
+        # A REVOIR
 
     def curseur(self):
         mouse_pos = pygame.mouse.get_pos()
