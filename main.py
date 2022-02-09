@@ -269,8 +269,8 @@ class Game:
 
     def crab_spawn(self,hp):
         spawn_sound.play()
-        Crab(self, self.player.x + (random.choice((-1, 1)) * random.randint(150, 250)),self.player.y + (random.choice((-1, 1)) * random.randint(150, 250)), 100, 2)
-
+        # Crab(self, self.player.x + (random.choice((-1, 1)) * random.randint(150, 250)),self.player.y + (random.choice((-1, 1)) * random.randint(150, 250)), 100, 2)
+        Crab(self,self.xTopLefIsland,self.yTopLefIsland,100,random.randint(1,5))
     def draw(self):
         #game loop draw
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
