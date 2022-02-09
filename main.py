@@ -4,7 +4,7 @@ import this
 import pygame, os
 from sprite import *
 import sys
-
+0
 from sys import exit
 from pygame.locals import *
 
@@ -84,6 +84,7 @@ class Game:
         self.timer_value = 0
         self.timer_init = 120  # 120s
         self.clock = pygame.time.Clock()
+        self.nb_crabs_killed = 0
 
         self.xTopLefIsland = 0
         self.yTopLefIsland = 0
@@ -229,8 +230,7 @@ class Game:
                 if event.button == pygame.BUTTON_LEFT:
                     self.player.attacks()
                 if event.button == pygame.BUTTON_RIGHT:
-                    spawn_sound.play()
-                    Crab(self, self.xTopLefIsland, self.yTopLefIsland, 100, random.randint(1, 5))
+                    self.crab_spawn(100)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.playing = False
@@ -261,6 +261,16 @@ class Game:
                 if event.key == pygame.K_p:
                     self.day_time = False
                     self.farm_time = True
+                elif event.key == pygame.K_i:
+                    self.tips = not self.tips
+                    if self.tips:
+                        self.tips1.set_alpha(150)
+                        self.tips2.set_alpha(150)
+                        self.tips3.set_alpha(150)
+                    else:
+                        self.tips1.set_alpha(0)
+                        self.tips2.set_alpha(0)
+                        self.tips3.set_alpha(0)
 
     def update_night(self):
         # game llop events
@@ -278,6 +288,37 @@ class Game:
         Crab(self, self.xTopLefIsland, self.yTopLefIsland, 100, random.randint(1, 5))
 
     def draw(self):
+        #game loop draw
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+        self.timer = font.render("Time left:  "+str(self.timer_value)+"s", True, BLACK)
+        self.timer_rect = self.timer.get_rect(x=900, y=20)
+
+        self.crabs_killed = font.render("Crabs killed: "+str(self.nb_crabs_killed), True, BLACK)
+        self.crabs_killed_rect = self.crabs_killed.get_rect(x=900, y=40)
+
+        current_defense_label = font.render("Current defense", True, BLACK)
+        current_defense_label_rect = current_defense_label.get_rect(x=860, y=650)
+
+        if self.player.current_weapon=="gun":
+            current_defense = font.render("Gun", True, BLACK)
+        else:
+            current_defense = font.render("Knife", True, BLACK)
+        current_defense_rect = current_defense.get_rect(x=910, y=680)
+
+        self.screen.fill(BLACK)
+        self.all_sprites.draw(self.screen)
+        self.clock.tick(FPS)
+        self.screen.blit(self.timer,self.timer_rect)
+        self.screen.blit(self.crabs_killed,self.crabs_killed_rect)
+        self.screen.blit(current_defense_label,current_defense_label_rect)
+        self.screen.blit(current_defense,current_defense_rect)
+        self.screen.blit(self.night_effet[0], (0,0))
+        self.curseur()
+
+        pygame.display.update()
+
+    def draw_day(self):
+
         # game loop draw
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
         self.timer = font.render("Time left:  " + str(self.timer_value) + "s", True, BLACK)
@@ -297,23 +338,13 @@ class Game:
             self.tips3.set_alpha(150)
             self.tips3_rect = self.tips3.get_rect(x=self.screen.get_width() / 2 - self.tips3.get_width() / 2, y=160)
 
+        # game loop draw
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
-        self.clock.tick(FPS)
         self.screen.blit(self.tips1, self.tips1_rect)
         self.screen.blit(self.tips2, self.tips2_rect)
         self.screen.blit(self.tips3, self.tips3_rect)
         self.screen.blit(self.timer, self.timer_rect)
-
-        self.screen.blit(self.night_effet[0], (0, 0))
-        self.curseur()
-
-        pygame.display.update()
-
-    def draw_day(self):
-        # game loop draw
-        self.screen.fill(BLACK)
-        self.all_sprites.draw(self.screen)
         self.clock.tick(FPS)
         self.curseur()
 
@@ -378,8 +409,8 @@ class Game:
                 self.playing = False
                 self.running = False
                 exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == pygame.BUTTON_LEFT:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
                     self.farm_time = False
                     self.night_time = True
 
