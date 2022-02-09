@@ -656,9 +656,6 @@ class Game:
                         self.options = False
                         self.menu = True
 
-            mouse_pos = pygame.mouse.get_pos()
-            mouse_pressed = pygame.mouse.get_pressed()
-
             self.screen.fill(BLUE)
             self.screen.blit(title, title_rect)
             self.screen.blit(sound_options, sound_options_rect)
