@@ -78,13 +78,14 @@ class Game:
         self.music_played = True
         self.fx_played = True
         self.gameplay_ZQSD = False
-        self.back_to_game = False
+        self.back_to_game = "null"
         self.tips = True
         self.timer_value = 0
         self.timer_init = 120 # 120s
         self.clock = pygame.time.Clock()
         self.xTopLefIsland = 0
         self.yTopLefIsland = 0
+        self.nb_crabs_killed = 0 # pour romain
 
         self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
         self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Switch2.ogg'))
@@ -227,6 +228,26 @@ class Game:
                 if event.key == pygame.K_ESCAPE:
                     self.playing = False
                     self.menu = True
+                elif event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
+                    self.playing = not self.playing
+                    self.options = not self.options
+                    self.back_to_game = "night"
+
+    def events_day(self):
+        #game loop events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.playing = False
+                self.running = False
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == pygame.BUTTON_LEFT:
+                    self.day_time = False
+                    self.farm_time = True
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.playing = False
+                    self.menu = True
                 elif event.key == pygame.K_i:
                     self.tips = not self.tips
                     if self.tips:
@@ -240,19 +261,7 @@ class Game:
                 elif event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
                     self.playing = not self.playing
                     self.options = not self.options
-                    self.back_to_game = True
-
-    def events_day(self):
-        #game loop events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.playing = False
-                self.running = False
-                exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == pygame.BUTTON_LEFT:
-                    self.day_time = False
-                    self.farm_time = True
+                    self.back_to_game = "day"
 
     def update_night(self):
         #game llop events
@@ -265,8 +274,41 @@ class Game:
         spawn_sound.play()
         Crab(self, self.player.x + (random.choice((-1, 1)) * random.randint(150, 250)),self.player.y + (random.choice((-1, 1)) * random.randint(150, 250)), 100, 2)
 
-    def draw(self):
+    def draw_night(self):
         #game loop draw
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+        self.timer = font.render("Time left:  "+str(self.timer_value)+"s", True, BLACK)
+        self.timer_rect = self.timer.get_rect(x=900, y=20)
+
+        self.crabs_killed = font.render("Crabs killed: "+str(self.nb_crabs_killed), True, BLACK)
+        self.crabs_killed_rect = self.crabs_killed.get_rect(x=900, y=40)
+
+        current_defense_label = font.render("Current defense", True, BLACK)
+        current_defense_label_rect = current_defense_label.get_rect(x=860, y=650)
+
+        if self.player.current_weapon=="gun":
+            current_defense = font.render("Gun", True, BLACK)
+        else:
+            current_defense = font.render("Knife", True, BLACK)
+        current_defense_rect = current_defense.get_rect(x=910, y=680)
+
+        self.screen.fill(BLACK)
+        self.all_sprites.draw(self.screen)
+        self.clock.tick(FPS)
+        self.screen.blit(self.timer,self.timer_rect)
+        self.screen.blit(self.crabs_killed,self.crabs_killed_rect)
+        self.screen.blit(current_defense_label,current_defense_label_rect)
+        self.screen.blit(current_defense,current_defense_rect)
+        self.screen.blit(self.night_effet[0], (0,0))
+        self.curseur()
+
+        pygame.display.update()
+        print(self.xTopLefIsland)
+        print(self.yTopLefIsland)
+        print('---')
+
+    def draw_day(self):
+
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
         self.timer = font.render("Time left:  "+str(self.timer_value)+"s", True, BLACK)
         self.timer_rect = self.timer.get_rect(x=900, y=20)
@@ -285,23 +327,6 @@ class Game:
             self.tips3.set_alpha(150)
             self.tips3_rect = self.tips3.get_rect(x=self.screen.get_width()/2-self.tips3.get_width()/2, y=160)
 
-        self.screen.fill(BLACK)
-        self.all_sprites.draw(self.screen)
-        self.clock.tick(FPS)
-        self.screen.blit(self.tips1,self.tips1_rect)
-        self.screen.blit(self.tips2,self.tips2_rect)
-        self.screen.blit(self.tips3,self.tips3_rect)
-        self.screen.blit(self.timer,self.timer_rect)
-
-        self.screen.blit(self.night_effet[0], (0,0))
-        self.curseur()
-
-        pygame.display.update()
-        print(self.xTopLefIsland)
-        print(self.yTopLefIsland)
-        print('---')
-
-    def draw_day(self):
         #game loop draw
         self.screen.fill(BLACK)
         self.clock.tick(FPS)
@@ -368,19 +393,29 @@ class Game:
                 if event.button == pygame.BUTTON_LEFT:
                     self.farm_time = False
                     self.night_time = True
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.playing = False
+                    self.menu = True
+                elif event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
+                    self.playing = not self.playing
+                    self.options = not self.options
+                    self.back_to_game = "farm"
+                    if (self.playing):
+                        self.main()
 
     def main(self):
         self.playing = True
 
         while self.playing:
-            if self.day_time:
+            if self.back_to_game=="day" or self.day_time:
                 self.draw_day()
                 self.events_day()
-            elif self.farm_time:
+            elif self.back_to_game=="farm" or self.farm_time:
                 self.draw_farm()
                 self.events_farm()
-            elif self.night_time:
-                self.draw()
+            elif self.back_to_game=="night" or self.night_time:
+                self.draw_night()
                 self.events()
                 self.update_night()
                 self.timer_value=int(self.timer_init-(pygame.time.get_ticks())/1000)
@@ -399,13 +434,6 @@ class Game:
     def intro_screen(self):
         click_sound.play()
         self.menu = True
-
-        if self.music_played==True:
-            pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
-            pygame.mixer.music.set_volume(0.05)
-            pygame.mixer.music.play(fade_ms=2000)
-        else:
-            pygame.mixer.music.pause()
 
         title = self.font.render('Pog Champs Game', True, BLACK)
         title_rect = title.get_rect(x=self.screen.get_width()/2-title.get_width()/2, y=100)
@@ -557,7 +585,7 @@ class Game:
                     self.gameplay_ZQSD = False
                     self.options_screen()
                 elif event.type == pygame.MOUSEBUTTONUP and back_button.rect.collidepoint(pygame.mouse.get_pos()) or (event.type == pygame.KEYDOWN and (event.key==K_RCTRL or event.key==K_LCTRL)):
-                    if self.back_to_game:
+                    if self.back_to_game!="null":
                         self.options = False
                         self.playing = True
                     else:
@@ -627,6 +655,12 @@ g = Game()
 while g.running==True:
 
     if g.menu==True:
+        if g.music_played==True:
+            pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
+            pygame.mixer.music.set_volume(0.05)
+            pygame.mixer.music.play(fade_ms=2000)
+        else:
+            pygame.mixer.music.pause()
         g.intro_screen()
     elif g.options==True:
         g.options_screen()
