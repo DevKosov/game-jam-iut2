@@ -241,7 +241,8 @@ class Block(pygame.sprite.Sprite):
 			self.image = self.game.terrain_spritesheet.get_image(3, 3, WIDTH, HEIGHT, SCALE, BLACK)
 		if self.block_type == 'dirt':
 			self.image = self.game.terrain_spritesheet.get_image(4, 3, WIDTH, HEIGHT, SCALE, BLACK)
-
+		if self.block_type == 'growingPotato':
+			self.image = self.game.terrain_spritesheet.get_image(5, 3, WIDTH, HEIGHT, SCALE, BLACK)
 		#map border textures
 		if self.block_type == 'topWater':
 			self.image = self.game.terrain_spritesheet.get_image(2, 2, WIDTH, HEIGHT, SCALE, BLACK)
