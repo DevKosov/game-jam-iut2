@@ -307,6 +307,7 @@ class Player(pygame.sprite.Sprite):
 	def attacks(self):
 		if (self.current_weapon == "gun"):
 			if (self.gun_ammo != 0):
+				self.game.FireBullet = True
 				self.game.bullet_sound.play()
 				x, y = pygame.mouse.get_pos()
 				Bullet(self.game, self.rect.centerx, self.rect.centery, x, y, 5)

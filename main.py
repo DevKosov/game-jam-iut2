@@ -89,6 +89,7 @@ class Game:
         self.xTopLefIsland = 0
         self.yTopLefIsland = 0
         self.hpCrab = HP_CRAB
+        self.FireBullet = False
 
         self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
         self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Switch2.ogg'))
@@ -121,6 +122,7 @@ class Game:
             pygame.image.load(os.path.join('assets/img/tests', 'overlayNormalRed.png')).convert_alpha(),
             pygame.image.load(os.path.join('assets/img/tests', 'overlayBeforeDeath.png')).convert_alpha()
         ]  # lul
+        self.fireEffect = pygame.image.load(os.path.join('assets/img/tests', 'gunfire_overlay.png')).convert_alpha()
 
     def createTileMap(self):
         
@@ -360,6 +362,9 @@ class Game:
             self.screen.blit(self.night_effet[1], (0,0))
         else:
             self.screen.blit(self.night_effet[2], (0,0))
+        if self.FireBullet:
+            self.screen.blit(self.fireEffect, (self.player.rect.centerx - self.fireEffect.get_width() / 2, self.player.rect.centery - self.fireEffect.get_height() / 2))
+            self.FireBullet = False
 
         self.curseur()
         pygame.display.update()
