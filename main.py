@@ -260,9 +260,6 @@ class Game:
     def update_night(self):
         #game llop events
         self.all_sprites.update()
-        print(self.xTopLefIsland)
-        print(self.yTopLefIsland)
-        print('----')
         #crabSpawn
         if (random.randint(0,60*3)) == 0:
             self.crab_spawn(100)
