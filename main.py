@@ -398,8 +398,9 @@ class Game:
             self.tips3.set_alpha(150)
             self.tips3_rect = self.tips3.get_rect(x=self.screen.get_width() / 2 - self.tips3.get_width() / 2, y=160)
 
-        self.collectMessage = font.render("Clique gauche pour manger une patate", True, BLACK)
-        self.collectMessage_rect = self.collectMessage.get_rect(x=WINDOW_WIDTH / 2 - self.collectMessage.get_width() / 2, y=WINDOW_HEIGHT / 2 - self.collectMessage.get_height() / 2)
+        self.collectMessage = font.render("Left click to collect", True, BLACK)
+        self.collectMessage.set_alpha(150)
+        self.collectMessage_rect = self.collectMessage.get_rect(x=WINDOW_WIDTH / 2 - self.collectMessage.get_width() / 2, y=700)
 
         # game loop draw
         self.screen.fill(BLACK)
@@ -584,25 +585,25 @@ class Game:
                     self.farm_time = False
                     self.night_time = True
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn1.rect.collidepoint(pygame.mouse.get_pos()):
-                if (self.player.potat_counter>0):
+                if (self.player.potat_counter>=10):
                     self.player.potat_counter-=10
                     # add gun damage
                     self.player.damaged_gun+=1
                     if self.player.damaged_gun>=5:
                         self.gun_level=2
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn2.rect.collidepoint(pygame.mouse.get_pos()):
-                if (self.player.corn_counter>0):
+                if (self.player.corn_counter>=10):
                     self.player.corn_counter-=10
                     # add gun ammo
                     self.player.gun_ammo+=1
                     self.player.gun_max_ammo+=1
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn3.rect.collidepoint(pygame.mouse.get_pos()):
-                if (self.player.potat_counter>0):
+                if (self.player.potat_counter>=10):
                     self.player.potat_counter-=10
                     # add knife damage
                     self.player.damaged_knife+=1
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn4.rect.collidepoint(pygame.mouse.get_pos()):
-                if (self.player.corn_counter>0):
+                if (self.player.corn_counter>=10):
                     self.player.corn_counter-=10
                     # add stamina
                     self.player.max_stamina+=10
