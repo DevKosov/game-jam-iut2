@@ -65,10 +65,10 @@ class Player(pygame.sprite.Sprite):
 		self.animate()
 
 		self.rect.x += self.x_change
-		self.game.xTopLefIsland += self.x_change
+		self.game.xTopLefIsland -= self.x_change
 		self.collision('x')
 		self.rect.y += self.y_change
-		self.game.yTopLefIsland += self.y_change
+		self.game.yTopLefIsland -= self.y_change
 		self.collision('y')
 
 		self.x_change = 0
@@ -139,19 +139,23 @@ class Player(pygame.sprite.Sprite):
 							self.rect.x -= 50
 							for sprite in self.game.all_sprites:
 								sprite.rect.x += 50
+							self.game.xTopLefIsland += 50
 						else:
 							self.rect.x -= -50
 							for sprite in self.game.all_sprites:
 								sprite.rect.x += -50
+							self.game.xTopLefIsland -= 50
 					else:
 						if diff_y < 0:
 							self.rect.y -= 50
 							for sprite in self.game.all_sprites:
 								sprite.rect.y += 50
+							self.game.yTopLefIsland += 50
 						else:
 							self.rect.y -= -50
 							for sprite in self.game.all_sprites:
 								sprite.rect.y += -50
+							self.game.yTopLefIsland -= 50
 
 					# Invulnératibilité pour (player_time_invulnerability) de temps
 					self.game.damaged_sound.play()
@@ -245,10 +249,12 @@ class Player(pygame.sprite.Sprite):
 					self.rect.x = hit[0].rect.left - self.rect.width
 					for sprite in self.game.all_sprites:
 						sprite.rect.x += self.player_speed
+					self.game.xTopLefIsland -= self.player_speed
 				if self.x_change < 0:
 					self.rect.x = hit[0].rect.right
 					for sprite in self.game.all_sprites:
 						sprite.rect.x -= self.player_speed
+					self.game.xTopLefIsland -= self.player_speed
 
 		if direction == 'y':
 			hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
@@ -257,10 +263,12 @@ class Player(pygame.sprite.Sprite):
 					self.rect.y = hit[0].rect.top - self.rect.height
 					for sprite in self.game.all_sprites:
 						sprite.rect.y += self.player_speed
+					self.game.yTopLefIsland -= self.player_speed
 				if self.y_change < 0:
 					self.rect.y = hit[0].rect.bottom
 					for sprite in self.game.all_sprites:
 						sprite.rect.y -= self.player_speed
+					self.game.yTopLefIsland -= self.player_speed
 
 class Block(pygame.sprite.Sprite):
 	def __init__(self, game, x, y, block_type, colision):
