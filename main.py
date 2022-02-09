@@ -35,16 +35,16 @@ tilemap = [
    'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSS1cccccccccccccccccccccccc2SSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSaggggggggggggggggg]ppppp[bSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggygggggybSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaggggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggtgggggtbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggy/////ybSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggg/////gbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggg/////gbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggt/////tbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSagggggggggggPgggggipppppubSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSa]pp[ggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaoggyggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaogggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaogggggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSaoggtggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao//yggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao//tggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSaippuggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSS3xxxxxxxxxxxxxxxxxxxxxxxx4SSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSlEEEEEEEEEEEEEEEE',
@@ -130,6 +130,8 @@ class Game:
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'sand', False)
                 if column == 'g':
                     Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'grass', False)
+                if column == '/':
+                    Block(self, (j-OFFSETX)*WIDTH, (i-OFFSETY)*HEIGHT, 'dirt', False)
 
                 #map border textures
                 if column == 'T':
