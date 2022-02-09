@@ -301,6 +301,12 @@ class Game:
 
         if self.player.current_weapon=="gun":
             current_defense = font.render("Gun", True, BLACK)
+            font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
+            current_ammo = font.render(str(self.player.gun_ammo), True, BLACK)
+            current_ammo_label_rect = current_ammo.get_rect(x=30, y=30)
+            font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 30)
+            max_ammo = font.render("/"+str(self.player.gun_max_ammo), True, BLACK)
+            max_ammo_label_rect = current_ammo.get_rect(x=60, y=55)
         else:
             current_defense = font.render("Knife", True, BLACK)
         current_defense_rect = current_defense.get_rect(x=910, y=680)
@@ -312,6 +318,9 @@ class Game:
         self.screen.blit(self.crabs_killed,self.crabs_killed_rect)
         self.screen.blit(current_defense_label,current_defense_label_rect)
         self.screen.blit(current_defense,current_defense_rect)
+        if self.player.current_weapon=="gun":
+            self.screen.blit(current_ammo,current_ammo_label_rect)
+            self.screen.blit(max_ammo,max_ammo_label_rect)
         self.screen.blit(self.night_effet[0], (0,0))
         self.curseur()
 
@@ -360,25 +369,52 @@ class Game:
         title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
-        subtitle = font.render("Improve your weapon damage", True, WHITE)
+        subtitle = font.render("Improve your skills and damages", True, WHITE)
         subtitle_rect = subtitle.get_rect(x=self.screen.get_width() / 2 - subtitle.get_width() / 2, y=150)
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
         label_nb_ress1 = font.render("Number of Potat : 10", True, WHITE)  # à changer une fois les ressources crées
         label_nb_ress1_rect = subtitle.get_rect(x=self.screen.get_width() / 3 - label_nb_ress1.get_width() / 2, y=230)
         label_nb_ress2 = font.render("Number of Corn : 7", True, WHITE)  # à changer une fois les ressources crées
-        label_nb_ress2_rect = subtitle.get_rect(x=350 + self.screen.get_width() / 3 - label_nb_ress2.get_width() / 2,
-                                                y=230)
+        label_nb_ress2_rect = subtitle.get_rect(x=350 + self.screen.get_width() / 3 - label_nb_ress2.get_width() / 2,y=230)
 
-        res_btn1 = Button(80, 500, 120, 50, BLACK, BLUE, '10 Potat', 30)
-        res_btn2 = Button(300, 500, 120, 50, BLACK, BLUE, '10 Corn', 30)
-        res_btn3 = Button(520, 500, 120, 50, BLACK, BLUE, '10 Potat', 30)
-        res_btn4 = Button(740, 500, 120, 50, BLACK, BLUE, '10 Corn', 30)
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
+        label_gun_dam = font.render("Gun", True, BLACK)
+        label_gun_dam_rect = label_gun_dam.get_rect(x=160, y=310)
 
-        buy_btn1 = Button(200, 500, 80, 50, BLACK, WHITE, 'Buy', 30)
-        buy_btn2 = Button(420, 500, 80, 50, BLACK, WHITE, 'Buy', 30)
-        buy_btn3 = Button(640, 500, 80, 50, BLACK, WHITE, 'Buy', 30)
-        buy_btn4 = Button(860, 500, 80, 50, BLACK, WHITE, 'Buy', 30)
+        label_gun_ammo = font.render("Gun Ammo", True, BLACK)
+        label_gun_ammo_rect = label_gun_ammo.get_rect(x=350, y=310)
+
+        label_knife_dam = font.render("Knife", True, BLACK)
+        label_knife_dam_rect = label_knife_dam.get_rect(x=590, y=310)
+
+        label_stamina = font.render("Stamina", True, BLACK)
+        label_stamina_rect = label_stamina.get_rect(x=800, y=310)
+
+        #############################################################
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
+        gun_dam_value = font.render(str(self.player.damaged_gun), True, BLACK)
+        gun_dam_rect_value = gun_dam_value.get_rect(x=165, y=390)
+
+        gun_ammo_value = font.render(str(self.player.gun_ammo), True, BLACK)
+        gun_ammo_rect_value = gun_ammo_value.get_rect(x=390, y=390)
+
+        knife_dam_value = font.render(str(self.player.damaged_knife), True, BLACK)
+        knife_dam_rect_value = knife_dam_value.get_rect(x=605, y=390)
+
+        stamina_value = font.render(str(self.player.player_speed), True, BLACK)
+        stamina_rect_value = stamina_value.get_rect(x=830, y=390)
+        
+
+        res_btn1 = Button(80, 500, 120, 50, BLACK, (78, 85, 115), '10 Potat', 30)
+        res_btn2 = Button(300, 500, 120, 50, BLACK, (78, 85, 115), '10 Corn', 30)
+        res_btn3 = Button(520, 500, 120, 50, BLACK, (78, 85, 115), '10 Potat', 30)
+        res_btn4 = Button(740, 500, 120, 50, BLACK, (78, 85, 115), '10 Corn', 30)
+
+        buy_btn1 = Button(200, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
+        buy_btn2 = Button(420, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
+        buy_btn3 = Button(640, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
+        buy_btn4 = Button(860, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
 
         self.screen.fill(BLACK)
         self.clock.tick(FPS)
@@ -386,16 +422,24 @@ class Game:
         self.screen.blit(subtitle, subtitle_rect)
         self.screen.blit(label_nb_ress1, label_nb_ress1_rect)
         self.screen.blit(label_nb_ress2, label_nb_ress2_rect)
-        pygame.draw.rect(self.screen, RED, pygame.Rect(80, 300, 200, 200))
+        pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(80, 300, 200, 200)) # gun damage
+        self.screen.blit(label_gun_dam, label_gun_dam_rect)
+        self.screen.blit(gun_dam_value, gun_dam_rect_value)
         self.screen.blit(res_btn1.image, res_btn1.rect)
         self.screen.blit(buy_btn1.image, buy_btn1.rect)
-        pygame.draw.rect(self.screen, RED, pygame.Rect(300, 300, 200, 200))
+        pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(300, 300, 200, 200)) # gun ammo
+        self.screen.blit(label_gun_ammo, label_gun_ammo_rect)
+        self.screen.blit(gun_ammo_value, gun_ammo_rect_value)
         self.screen.blit(res_btn2.image, res_btn2.rect)
         self.screen.blit(buy_btn2.image, buy_btn2.rect)
-        pygame.draw.rect(self.screen, RED, pygame.Rect(520, 300, 200, 200))
+        pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(520, 300, 200, 200)) # knife damage
+        self.screen.blit(label_knife_dam, label_knife_dam_rect)
+        self.screen.blit(knife_dam_value, knife_dam_rect_value)
         self.screen.blit(res_btn3.image, res_btn3.rect)
         self.screen.blit(buy_btn3.image, buy_btn3.rect)
-        pygame.draw.rect(self.screen, RED, pygame.Rect(740, 300, 200, 200))
+        pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(740, 300, 200, 200)) # stamina
+        self.screen.blit(label_stamina, label_stamina_rect)
+        self.screen.blit(stamina_value, stamina_rect_value)
         self.screen.blit(res_btn4.image, res_btn4.rect)
         self.screen.blit(buy_btn4.image, buy_btn4.rect)
         self.curseur()
