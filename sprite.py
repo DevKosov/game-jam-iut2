@@ -1,6 +1,7 @@
 # from tkinter import Y
 from turtle import width
 import pygame, os, math
+from config import *
 #import spritesheet
 import sprite
 import time
@@ -19,22 +20,19 @@ class SpriteSheet():
 
 class Player(pygame.sprite.Sprite):
 	def __init__(self, game, x, y, gameplay):
-		BLACK = (0,0,0)
-		WIDTH = 24
-		HEIGHT = 24
 
 		#HIhihiha
 
 		self.game = game
-		self._layer = 2
+		self._layer = PLAYER_LAYER
 		self.groups = self.game.all_sprites
 		pygame.sprite.Sprite.__init__(self, self.groups)
 
 		self.x = x
 		self.y = y
-		self.width = 15
-		self.height = 18
-		self.hp = 150
+		self.width = PLAYER_SPRITE_WIDTH
+		self.height = PLAYER_SPRITE_HEIGHT
+		self.hp = PLAYER_HP
 
 		self.x_change = 0
 		self.y_change = 0
@@ -57,7 +55,7 @@ class Player(pygame.sprite.Sprite):
 
 		#Player Game Night State
 		self.current_weapon = "gun"
-		self.player_speed = 5
+		self.player_speed = PLAYER_SPEED
 		self.potat_counter = 0
 		self.corn_counter = 0
 		self.damaged_knife = 0
@@ -175,7 +173,6 @@ class Player(pygame.sprite.Sprite):
 				self.player_time_left += 1
 
 	def animate(self):
-		BLACK = (0, 0, 0)
 		SCALE = 3
 
 		image = pygame.transform.flip(self.game.character_spritesheet.get_image(1, 1, self.width, self.height, SCALE, BLACK), 1, 0)
@@ -278,14 +275,11 @@ class Player(pygame.sprite.Sprite):
 
 class Block(pygame.sprite.Sprite):
 	def __init__(self, game, x, y, block_type, colision, farm):
-		BLACK = (0,0,0)
-		WIDTH = 64
-		HEIGHT = 64
-		SCALE = 1
+		self.scale = TILEMAP_SCALE
 
 		self.colision = colision
 		self.game = game
-		self._layer = 1
+		self._layer = BLOCK_LAYER
 
 		if not(farm):
 			
@@ -297,8 +291,8 @@ class Block(pygame.sprite.Sprite):
 				pygame.sprite.Sprite.__init__(self, self.groups)
 			self.x = x
 			self.y = y
-			self.width = 64
-			self.height = 64
+			self.width = TILE_WIDTH
+			self.height = TILE_HEIGHT
 
 			self.block_type = block_type
 
@@ -307,79 +301,79 @@ class Block(pygame.sprite.Sprite):
 			pygame.sprite.Sprite.__init__(self, self.groups)
 			self.x = x
 			self.y = y
-			self.width = 64
-			self.height = 64
+			self.width = TILE_WIDTH
+			self.height = TILE_HEIGHT
 
 			self.block_type = block_type
 
 	# basic textures
 		if self.block_type == 'sand':
-			self.image = self.game.terrain_spritesheet.get_image(2, 3, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(2, 3, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'grass':
-			self.image = self.game.terrain_spritesheet.get_image(1, 3, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(1, 3, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'water':
-			self.image = self.game.terrain_spritesheet.get_image(3, 3, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(3, 3, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'dirt':
-			self.image = self.game.terrain_spritesheet.get_image(4, 3, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(4, 3, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'growingPotato':
-			self.image = self.game.terrain_spritesheet.get_image(5, 3, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(5, 3, self.width, self.height, self.scale, BLACK)
 		#map border textures
 		if self.block_type == 'topWater':
-			self.image = self.game.terrain_spritesheet.get_image(2, 2, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(2, 2, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'topLeftWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(7, 2, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(7, 2, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'topRightWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(6, 2, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(6, 2, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'bottomWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(4, 2, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(4, 2, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'bottomLeftSand':
-			self.image = self.game.terrain_spritesheet.get_image(8, 2, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(8, 2, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'bottomRightSand':
-			self.image = self.game.terrain_spritesheet.get_image(5, 2, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(5, 2, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'rightWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(1, 2, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(1, 2, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'leftWaterBord':
-			self.image = self.game.terrain_spritesheet.get_image(3, 2, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(3, 2, self.width, self.height, self.scale, BLACK)
 
 		#Sand + Grass Transition
 		if self.block_type == 'topLeftSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(6, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(6, 1, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'topRightSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(5, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(5, 1, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'topSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(4, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(4, 1, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'leftSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(1, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(1, 1, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'rightSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(3, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(3, 1, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'bottomRightSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(8, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(8, 1, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'bottomleftSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(7, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(7, 1, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'bottomSandGrassT':
-			self.image = self.game.terrain_spritesheet.get_image(2, 1, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(2, 1, self.width, self.height, self.scale, BLACK)
 
 		# Fences
 		if self.block_type == 'topLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(4, 4, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(4, 4, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'topRightFence':
-			self.image = self.game.terrain_spritesheet.get_image(5, 4, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(5, 4, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'topFence':
-			self.image = self.game.terrain_spritesheet.get_image(8, 4, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(8, 4, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'sideFence':
-			self.image = self.game.terrain_spritesheet.get_image(1, 4, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(1, 4, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'bottomLeftFence':
-			self.image = self.game.terrain_spritesheet.get_image(7, 4, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(7, 4, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'bottomRightFence':
-			self.image = self.game.terrain_spritesheet.get_image(6, 4, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(6, 4, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'topStopFence':
-			self.image = self.game.terrain_spritesheet.get_image(3, 4, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(3, 4, self.width, self.height, self.scale, BLACK)
 		if self.block_type == 'bottomStopFence':
-			self.image = self.game.terrain_spritesheet.get_image(2, 4, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(2, 4, self.width, self.height, self.scale, BLACK)
 
 
 		if self.block_type == 'firstStagePotato':
-			self.image = self.game.terrain_spritesheet.get_image(5, 3, WIDTH, HEIGHT, SCALE, BLACK)
+			self.image = self.game.terrain_spritesheet.get_image(5, 3, self.width, self.height, self.scale, BLACK)
 
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
@@ -419,12 +413,11 @@ class Button:
 
 class Crab(pygame.sprite.Sprite):
 	def __init__(self, game, x, y, hp,speed):
-		BLACK = (0,0,0)
-		WIDTH = 100
-		HEIGHT = 79
-		SCALE = 0.7
+		self.width = CRAB_WIDTH
+		self.height = CRAB_HEIGHT
+		self.scale = CRAB_SCALE
 
-		self._layer = 3
+		self._layer = CRAB_LAYER
 		self.game = game
 		self.animation_loop = 0
 		self.speed = speed
@@ -436,10 +429,6 @@ class Crab(pygame.sprite.Sprite):
 		self.y = y
 
 		#Image variable
-		self.width = WIDTH
-		self.height = HEIGHT
-		self.scale = SCALE
-		self.black = BLACK
 		self.x_change = 0
 		self.y_change = 0
 
@@ -529,16 +518,14 @@ class Crab(pygame.sprite.Sprite):
 
 	def animate(self):
 
-		VITESSE_ANIMATION = 0.1
+		image = pygame.transform.flip(self.game.crab_spritesheet.get_image(1, 1, self.width, self.height, self.scale, BLACK), 1, 0)
+		image.set_colorkey(BLACK)
+		image1 = pygame.transform.flip(self.game.crab_spritesheet.get_image(2, 1, self.width, self.height, self.scale, BLACK), 1, 0)
+		image1.set_colorkey(BLACK)
+		image2 = pygame.transform.flip(self.game.crab_spritesheet.get_image(3, 1, self.width, self.height, self.scale, BLACK), 1, 0)
+		image2.set_colorkey(BLACK)
 
-		image = pygame.transform.flip(self.game.crab_spritesheet.get_image(1, 1, self.width, self.height, self.scale, self.black ), 1, 0)
-		image.set_colorkey(self.black )
-		image1 = pygame.transform.flip(self.game.crab_spritesheet.get_image(2, 1, self.width, self.height, self.scale, self.black ), 1, 0)
-		image1.set_colorkey(self.black )
-		image2 = pygame.transform.flip(self.game.crab_spritesheet.get_image(3, 1, self.width, self.height, self.scale, self.black ), 1, 0)
-		image2.set_colorkey(self.black )
-
-		self.animation_loop += VITESSE_ANIMATION
+		self.animation_loop += CRAB_VITESSE_ANIMATION
 
 		if self.animation_loop < 1:
 			self.image = image
@@ -559,10 +546,8 @@ class Bullet(pygame.sprite.Sprite):
 		self.x = x
 		self.y = y
 
-		VITESSE_BULLET = 50
-
 		self.game = game
-		self._layer = 2
+		self._layer = BULLET_LAYER
 		self.groups = self.game.all_sprites, self.game.bullets
 		pygame.sprite.Sprite.__init__(self, self.groups)
 
