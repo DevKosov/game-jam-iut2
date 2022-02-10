@@ -96,12 +96,12 @@ class Game:
         self.current_code = []
         self.code_index = 0
 
-        self.btn_img11 = "assets/img/tests/redButton11.png"
-        self.btn_img12 = "assets/img/tests/redButton12.png"
-        self.btn_img21 = "assets/img/tests/greenButton11.png"
-        self.btn_img31 = "assets/img/tests/blueButton11.png"
-        self.btn_img32 = "assets/img/tests/blueButton12.png"
-        self.btn_img41 = "assets/img/tests/purpleButton11.png"
+        self.btn_img11 = (3, 1)
+        self.btn_img12 = (3, 2)
+        self.btn_img21 = (1, 1)
+        self.btn_img31 = (2, 1)
+        self.btn_img32 = (2, 2)
+        self.btn_img41 = (5, 1)
 
         self.recolteTimeAct = 0;
         self.recolteTimeTotal = TEMPS_RECOLTE;
@@ -260,10 +260,16 @@ class Game:
             pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0, 0))
 
     def after_win(self):
-        self.night_time=False
-        self.day_time=True
+        pygame.mixer.fadeout(1000)
+        pygame.mixer.music.load(self.sound_farm)
+        pygame.mixer.music.set_volume(0.05)
+        pygame.mixer.music.play(fade_ms=2000)
         self.game_day+=1
         self.nb_crabs_left = 5+self.game_day*CRAB_ADD_PER_DAY
+        for enemies in self.enemies:
+            enemies.kill()
+        self.night_time=False
+        self.day_time=True
 
     def new(self):
         # a new game starts
@@ -292,13 +298,7 @@ class Game:
     def events_night(self):
         # Farm Zone
         if (self.nb_crabs_left == 0):
-            pygame.mixer.fadeout(1000)
-            pygame.mixer.music.load(self.sound_farm)
-            pygame.mixer.music.set_volume(0.05)
-            pygame.mixer.music.play(fade_ms=2000)
-            self.night_time = False
-            self.day_time = True
-            self.game_day += 1
+            self.after_win()
         # game loop events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
