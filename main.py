@@ -1095,16 +1095,12 @@ class Game:
 					self.menu = False
 					self.playing = True
 			if rules_button.is_pressed(mouse_pos, mouse_pressed):
-				if (self.pause):
-
 					self.menu = False
 					self.rules = True
 			if option_button.is_pressed(mouse_pos, mouse_pressed):
-				if (self.pause):
 					self.menu = False
 					self.options = True
 			if credits_button.is_pressed(mouse_pos, mouse_pressed):
-				if (self.pause):
 					self.menu = False
 					self.credits = True
 			if exit_button.is_pressed(mouse_pos, mouse_pressed):
