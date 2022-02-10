@@ -81,7 +81,20 @@ class Game:
         self.clock = pygame.time.Clock()
         self.nb_crabs_killed = 0
         self.gun_level = 1
+        self.farmingTilePosGauche = [(21, 22), (22, 22), (21, 23), (22, 23), (21, 24), (22, 24), (21, 25), (22, 25)]
+        self.farmingTilePosDroite = [(38, 16), (39, 16), (40, 16), (41, 16), (42, 16), (38, 17), (39, 17), (40, 17), (41, 17), (42, 17), (38, 18), (39, 18), (40, 18), (41, 18), (42, 18), (38, 19), (39, 19), (40, 19), (41, 19), (42, 19)]
+
+
+        self.farminTileActGauche = []
+        self.farminTileACTDroite = []
+        self.apparitionFarmPossible = True
         self.game_day = 1;
+
+        #Insane Easter Egss
+        self.CODE = [pygame.K_UP, pygame.K_UP, pygame.K_DOWN, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_LEFT,
+                pygame.K_RIGHT, pygame.K_b, pygame.K_a]
+        self.current_code = []
+        self.code_index = 0
 
         self.btn_img11 = "assets/img/tests/redButton11.png"
         self.btn_img12 = "assets/img/tests/redButton12.png"
@@ -114,6 +127,7 @@ class Game:
         self.campfireYAct = 240
 
         self.nbCrabOnScreen = 0
+
 
         #Bruitage
         self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
@@ -169,78 +183,78 @@ class Game:
             for j, column in enumerate(row):
                 # basic textures
                 if column == 'E':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'water', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'water', True, False, i, j)
                 if column == 'S':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'sand', False, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'sand', False, False, i, j)
                 if column == 'g':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'grass', False, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'grass', False, False, i, j)
                 if column == '/':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'dirt', False, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'dirt', False, False, i, j)
 
                 # map border textures
                 if column == 'T':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topWater', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topWater', True, False, i, j)
                 if column == 'G':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topLeftWaterBord', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topLeftWaterBord', True, False, i, j)
                 if column == 'R':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topRightWaterBord', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topRightWaterBord', True, False, i, j)
                 if column == 'B':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomWaterBord', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomWaterBord', True, False, i, j)
                 if column == 'V':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomLeftSand', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomLeftSand', True, False, i, j)
                 if column == 'X':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomRightSand', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomRightSand', True, False, i, j)
                 if column == 'l':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'rightWaterBord', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'rightWaterBord', True, False, i, j)
                 if column == 'D':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'leftWaterBord', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'leftWaterBord', True, False, i, j)
 
                 # Sand + Grass Transition
                 if column == '1':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topLeftSandGrassT', False, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topLeftSandGrassT', False, False, i, j)
                 if column == '2':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topRightSandGrassT', False, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topRightSandGrassT', False, False, i, j)
                 if column == 'c':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topSandGrassT', False, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topSandGrassT', False, False, i, j)
                 if column == 'a':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'leftSandGrassT', False, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'leftSandGrassT', False, False, i, j)
                 if column == 'b':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'rightSandGrassT', False, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'rightSandGrassT', False, False, i, j)
                 if column == '4':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomRightSandGrassT', False, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomRightSandGrassT', False, False, i, j)
                 if column == '3':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomleftSandGrassT', False, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomleftSandGrassT', False, False, i, j)
                 if column == 'x':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomSandGrassT', False, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomSandGrassT', False, False, i, j)
 
                 # Fences
                 if column == ']':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topLeftFence', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topLeftFence', True, False, i, j)
                 if column == '[':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topRightFence', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topRightFence', True, False, i, j)
                 if column == 'p':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topFence', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topFence', True, False, i, j)
                 if column == 'o':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'sideFence', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'sideFence', True, False, i, j)
                 if column == 'i':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomLeftFence', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomLeftFence', True, False, i, j)
                 if column == 'u':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomRightFence', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomRightFence', True, False, i, j)
                 if column == 'y':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topStopFence', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topStopFence', True, False, i, j)
                 if column == 't':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomStopFence', True, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomStopFence', True, False, i, j)
                 if column == '*':
-                    self.campFire = Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'campFire', True, False)
+                    self.campFire = Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'campFire', True, False, i, j)
 
                 #potato
                 if column == ':':
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'dirt', False, False)
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'firstStagePotato', True, True)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'dirt', False, False, i, j)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'firstStagePotato', True, True, i, j)
                 # Player pog
                 if column == 'P':
                     self.player = Player(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, self.gameplay_ZQSD)
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'grass', False, False)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'grass', False, False, i, j)
 
         self.screen.blit(
             pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0, 0))
@@ -310,6 +324,16 @@ class Game:
                     self.playing = not self.playing
                     self.options = not self.options
                     self.back_to_game = True
+            if event.type == pygame.KEYDOWN: #event Konami code
+                if event.key == self.CODE[self.code_index ]:
+                    self.current_code.append(event.key)
+                    self.code_index  += 1
+                    if self.current_code == self.CODE:
+                        self.code_index  = 0
+                        print('Bingo!')
+                else:
+                    self.current_code = []
+                    self.code_index = 0
 
     def events_day(self):
         # game loop events
@@ -498,26 +522,41 @@ class Game:
         mouse = pygame.mouse.get_pressed()[0]
         if mouse:
             for block in self.blocks_no_collid_farm:
-                if pygame.sprite.collide_mask(self.player, block):
-                    if self.recolteTimeAct < self.recolteTimeTotal :
-                        self.recolteTimeAct = self.animationLoading(self.recolteTimeTotal, self.recolteTimeAct, GREEN_VALIDATION)
-                    else:
-                        if block.block_type == 'firstStageCorn':
-                            self.player.corn_counter += 1
+                if block.block_type == 'secondStageCorn' or block.block_type == 'secondStagePotat' or block.block_type == 'rottenPotat' or block.block_type == 'rottenCorn':
+                    if pygame.sprite.collide_mask(self.player, block):
+                        if self.recolteTimeAct < self.recolteTimeTotal :
+                            self.recolteTimeAct = self.animationLoading(self.recolteTimeTotal, self.recolteTimeAct, GREEN_VALIDATION)
                         else:
-                            self.player.potat_counter += 1
-                        block.kill()
+                            if block.block_type == 'secondStageCorn':
+                                self.player.corn_counter += random.randint(3, 5)
+                            elif block.block_type == 'rottenCorn':
+                                self.player.corn_counter += random.randint(1, 2)
+                            elif block.block_type == 'secondStagePotat':
+                                self.player.potat_counter += random.randint(3, 5) # trouver
+                            else:
+                                self.player.potat_counter += random.randint(1, 2)
+                            case = (block.i, block.j)
+                            if block.i > 30: # si c'étais un block du champ droit
+                                self.farmingTilePosDroite.append(case)
+                                self.apparitionFarmPossible = True
+                            else:
+                                self.farmingTilePosGauche.append(case)
+                                self.apparitionFarmPossible = True
+
+                            block.kill()
             if not(pygame.sprite.spritecollide(self.player, self.blocks_no_collid_farm, False)): # si bug
                     self.recolteTimeAct = 0
 
             if self.campFire.rect.collidepoint(pygame.mouse.get_pos()):
-                    if self.passerDayAct < self.passerDayTotal :
-                        self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
-                    else:
-                        self.day_time = False
-                        self.farm_time = True
-            else:
-                self.passerDayAct = 0
+                if self.passerDayAct < self.passerDayTotal :
+                    self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
+                else:
+                    self.day_time = False
+                    self.farm_time = True
+        mouse_pos = pygame.mouse.get_pos()
+        if self.campFire.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+            self.screen.blit(self.marketMessage, self.marketMessage_rect)
+
         self.campFireAnimation()
         self.curseur()
 
@@ -558,20 +597,69 @@ class Game:
 
     def update_day(self):
         # game llop events
-        if random.randint(1,POTATO_APPEAR_TIME) == 69:
-            if random.randint(1,2) == 2:
-                element = 'Potato'
-            else:
-                element = 'Corn'
+        
+        if self.apparitionFarmPossible and random.randint(1,30) == 15: # trouver #POTATO_APPEAR_TIME
+            self.caseMaxFarmGauche = len(self.farmingTilePosGauche)
+            self.caseMaxFarmDroite = len(self.farmingTilePosDroite)
 
-            if random.randint(1,2) == 2:
-                patateX = random.randint(38,42)
-                patateY = random.randint(16,19)
-                Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStage' + element, True, True)
-            else:
-                patateX = random.randint(21,22)
-                patateY = random.randint(22,25)
-                Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStage' + element, True, True)
+            if self.caseMaxFarmGauche == 0 and self.caseMaxFarmDroite > 0: # Si peut que spawn a droite
+                pos = random.randint(1, self.caseMaxFarmDroite)
+                case = self.farmingTilePosDroite[pos-1]
+                self.farmingTilePosDroite.remove(case)
+                if random.randint(1,2) == 2:
+                    element = 'Potato'
+                else:
+                    element = 'Corn'
+                patateX = case[0]
+                patateY = case[1]
+                Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStage' + element, True, True, patateX, patateY)
+
+
+            elif self.caseMaxFarmDroite == 0 and self.caseMaxFarmGauche > 0: # Si peut que spawn a gauche
+                pos = random.randint(1, self.caseMaxFarmGauche)
+                case = self.farmingTilePosGauche[pos-1]
+                self.farmingTilePosGauche.remove(case)
+                if random.randint(1,2) == 2:
+                    element = 'Potato'
+                else:
+                    element = 'Corn'
+                patateX = case[0]
+                patateY = case[1]
+                Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStage' + element, True, True, patateX, patateY)
+
+
+            elif self.caseMaxFarmDroite > 0 and self.caseMaxFarmGauche > 0: # Si peut spawn a droite et a gauche
+                if random.randint(1, 2) == 2: # spawn a gauche
+                    pos = random.randint(1, self.caseMaxFarmGauche)
+                    case = self.farmingTilePosGauche[pos-1]
+
+                    self.farmingTilePosGauche.remove(case)
+
+                    if random.randint(1,2) == 2:
+                        element = 'Potato'
+                    else:
+                        element = 'Corn'
+                    patateX = case[0]
+                    patateY = case[1]
+                    Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStage' + element, True, True, patateX, patateY)
+
+                else: # spawn a droite
+                    pos = random.randint(1, self.caseMaxFarmDroite)
+                    case = self.farmingTilePosDroite[pos-1]
+
+                    self.farmingTilePosDroite.remove(case)
+
+                    if random.randint(1,2) == 2:
+                        element = 'Potato'
+                    else:
+                        element = 'Corn'
+                    patateX = case[0]
+                    patateY = case[1]
+                    Block(self, self.xTopLefIsland + (patateX - 17) * TILE_WIDTH, self.yTopLefIsland + (patateY - 12) * TILE_HEIGHT, 'firstStage' + element, True, True, patateX, patateY)
+
+            else: 
+                self.apparitionFarmPossible = False
+
 
 
         self.all_sprites.update()
@@ -1019,7 +1107,7 @@ class Game:
                 else:
                     back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
 
-            self.screen.fill(BLUE)
+            self.screen.blit(pygame.image.load('assets/img/tests/menuForAll.png'),(0,0))
             self.screen.blit(title, title_rect)
             self.screen.blit(sound_options, sound_options_rect)
             self.screen.blit(music_sound, music_sound_rect)
@@ -1072,7 +1160,7 @@ class Game:
             else:
                 back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
 
-            self.screen.fill(BLUE)
+            self.screen.blit(pygame.image.load('assets/img/tests/menuForAll.png'),(0,0))
             self.screen.blit(title, title_rect)
             self.screen.blit(back_button.image, back_button.rect)
 
@@ -1152,7 +1240,7 @@ class Game:
             else:
                 back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
 
-            self.screen.fill(BLUE)
+            self.screen.blit(pygame.image.load('assets/img/tests/menuForAll.png'),(0,0))
             self.screen.blit(title, title_rect)
             self.screen.blit(rules_desc1, rules_desc1_rect)
             self.screen.blit(rules_desc2, rules_desc2_rect)
