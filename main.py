@@ -142,7 +142,8 @@ class Game:
 		self.gun_reload_1 = pygame.mixer.Sound(os.path.join('assets/audio/se/Equip1.ogg'))
 		self.gun_reload_2 = pygame.mixer.Sound(os.path.join('assets/audio/se/Equip3.ogg'))
 		self.victory = pygame.mixer.Sound(os.path.join('assets/audio/me/Victory1.ogg'))
-
+		self.easter_eggs = pygame.mixer.Sound(os.path.join('assets/audio/se/Easter Eggs.ogg'))
+		self.easter_eggs.set_volume(0.5)
 		#Musique de fond
 		self.sound_title = os.path.join('assets/audio/bgm/Town1.ogg')
 		self.sound_farm = os.path.join('assets/audio/bgm', 'Town8.ogg')
@@ -468,7 +469,7 @@ class Game:
 					self.code_index  += 1
 					if self.current_code == self.CODE:
 						self.code_index  = 0
-						print('Bingo!')
+						self.easter_eggs.play()
 				else:
 					self.current_code = []
 					self.code_index = 0
