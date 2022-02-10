@@ -96,12 +96,12 @@ class Game:
         self.current_code = []
         self.code_index = 0
 
-        self.btn_img11 = "assets/img/tests/redButton11.png"
-        self.btn_img12 = "assets/img/tests/redButton12.png"
-        self.btn_img21 = "assets/img/tests/greenButton11.png"
-        self.btn_img31 = "assets/img/tests/blueButton11.png"
-        self.btn_img32 = "assets/img/tests/blueButton12.png"
-        self.btn_img41 = "assets/img/tests/purpleButton11.png"
+        self.btn_img11 = (3, 1)
+        self.btn_img12 = (3, 2)
+        self.btn_img21 = (1, 1)
+        self.btn_img31 = (2, 1)
+        self.btn_img32 = (2, 2)
+        self.btn_img41 = (5, 1)
 
         self.recolteTimeAct = 0;
         self.recolteTimeTotal = TEMPS_RECOLTE;
