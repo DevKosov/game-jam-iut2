@@ -96,12 +96,12 @@ class Game:
         self.current_code = []
         self.code_index = 0
 
-        self.btn_img11 = (3, 1)
-        self.btn_img12 = (3, 2)
-        self.btn_img21 = (1, 1)
-        self.btn_img31 = (2, 1)
-        self.btn_img32 = (2, 2)
-        self.btn_img41 = (5, 1)
+        self.farm_btn_img11 = (3, 1)
+        self.farm_btn_img12 = (3, 2)
+        self.farm_btn_img21 = (1, 1)
+        self.farm_btn_img31 = (2, 1)
+        self.farm_btn_img32 = (2, 2)
+        self.farm_btn_img41 = (5, 1)
 
         self.recolteTimeAct = 0;
         self.recolteTimeTotal = TEMPS_RECOLTE;
@@ -174,6 +174,63 @@ class Game:
         ]  # lul
         self.fireEffect = pygame.image.load(os.path.join('assets/img/tests', 'gunfire_overlay.png')).convert_alpha()
         self.campFireEffect = pygame.image.load(os.path.join('assets/img/tests', 'fire_overlay.png')).convert_alpha()
+
+
+
+        #init farm
+
+        self.farm_title = self.font.render("It's farmer time", True, WHITE)
+        self.farm_title_rect = self.farm_title.get_rect(x=self.screen.get_width() / 2 - self.farm_title.get_width() / 2, y=100)
+
+        self.farm_font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+        self.farm_subtitle = self.farm_font.render("Improve your skills and weapon damages", True, WHITE)
+        self.farm_subtitle_rect = self.farm_subtitle.get_rect(x=self.screen.get_width() / 2 - self.farm_subtitle.get_width() / 2, y=150)
+
+        self.farm_potato_img1 = pygame.image.load("assets/img/tests/potato.png")
+        self.farm_potato_img2 = pygame.transform.scale(self.farm_potato_img1, (30,30))
+
+        self.farm_corn_img1 = pygame.image.load("assets/img/tests/corna.png")
+        self.farm_corn_img2 = pygame.transform.scale(self.farm_corn_img1, (30,30))
+ 
+        self.farm_font_special = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
+        
+
+        self.farm_font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
+        self.farm_label_gun_dam = self.farm_font.render("Gun damage", True, BLACK)
+        self.farm_label_gun_dam_rect = self.farm_label_gun_dam.get_rect(x=110, y=320)
+
+        self.farm_label_gun_ammo = self.farm_font.render("Gun ammo", True, BLACK)
+        self.farm_label_gun_ammo_rect = self.farm_label_gun_ammo.get_rect(x=350, y=320)
+
+        self.farm_label_knife_dam = self.farm_font.render("Knife damage", True, BLACK)
+        self.farm_label_knife_dam_rect = self.farm_label_knife_dam.get_rect(x=545, y=320)
+
+
+        self.farm_knife_img1 = pygame.image.load("assets/img/tests/knife.png")
+        self.farm_knife_img2 = pygame.transform.rotate(self.farm_knife_img1,45)
+        self.farm_knife_img3 = pygame.transform.scale(self.farm_knife_img2,(100,100))
+
+        self.farm_bullet_img1 = pygame.image.load("assets/img/tests/bullet_26x64.png")
+        self.farm_bullet_img2 = pygame.transform.scale(self.farm_bullet_img1,(30,90))
+
+        self.farm_label_stamina = self.farm_font.render("Max stamina", True, BLACK)
+        self.farm_label_stamina_rect = self.farm_label_stamina.get_rect(x=775, y=320)
+
+        self.farm_buy_btn1 = Button(200, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+        self.farm_buy_btn2 = Button(420, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+        self.farm_buy_btn3 = Button(640, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+        self.farm_buy_btn4 = Button(860, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+
+        self.farm_res_btn1 = Button(80, 500, 120, 50, BLACK, self.farm_btn_img21, '.     10', 30)
+        self.farm_res_btn2 = Button(300, 500, 120, 50, BLACK, self.farm_btn_img21, '.      10', 30)
+        self.farm_res_btn3 = Button(520, 500, 120, 50, BLACK, self.farm_btn_img21, '.     10', 30)
+        self.farm_res_btn4 = Button(740, 500, 120, 50, BLACK, self.farm_btn_img21, '.      10', 30)
+
+        
+
+        self.farm_start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Start', 40)
+
+
 
     def createTileMap(self):
 
@@ -672,34 +729,11 @@ class Game:
 
     def draw_farm(self):
 
-        title = self.font.render("It's farmer time", True, WHITE)
-        title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
-
-        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
-        subtitle = font.render("Improve your skills and weapon damages", True, WHITE)
-        subtitle_rect = subtitle.get_rect(x=self.screen.get_width() / 2 - subtitle.get_width() / 2, y=150)
-
-        potato_img1 = pygame.image.load("assets/img/tests/potato.png")
-        potato_img2 = pygame.transform.scale(potato_img1, (30,30))
-
-        corn_img1 = pygame.image.load("assets/img/tests/corna.png")
-        corn_img2 = pygame.transform.scale(corn_img1, (30,30))
- 
-        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
-        label_nb_ress1 = font.render(str(self.player.potat_counter), True, WHITE)
-        label_nb_ress1_rect = subtitle.get_rect(x=450, y=230)
-        label_nb_ress2 = font.render(str(self.player.corn_counter), True, WHITE)
-        label_nb_ress2_rect = subtitle.get_rect(x=630,y=230)
-
-        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
-        label_gun_dam = font.render("Gun damage", True, BLACK)
-        label_gun_dam_rect = label_gun_dam.get_rect(x=110, y=320)
-
-        label_gun_ammo = font.render("Gun ammo", True, BLACK)
-        label_gun_ammo_rect = label_gun_ammo.get_rect(x=350, y=320)
-
-        label_knife_dam = font.render("Knife damage", True, BLACK)
-        label_knife_dam_rect = label_knife_dam.get_rect(x=545, y=320)
+        self.farm_label_nb_ress1 = self.farm_font_special.render(str(self.player.potat_counter), True, WHITE)
+        self.farm_label_nb_ress1_rect = self.farm_subtitle.get_rect(x=450, y=230)
+        self.farm_label_nb_ress2 = self.farm_font_special.render(str(self.player.corn_counter), True, WHITE)
+        self.farm_label_nb_ress2_rect = self.farm_subtitle.get_rect(x=630,y=230)
+        
 
         if self.gun_level==1:
             gun_img1 = pygame.image.load("assets/img/tests/gunNormal2.png")
@@ -708,116 +742,101 @@ class Game:
             gun_img1 = pygame.image.load("assets/img/tests/gunUpgraded2.png")
             gun_img2 = pygame.transform.scale(gun_img1,(100,70))
 
-        knife_img1 = pygame.image.load("assets/img/tests/knife.png")
-        knife_img2 = pygame.transform.rotate(knife_img1,45)
-        knife_img3 = pygame.transform.scale(knife_img2,(100,100))
+        #trouver
+        self.farm_font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 60)
+        self.farm_gun_dam_value = self.farm_font.render("+"+str(self.player.damaged_gun), True, BLACK)
+        self.farm_gun_dam_rect_value = self.farm_gun_dam_value.get_rect(x=200, y=450)
 
-        bullet_img1 = pygame.image.load("assets/img/tests/bullet_26x64.png")
-        bullet_img2 = pygame.transform.scale(bullet_img1,(30,90))
+        self.farm_gun_ammo_value = self.farm_font.render("+"+str(self.player.gun_ammo), True, BLACK)
+        self.farm_gun_ammo_rect_value = self.farm_gun_ammo_value.get_rect(x=420, y=450)
 
-        label_stamina = font.render("Max stamina", True, BLACK)
-        label_stamina_rect = label_stamina.get_rect(x=775, y=320)
+        self.farm_knife_dam_value = self.farm_font.render("+"+str(self.player.damaged_knife), True, BLACK)
+        self.farm_knife_dam_rect_value = self.farm_knife_dam_value.get_rect(x=640, y=450)
+
+        self.farm_font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
+        self.farm_stamina_value = self.farm_font.render(str(self.player.max_stamina), True, BLACK)
+        self.farm_stamina_rect_value = self.farm_stamina_value.get_rect(x=800, y=390)
 
         #############################################################
-        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 60)
-        gun_dam_value = font.render("+"+str(self.player.damaged_gun), True, BLACK)
-        gun_dam_rect_value = gun_dam_value.get_rect(x=200, y=450)
-
-        gun_ammo_value = font.render("+"+str(self.player.gun_ammo), True, BLACK)
-        gun_ammo_rect_value = gun_ammo_value.get_rect(x=420, y=450)
-
-        knife_dam_value = font.render("+"+str(self.player.damaged_knife), True, BLACK)
-        knife_dam_rect_value = knife_dam_value.get_rect(x=640, y=450)
-
-        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
-        stamina_value = font.render(str(self.player.max_stamina), True, BLACK)
-        stamina_rect_value = stamina_value.get_rect(x=800, y=390)
-
-
-        res_btn1 = Button(80, 500, 120, 50, BLACK, self.btn_img21, '.     10', 30)
-        res_btn2 = Button(300, 500, 120, 50, BLACK, self.btn_img21, '.      10', 30)
-        res_btn3 = Button(520, 500, 120, 50, BLACK, self.btn_img21, '.     10', 30)
-        res_btn4 = Button(740, 500, 120, 50, BLACK, self.btn_img21, '.      10', 30)
-
-        self.start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.btn_img11, 'Start', 40)
-
-        self.buy_btn1 = Button(200, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
-        self.buy_btn2 = Button(420, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
-        self.buy_btn3 = Button(640, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
-        self.buy_btn4 = Button(860, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
 
         mouse_pos = pygame.mouse.get_pos()
-        if self.buy_btn1.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-            self.buy_btn1 = Button(200, 500, 80, 50, BLACK, self.btn_img32, 'Buy', 30)
+        if self.farm_buy_btn1.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+            self.farm_buy_btn1 = Button(200, 500, 80, 50, BLACK, self.farm_btn_img32, 'Buy', 30)
+            self.farm_buy_btn2 = Button(420, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+            self.farm_buy_btn3 = Button(640, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+            self.farm_buy_btn4 = Button(860, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+            self.farm_start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Start', 40)
         else:
-            self.buy_btn1 = Button(200, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
-
-        if self.buy_btn2.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-            self.buy_btn2 = Button(420, 500, 80, 50, BLACK, self.btn_img32, 'Buy', 30)
-        else:
-            self.buy_btn2 = Button(420, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
-
-        if self.buy_btn3.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-            self.buy_btn3 = Button(640, 500, 80, 50, BLACK, self.btn_img32, 'Buy', 30)
-        else:
-            self.buy_btn3 = Button(640, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
-
-        if self.buy_btn4.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-            self.buy_btn4 = Button(860, 500, 80, 50, BLACK, self.btn_img32, 'Buy', 30)
-        else:
-            self.buy_btn4 = Button(860, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
-
-        if self.start_before_farm.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-            self.start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.btn_img12, 'Start', 40)
-        else:
-            self.start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.btn_img11, 'Start', 40)
+            self.farm_buy_btn1 = Button(200, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+            if self.farm_buy_btn2.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+                self.farm_buy_btn2 = Button(420, 500, 80, 50, BLACK, self.farm_btn_img32, 'Buy', 30)
+                self.farm_buy_btn3 = Button(640, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+                self.farm_buy_btn4 = Button(860, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+                self.farm_start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Start', 40)
+            else:
+                self.farm_buy_btn2 = Button(420, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+                if self.farm_buy_btn3.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+                    self.farm_buy_btn3 = Button(640, 500, 80, 50, BLACK, self.farm_btn_img32, 'Buy', 30)
+                    self.farm_buy_btn4 = Button(860, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+                    self.farm_start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Start', 40)
+                else:
+                    self.farm_buy_btn3 = Button(640, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+                    if self.farm_buy_btn4.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+                        self.farm_buy_btn4 = Button(860, 500, 80, 50, BLACK, self.farm_btn_img32, 'Buy', 30)
+                        self.farm_start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Start', 40)
+                    else:
+                        self.farm_buy_btn4 = Button(860, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
+                        if self.farm_start_before_farm.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+                            self.farm_start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.farm_btn_img12, 'Start', 40)
+                        else:
+                            self.farm_start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Start', 40)
 
         self.screen.blit(pygame.image.load('assets/img/tests/shopBG.png'),(0,0))
-        self.clock.tick(FPS)
-        self.screen.blit(title, title_rect)
-        self.screen.blit(subtitle, subtitle_rect)
-        self.screen.blit(label_nb_ress1, label_nb_ress1_rect)
-        self.screen.blit(label_nb_ress2, label_nb_ress2_rect)
+        self.clock.tick(60)
+        self.screen.blit(self.farm_title, self.farm_title_rect)
+        self.screen.blit(self.farm_subtitle, self.farm_subtitle_rect)
+        self.screen.blit(self.farm_label_nb_ress1, self.farm_label_nb_ress1_rect)
+        self.screen.blit(self.farm_label_nb_ress2, self.farm_label_nb_ress2_rect)
 
-        self.screen.blit(potato_img1, (370,210))
-        self.screen.blit(corn_img1, (550,210))
+        self.screen.blit(self.farm_potato_img1, (370,210))
+        self.screen.blit(self.farm_corn_img1, (550,210))
 
 
-        background_square = ButtonNoText(70,290,220,240,self.btn_img41)
+        background_square = ButtonNoText(70,290,220,240,self.farm_btn_img41)
         self.screen.blit(background_square.image, background_square.rect)
-        self.screen.blit(label_gun_dam, label_gun_dam_rect)
-        self.screen.blit(gun_dam_value, gun_dam_rect_value)
-        self.screen.blit(res_btn1.image, res_btn1.rect)
-        self.screen.blit(potato_img2, (100,507))
+        self.screen.blit(self.farm_label_gun_dam, self.farm_label_gun_dam_rect)
+        self.screen.blit(self.farm_gun_dam_value, self.farm_gun_dam_rect_value)
+        self.screen.blit(self.farm_res_btn1.image, self.farm_res_btn1.rect)
+        self.screen.blit(self.farm_potato_img2, (100,507))
         self.screen.blit(gun_img2,(130,360))
-        self.screen.blit(self.buy_btn1.image, self.buy_btn1.rect)
+        self.screen.blit(self.farm_buy_btn1.image, self.farm_buy_btn1.rect)
 
-        background_square = ButtonNoText(290,290,220,240,self.btn_img41)
-        self.screen.blit(background_square.image, background_square.rect)
-        self.screen.blit(label_gun_ammo, label_gun_ammo_rect)
-        self.screen.blit(gun_ammo_value, gun_ammo_rect_value)
-        self.screen.blit(res_btn2.image, res_btn2.rect)
-        self.screen.blit(corn_img2, (322,507))
-        self.screen.blit(bullet_img2,(385,350))
-        self.screen.blit(self.buy_btn2.image, self.buy_btn2.rect)
+        # background_square = ButtonNoText(290,290,220,240,self.farm_btn_img41)
+        # self.screen.blit(background_square.image, background_square.rect)
+        self.screen.blit(self.farm_label_gun_ammo, self.farm_label_gun_ammo_rect)
+        self.screen.blit(self.farm_gun_ammo_value, self.farm_gun_ammo_rect_value)
+        self.screen.blit(self.farm_res_btn2.image, self.farm_res_btn2.rect)
+        self.screen.blit(self.farm_corn_img2, (322,507))
+        self.screen.blit(self.farm_bullet_img2,(385,350))
+        self.screen.blit(self.farm_buy_btn2.image, self.farm_buy_btn2.rect)
 
-        background_square = ButtonNoText(510,290,220,240,self.btn_img41)
-        self.screen.blit(background_square.image, background_square.rect)
-        self.screen.blit(label_knife_dam, label_knife_dam_rect)
-        self.screen.blit(knife_dam_value, knife_dam_rect_value)
-        self.screen.blit(res_btn3.image, res_btn3.rect)
-        self.screen.blit(potato_img2, (540,507))
-        self.screen.blit(knife_img3,(560,350))
-        self.screen.blit(self.buy_btn3.image, self.buy_btn3.rect)
+        # background_square = ButtonNoText(510,290,220,240,self.farm_btn_img41)
+        # self.screen.blit(background_square.image, background_square.rect)
+        self.screen.blit(self.farm_label_knife_dam, self.farm_label_knife_dam_rect)
+        self.screen.blit(self.farm_knife_dam_value, self.farm_knife_dam_rect_value)
+        self.screen.blit(self.farm_res_btn3.image, self.farm_res_btn3.rect)
+        self.screen.blit(self.farm_potato_img2, (540,507))
+        self.screen.blit(self.farm_knife_img3,(560,350))
+        self.screen.blit(self.farm_buy_btn3.image, self.farm_buy_btn3.rect)
 
-        background_square = ButtonNoText(730,290,220,240,self.btn_img41)
-        self.screen.blit(background_square.image, background_square.rect)
-        self.screen.blit(label_stamina, label_stamina_rect)
-        self.screen.blit(stamina_value, stamina_rect_value)
-        self.screen.blit(res_btn4.image, res_btn4.rect)
-        self.screen.blit(corn_img2, (762,507))
-        self.screen.blit(self.start_before_farm.image, self.start_before_farm.rect)
-        self.screen.blit(self.buy_btn4.image, self.buy_btn4.rect)
+        # background_square = ButtonNoText(730,290,220,240,self.farm_btn_img41)
+        # self.screen.blit(background_square.image, background_square.rect)
+        self.screen.blit(self.farm_label_stamina, self.farm_label_stamina_rect)
+        self.screen.blit(self.farm_stamina_value, self.farm_stamina_rect_value)
+        self.screen.blit(self.farm_res_btn4.image, self.farm_res_btn4.rect)
+        self.screen.blit(self.farm_corn_img2, (762,507))
+        self.screen.blit(self.farm_start_before_farm.image, self.farm_start_before_farm.rect)
+        self.screen.blit(self.farm_buy_btn4.image, self.farm_buy_btn4.rect)
         self.curseur()
 
         pygame.display.update()
@@ -829,7 +848,7 @@ class Game:
                 self.playing = False
                 self.running = False
                 exit()
-            if event.type == pygame.MOUSEBUTTONUP and self.buy_btn1.rect.collidepoint(pygame.mouse.get_pos()):
+            if event.type == pygame.MOUSEBUTTONUP and self.farm_buy_btn1.rect.collidepoint(pygame.mouse.get_pos()):
                 if (self.player.potat_counter>=10):
                     self.player.potat_counter-=10
                     # add gun damage
@@ -837,26 +856,26 @@ class Game:
                     self.shop_sound.play()
                     if self.player.damaged_gun>=5:
                         self.gun_level=2
-            if event.type == pygame.MOUSEBUTTONUP and self.buy_btn2.rect.collidepoint(pygame.mouse.get_pos()):
+            if event.type == pygame.MOUSEBUTTONUP and self.farm_buy_btn2.rect.collidepoint(pygame.mouse.get_pos()):
                 if (self.player.corn_counter>=10):
                     self.player.corn_counter-=10
                     # add gun ammo
                     self.player.gun_ammo+=1
                     self.player.gun_max_ammo+=1
                     self.shop_sound.play()
-            if event.type == pygame.MOUSEBUTTONUP and self.buy_btn3.rect.collidepoint(pygame.mouse.get_pos()):
+            if event.type == pygame.MOUSEBUTTONUP and self.farm_buy_btn3.rect.collidepoint(pygame.mouse.get_pos()):
                 if (self.player.potat_counter>=10):
                     self.player.potat_counter-=10
                     # add knife damage
                     self.player.damaged_knife+=1
                     self.shop_sound.play()
-            if event.type == pygame.MOUSEBUTTONUP and self.buy_btn4.rect.collidepoint(pygame.mouse.get_pos()):
+            if event.type == pygame.MOUSEBUTTONUP and self.farm_buy_btn4.rect.collidepoint(pygame.mouse.get_pos()):
                 if (self.player.corn_counter>=10):
                     self.player.corn_counter-=10
                     # add stamina
                     self.player.max_stamina+=10
                     self.shop_sound.play()
-            if event.type == pygame.MOUSEBUTTONUP and self.start_before_farm.rect.collidepoint(pygame.mouse.get_pos()):
+            if event.type == pygame.MOUSEBUTTONUP and self.farm_start_before_farm.rect.collidepoint(pygame.mouse.get_pos()):
                 self.farm_time = False
                 self.night_time = True
                 pygame.mixer.fadeout(1000)
@@ -913,11 +932,11 @@ class Game:
         title = self.font.render('Crab Island', True, BLACK)
         title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
 
-        play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.btn_img11, 'Play', 40)
-        rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img11, 'Rules of play', 40)
-        option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.btn_img11, 'Options', 40)
-        credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.btn_img11, 'Credits', 40)
-        exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Exit', 40)
+        play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.farm_btn_img11, 'Play', 40)
+        rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.farm_btn_img11, 'Rules of play', 40)
+        option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.farm_btn_img11, 'Options', 40)
+        credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.farm_btn_img11, 'Credits', 40)
+        exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Exit', 40)
 
         while self.menu:
             for event in pygame.event.get():
@@ -929,29 +948,29 @@ class Game:
             mouse_pressed = pygame.mouse.get_pressed()
         
             if play_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.btn_img12, 'Play', 40)
+                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.farm_btn_img12, 'Play', 40)
             else:
-                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.btn_img11, 'Play', 40)
+                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.farm_btn_img11, 'Play', 40)
 
             if rules_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img12, 'Rules of play', 40)
+                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.farm_btn_img12, 'Rules of play', 40)
             else:
-                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img11, 'Rules of play', 40)
+                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.farm_btn_img11, 'Rules of play', 40)
 
             if option_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.btn_img12, 'Options', 40)
+                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.farm_btn_img12, 'Options', 40)
             else:
-                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.btn_img11, 'Options', 40)
+                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.farm_btn_img11, 'Options', 40)
 
             if credits_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.btn_img12, 'Credits', 40)
+                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.farm_btn_img12, 'Credits', 40)
             else:
-                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.btn_img11, 'Credits', 40)
+                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.farm_btn_img11, 'Credits', 40)
 
             if exit_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img12, 'Exit', 40)
+                exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img12, 'Exit', 40)
             else:
-                exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Exit', 40)
+                exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Exit', 40)
 
             if play_button.is_pressed(mouse_pos, mouse_pressed):
                 self.menu = False
