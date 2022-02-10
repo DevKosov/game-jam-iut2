@@ -81,6 +81,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.nb_crabs_killed = 0
         self.gun_level = 1
+        self.game_day = 1;
 
         self.btn_img11 = "assets/img/tests/redButton11.png"
         self.btn_img12 = "assets/img/tests/redButton12.png"
@@ -99,6 +100,10 @@ class Game:
         self.yTopLefIsland = 0
         self.hpCrab = HP_CRAB
         self.FireBullet = False
+
+        self.day_time = True
+        self.farm_time = False
+        self.night_time = False
 
         self.campFireGrandit = True
         self.campFireReduit = False
@@ -363,45 +368,46 @@ class Game:
 
     def draw(self):
         #game loop draw
+        font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 35)
+        self.timer = font.render("Time left:  " + str(self.timer_value) + "s", True, WHITE)
+        self.timer.set_alpha(150)
+        self.timer_rect = self.timer.get_rect(x=20, y=20)
+        self.crabs_killed = font.render("Crabs killed: "+str(self.nb_crabs_killed), True, WHITE)
+        self.crabs_killed.set_alpha(150)
+        self.crabs_killed_rect = self.crabs_killed.get_rect(x=20, y=50)
+        counter_day = font.render("Day: "+str(self.game_day), True, WHITE)
+        counter_day.set_alpha(150)
+        counter_day_rect = counter_day.get_rect(x=20, y=730)
+
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
-        self.timer = font.render("Time left:  "+str(self.timer_value)+"s", True, BLACK)
-        self.timer_rect = self.timer.get_rect(x=900, y=20)
-
-        self.crabs_killed = font.render("Crabs killed: "+str(self.nb_crabs_killed), True, BLACK)
-        self.crabs_killed_rect = self.crabs_killed.get_rect(x=900, y=40)
-
-        current_defense_label = font.render("Current defense", True, BLACK)
+        current_defense_label = font.render("Current defense", True, WHITE)
+        current_defense_label.set_alpha(150)
         current_defense_label_rect = current_defense_label.get_rect(x=860, y=650)
+
+        heart_img1 = pygame.image.load("assets/img/tests/heart.png")
+        heart_img2 = pygame.transform.scale(heart_img1, (30,30))
 
         if self.player.current_weapon=="gun":
             if self.gun_level==1:
                 gun_img1 = pygame.image.load("assets/img/tests/gunNormal2.png")
                 gun_img2 = pygame.transform.scale(gun_img1,(70,45))
+                gun_img2.set_alpha(150)
             elif self.gun_level==2:
                 gun_img1 = pygame.image.load("assets/img/tests/gunUpgraded2.png")
                 gun_img2 = pygame.transform.scale(gun_img1,(70,45))
-            font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
-            current_ammo = font.render(str(self.player.gun_ammo), True, BLACK)
-            current_ammo_label_rect = current_ammo.get_rect(x=30, y=30)
-            font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 30)
-            max_ammo = font.render("/"+str(self.player.gun_max_ammo), True, BLACK)
-            max_ammo_label_rect = current_ammo.get_rect(x=80, y=55)
+                gun_img2.set_alpha(150)
+            font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
+            current_ammo = font.render(str(self.player.gun_ammo)+"/"+str(self.player.gun_max_ammo), True, WHITE)
+            current_ammo.set_alpha(150)
+            current_ammo_label_rect = current_ammo.get_rect(x=880, y=720)
         else:
             knife_img1 = pygame.image.load("assets/img/tests/knife.png")
             knife_img2 = pygame.transform.rotate(knife_img1,45)
+            knife_img2.set_alpha(150)
 
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
         self.clock.tick(FPS)
-        self.screen.blit(self.timer,self.timer_rect)
-        self.screen.blit(self.crabs_killed,self.crabs_killed_rect)
-        self.screen.blit(current_defense_label,current_defense_label_rect)
-        if self.player.current_weapon=="gun":
-            self.screen.blit(gun_img2, (900,680))
-            self.screen.blit(current_ammo,current_ammo_label_rect)
-            self.screen.blit(max_ammo,max_ammo_label_rect)
-        else:
-            self.screen.blit(knife_img2, (900,680))
         if (self.player.player_health == 3):
             self.screen.blit(self.night_effet[0], (0,0))
         elif (self.player.player_health == 2):
@@ -411,6 +417,17 @@ class Game:
         if self.FireBullet:
             self.screen.blit(self.fireEffect, (self.player.rect.centerx - self.fireEffect.get_width() / 2, self.player.rect.centery - self.fireEffect.get_height() / 2))
             self.FireBullet = False
+        self.screen.blit(self.timer,self.timer_rect)
+        self.screen.blit(counter_day,counter_day_rect)
+        self.screen.blit(self.crabs_killed,self.crabs_killed_rect)
+        self.screen.blit(current_defense_label,current_defense_label_rect)
+        if self.player.current_weapon=="gun":
+            self.screen.blit(gun_img2, (900,680))
+            self.screen.blit(current_ammo,current_ammo_label_rect)
+        else:
+            self.screen.blit(knife_img2, (900,680))
+        for i in range(int(self.player.hp/50)):
+            self.screen.blit(heart_img2, (900+35*i,20))
         self.campFireAnimation()
         self.curseur()
         pygame.display.update()
@@ -421,6 +438,9 @@ class Game:
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 35)
         self.timer = font.render("Time left:  " + str(self.timer_value) + "s", True, BLACK)
         self.timer_rect = self.timer.get_rect(x=20, y=20)
+
+        counter_day = font.render("Day: "+str(self.game_day), True, BLACK)
+        counter_day_rect = counter_day.get_rect(x=20, y=730)
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 35)
         label_nb_ress1 = font.render(str(self.player.potat_counter), True, BLACK)
@@ -455,6 +475,10 @@ class Game:
         self.collectMessage.set_alpha(150)
         self.collectMessage_rect = self.collectMessage.get_rect(x=WINDOW_WIDTH / 2 - self.collectMessage.get_width() / 2, y=700)
 
+        self.marketMessage = font.render("Left click to go to the market", True, BLACK)
+        self.marketMessage.set_alpha(150)
+        self.marketMessage_rect = self.marketMessage.get_rect(x=WINDOW_WIDTH / 2 - self.marketMessage.get_width() / 2, y=700)
+
         # game loop draw
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
@@ -462,6 +486,7 @@ class Game:
         self.screen.blit(self.tips2, self.tips2_rect)
         self.screen.blit(self.tips3, self.tips3_rect)
         self.screen.blit(self.timer, self.timer_rect)
+        self.screen.blit(counter_day,counter_day_rect)
         self.screen.blit(potato_img2, (970,20))
         self.screen.blit(corn_img2, (970,80))
         self.screen.blit(label_nb_ress1,label_nb_ress1_rect)
@@ -486,6 +511,17 @@ class Game:
                     self.recolteTimeAct = 0
 
             if self.campFire.rect.collidepoint(pygame.mouse.get_pos()):
+<<<<<<< HEAD
+                if self.passerDayAct < self.passerDayTotal :
+                    self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
+                else:
+                    self.day_time = False
+                    self.farm_time = True
+        mouse_pos = pygame.mouse.get_pos()
+        if self.campFire.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+            self.screen.blit(self.marketMessage, self.marketMessage_rect)
+
+=======
                     if self.passerDayAct < self.passerDayTotal :
                         self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
                     else:
@@ -493,6 +529,7 @@ class Game:
                         self.farm_time = True
             else:
                 self.passerDayAct = 0
+>>>>>>> 03d817cd38edbfd4d7ae0888917422ae991d4c46
         self.campFireAnimation()
         self.curseur()
 
@@ -557,7 +594,7 @@ class Game:
         title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
-        subtitle = font.render("Improve your skills and damages", True, WHITE)
+        subtitle = font.render("Improve your skills and weapon damages", True, WHITE)
         subtitle_rect = subtitle.get_rect(x=self.screen.get_width() / 2 - subtitle.get_width() / 2, y=150)
 
         potato_img1 = pygame.image.load("assets/img/tests/potato.png")
