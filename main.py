@@ -122,7 +122,6 @@ class Game:
 
         self.nbCrabOnScreen = 0
 
-        self.aaaaaaaaaaaaaaaaaaaa = 0
 
         #Bruitage
         self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
