@@ -1019,7 +1019,7 @@ class Game:
                 else:
                     back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
 
-            self.screen.fill(BLUE)
+            self.screen.blit(pygame.image.load('assets/img/tests/menuForAll.png'),(0,0))
             self.screen.blit(title, title_rect)
             self.screen.blit(sound_options, sound_options_rect)
             self.screen.blit(music_sound, music_sound_rect)
@@ -1072,7 +1072,7 @@ class Game:
             else:
                 back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
 
-            self.screen.fill(BLUE)
+            self.screen.blit(pygame.image.load('assets/img/tests/menuForAll.png'),(0,0))
             self.screen.blit(title, title_rect)
             self.screen.blit(back_button.image, back_button.rect)
 
@@ -1152,7 +1152,7 @@ class Game:
             else:
                 back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
 
-            self.screen.fill(BLUE)
+            self.screen.blit(pygame.image.load('assets/img/tests/menuForAll.png'),(0,0))
             self.screen.blit(title, title_rect)
             self.screen.blit(rules_desc1, rules_desc1_rect)
             self.screen.blit(rules_desc2, rules_desc2_rect)
