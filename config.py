@@ -43,7 +43,7 @@ OFFSETX = 23.5
 OFFSETY = 15
 
 HP_CRAB = 100
-TIME_SPAWN_CRAB = 180 # /60 = nombre de seconde moyenne entre chaque spawn
+TIME_SPAWN_CRAB = 180*2 # /60 = nombre de seconde moyenne entre chaque spawn
 CRAB_VITESSE_MIN = 1
 CRAB_VITESSE_MAX = 5
 

@@ -313,7 +313,8 @@ class Player(pygame.sprite.Sprite):
 				Bullet(self.game, self.rect.centerx, self.rect.centery, x, y, 5)
 				self.gun_ammo -= 1
 		else:
-			print("knife")
+			self.game.knife_sound.play()
+			KnifeCute(self.game)
 
 	def sprint(self,event):
 		if event.type == pygame.KEYUP :
@@ -750,7 +751,56 @@ class Bullet(pygame.sprite.Sprite):
 		self.collisition()
 		self.rect.x += self.deplacementX
 		self.rect.y += self.deplacementY
-		
+
+class KnifeCute(pygame.sprite.Sprite):
+	def __init__(self, game):
+
+		x, y = pygame.mouse.get_pos()
+
+		self.game = game
+		self._layer = BULLET_LAYER
+		self.groups = self.game.all_sprites, self.game.bullets
+		pygame.sprite.Sprite.__init__(self, self.groups)
+
+		self.image = pygame.transform.scale(pygame.image.load(os.path.join('assets/img/tests', 'bullet_26x64.png')).convert_alpha(), (13, 32))
+
+
+		diff_x = self.game.player.rect.x - x
+		diff_y = self.game.player.rect.y - y
+		marge_de_deplacement_x = 15
+		marge_de_deplacement_y = 10
+
+		if abs(diff_x) > abs(diff_y):
+			self.y = self.game.player.rect.y
+			if diff_x < 0:
+				self.x = self.game.player.rect.x  + 50 + marge_de_deplacement_x
+			else:
+				self.x = self.game.player.rect.x - 50+ marge_de_deplacement_x
+		else:
+			self.x = self.game.player.rect.x + marge_de_deplacement_x
+			if diff_y < 0:
+				self.y = self.game.player.rect.y + 50+ marge_de_deplacement_y
+			else:
+				self.y = self.game.player.rect.y - 50+ marge_de_deplacement_y
+
+		self.rect = self.image.get_rect()
+		self.rect.x = self.x
+		self.rect.y = self.y
+
+
+	def collisition(self):
+		for enemies in self.game.enemies:
+			if pygame.sprite.collide_mask(self, enemies):
+				enemies.damaged(50)
+				self.game.damaged_sound.play()
+				self.kill()
+				break
+		hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
+		if hit:
+			self.kill()
+
+	def update(self):
+		self.collisition()
 
 # 		try:
 # 			self.sheet_image = pygame.image.load('assets/img/characters/doux.png').convert_alpha()

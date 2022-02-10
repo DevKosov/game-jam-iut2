@@ -10,7 +10,7 @@ from sys import exit
 from pygame.locals import *
 
 pygame.init()
-pygame.display.set_caption('GAME JAM 2022')
+pygame.display.set_caption('Crab Island')
 
 
 tilemap = [
@@ -104,13 +104,20 @@ class Game:
 
         self.nbCrabOnScreen = 0
 
+        #Bruitage
         self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
         self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Switch2.ogg'))
         self.damaged_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Damage1.ogg'))
+        self.shop_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Shop2.ogg'))
+        self.knife_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Sword4.ogg'))
 
-        #self.xTopLefIsland + (31-17) * TILE_WIDTH, self.yTopLefIsland + (21-12) * TILE_HEIGHT, 64, 64) fire tile
+        #Musique de fond
+        self.sound_title = os.path.join('assets/audio/bgm/Town1.ogg')
+        self.sound_farm = os.path.join('assets/audio/bgm', 'Town8.ogg')
+        self.sound_night = os.path.join('assets/audio/bgs', 'Night.ogg')
 
         pygame.mouse.set_visible(False)
+
 
         if self.fx_played == True:
             self.bullet_sound.set_volume(0.1)
@@ -118,13 +125,16 @@ class Game:
             spawn_sound.set_volume(0.1)
             click_sound.set_volume(0.1)
             self.damaged_sound.set_volume(0.05)
-
+            self.shop_sound.set_volume(0.05)
+            self.knife_sound.set_volume(0.05)
         else:
             self.bullet_sound.set_volume(0)
             self.switch_weapon_sound.set_volume(0)
             spawn_sound.set_volume(0)
             click_sound.set_volume(0)
             self.damaged_sound.set_volume(0)
+            self.shop_sound.set_volume(0)
+            self.knife_sound.set_volume(0)
 
         self.character_spritesheet = SpriteSheet(
             pygame.image.load(os.path.join('assets/img/characters', 'doux2.png')).convert_alpha())
@@ -141,7 +151,7 @@ class Game:
         self.campFireEffect = pygame.image.load(os.path.join('assets/img/tests', 'fire_overlay.png')).convert_alpha()
 
     def createTileMap(self):
-        
+
         self.xTopLefIsland = (17 - OFFSETX) * TILE_WIDTH
         self.yTopLefIsland = (12 - OFFSETY) * TILE_HEIGHT
         for i, row in enumerate(tilemap):
@@ -238,6 +248,11 @@ class Game:
 
         # self.night_effect.set_alpha(115)
         # self.night_effect.fill((30,0,0))
+        pygame.mixer.fadeout(1000)
+        pygame.mixer.music.load(self.sound_farm)
+        pygame.mixer.music.set_volume(0.05)
+        pygame.mixer.music.play(fade_ms=2000)
+
         self.day_time = True
         self.farm_time = False
         self.night_time = False
@@ -303,7 +318,6 @@ class Game:
                         self.tips3.set_alpha(0)
             if event.type == pygame.MOUSEBUTTONUP:
                 self.recolteTimeAct = 0
-
             if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LSHIFT:
                     self.player.sprint(event)
@@ -403,7 +417,7 @@ class Game:
         label_nb_ress1 = font.render(str(self.player.potat_counter), True, BLACK)
         label_nb_ress1_rect = label_nb_ress1.get_rect(x=940, y=30)
 
-        label_nb_ress2 = font.render(str(self.player.corn_counter), True, BLACK) 
+        label_nb_ress2 = font.render(str(self.player.corn_counter), True, BLACK)
         label_nb_ress2_rect = label_nb_ress1.get_rect(x=940,y=90)
 
         potato_img1 = pygame.image.load("assets/img/tests/potato.png")
@@ -412,7 +426,7 @@ class Game:
         corn_img1 = pygame.image.load("assets/img/tests/corna.png")
         corn_img2 = pygame.transform.scale(corn_img1, (40,40))
 
-        
+
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
         if self.tips:
@@ -540,11 +554,11 @@ class Game:
 
         corn_img1 = pygame.image.load("assets/img/tests/corna.png")
         corn_img2 = pygame.transform.scale(corn_img1, (40,40))
- 
+
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
         label_nb_ress1 = font.render(str(self.player.potat_counter), True, WHITE)
         label_nb_ress1_rect = subtitle.get_rect(x=450, y=230)
-        label_nb_ress2 = font.render(str(self.player.corn_counter), True, WHITE) 
+        label_nb_ress2 = font.render(str(self.player.corn_counter), True, WHITE)
         label_nb_ress2_rect = subtitle.get_rect(x=630,y=230)
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
@@ -588,7 +602,7 @@ class Game:
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 90)
         stamina_value = font.render(str(self.player.max_stamina), True, BLACK)
         stamina_rect_value = stamina_value.get_rect(x=800, y=390)
-        
+
 
         res_btn1 = Button(80, 500, 120, 50, BLACK, (78, 85, 115), '.   10', 30)
         res_btn2 = Button(300, 500, 120, 50, BLACK, (78, 85, 115), '.        10', 30)
@@ -660,6 +674,7 @@ class Game:
                     self.player.potat_counter-=10
                     # add gun damage
                     self.player.damaged_gun+=1
+                    self.shop_sound.play()
                     if self.player.damaged_gun>=5:
                         self.gun_level=2
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn2.rect.collidepoint(pygame.mouse.get_pos()):
@@ -668,20 +683,27 @@ class Game:
                     # add gun ammo
                     self.player.gun_ammo+=1
                     self.player.gun_max_ammo+=1
+                    self.shop_sound.play()
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn3.rect.collidepoint(pygame.mouse.get_pos()):
                 if (self.player.potat_counter>=10):
                     self.player.potat_counter-=10
                     # add knife damage
                     self.player.damaged_knife+=1
+                    self.shop_sound.play()
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn4.rect.collidepoint(pygame.mouse.get_pos()):
                 if (self.player.corn_counter>=10):
                     self.player.corn_counter-=10
                     # add stamina
                     self.player.max_stamina+=10
+                    self.shop_sound.play()
             if event.type == pygame.MOUSEBUTTONUP and self.start_before_farm.rect.collidepoint(pygame.mouse.get_pos()):
                 self.farm_time = False
                 self.night_time = True
-                
+                pygame.mixer.fadeout(1000)
+                pygame.mixer.music.load(self.sound_night)
+                pygame.mixer.music.set_volume(0.05)
+                pygame.mixer.music.play(fade_ms=2000)
+
 
     def main(self):
         self.playing = True
@@ -719,7 +741,9 @@ class Game:
         self.menu = True
 
         if self.music_played == True:
-            pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
+
+            pygame.mixer.music.load(self.sound_title)
+            # pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town8.ogg'))
             pygame.mixer.music.set_volume(0.05)
             pygame.mixer.music.play(fade_ms=2000)
         else:
@@ -859,12 +883,16 @@ class Game:
                         spawn_sound.set_volume(0.1)
                         click_sound.set_volume(0.1)
                         self.damaged_sound.set_volume(0.05)
+                        self.shop_sound.set_volume(0.05)
+                        self.knife_sound.set_volume(0.05)
                     else:
                         self.bullet_sound.set_volume(0)
                         self.switch_weapon_sound.set_volume(0)
                         spawn_sound.set_volume(0)
                         click_sound.set_volume(0)
                         self.damaged_sound.set_volume(0)
+                        self.shop_sound.set_volume(0)
+                        self.knife_sound.set_volume(0)
 
                     self.options_screen()
                 elif event.type == pygame.MOUSEBUTTONUP and (top_btn1.rect.collidepoint(pygame.mouse.get_pos()) or
