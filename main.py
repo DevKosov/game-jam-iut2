@@ -380,7 +380,9 @@ class Game:
 		self.night_time=False
 		self.reset_value_after_game_over()
 		#self.day_time=True
-		self.menu = True
+		
+		#self.menu = True
+		self.intro_screen()
 
 	def reset_value_after_game_over(self):
 		self.game_day=1
@@ -466,7 +468,7 @@ class Game:
 			if event.type == pygame.KEYUP:
 				if event.key == pygame.K_ESCAPE:
 					self.pause = True
-					self.playing = False
+					#self.playing = False
 					self.intro_screen()
 
 	def events_day(self):
