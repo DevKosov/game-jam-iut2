@@ -11,7 +11,7 @@ from pygame.locals import *
 
 pygame.init()
 pygame.display.set_caption('Crab Island')
-
+pygame.display.set_icon(pygame.image.load("assets/img/tests/logo.png"))
 
 tilemap = [
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
@@ -1033,7 +1033,7 @@ class Game:
 		title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
 
 		play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.farm_btn_img11, 'Play', 40)
-		rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.farm_btn_img11, 'Rules of play', 40)
+		rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.farm_btn_img11, 'Game Rules', 40)
 		option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.farm_btn_img11, 'Options', 40)
 		credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.farm_btn_img11, 'Credits', 40)
 		exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Exit', 40)
@@ -1053,9 +1053,9 @@ class Game:
 				play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.farm_btn_img21, 'Play', 40)
 
 			if rules_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-				rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img42, 'Rules of play', 40)
+				rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img42, 'Game Rules', 40)
 			else:
-				rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.farm_btn_img41, 'Rules of play', 40)
+				rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.farm_btn_img41, 'Game Rules', 40)
 
 			if option_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
 				option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.btn_img42, 'Options', 40)
@@ -1338,7 +1338,7 @@ class Game:
 		click_sound.play()
 		self.rules = True
 
-		title = self.font.render('Rules of play', True, BLACK)
+		title = self.font.render('Game Rules', True, BLACK)
 		title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
 
 		font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 30)
@@ -1365,12 +1365,12 @@ class Game:
 
 		btn2 = Button(620,390,80,40,BLACK,self.farm_btn_img21,"Mouse",30)
 
-		rules_desc7 = font.render('To shoot :', True, BLACK)
+		rules_desc7 = font.render('To collect potatoes/corn :', True, BLACK)
 		rules_desc7_rect = rules_desc7.get_rect(x=230, y=450)
 
 		btn3 = Button(620,440,150,40,BLACK,self.farm_btn_img21,"Right click",30)
 
-		rules_desc8 = font.render('To collect potatoes/corn :', True, BLACK)
+		rules_desc8 = font.render('To shoot :', True, BLACK)
 		rules_desc8_rect = rules_desc8.get_rect(x=230, y=500)
 
 		btn4 = Button(620,490,150,40,BLACK,self.farm_btn_img21,"Left click",30)

@@ -70,6 +70,8 @@ RATIO_DEGAT_KNIFE = 10
 
 RATIO_DEGAT_GUN = 10
 
+# NB secondes de temps de reload
+ANIMATION_GUN_DURATION = 3
 #######################
 #Crab Equilibrage
 

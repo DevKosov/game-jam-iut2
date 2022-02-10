@@ -73,7 +73,7 @@ class Player(pygame.sprite.Sprite):
 		self.gun_max_ammo = 5
 		self.in_realoding = False
 		self.gun_time_animation = 0
-		self.animation_gun_duration = 180
+		self.animation_gun_duration = ANIMATION_GUN_DURATION * 60
 
 		#Gestion du Knife
 		self.in_cutting = False
