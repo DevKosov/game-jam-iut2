@@ -68,6 +68,7 @@ class Game:
 		self.menu = True
 		self.rules = False
 		self.playing = False
+		self.pause = False
 		self.options = False
 		self.credits = False
 		self.font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 70)
@@ -355,7 +356,6 @@ class Game:
 			pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0, 0))
 
 	def after_win(self):
-		self.victory.play()
 		pygame.mixer.fadeout(1000)
 		pygame.mixer.music.set_volume(0.05)
 		pygame.mixer.music.load(self.sound_farm)
@@ -430,10 +430,6 @@ class Game:
 			if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_LSHIFT:
 					self.player.sprint(event)
-			if event.type == pygame.KEYUP:
-				if event.key == pygame.K_ESCAPE:
-						self.night_time=False
-						self.day_time=True
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				self.player.switch_weapon(event)
 				if event.button == pygame.BUTTON_LEFT:
@@ -444,19 +440,13 @@ class Game:
 						if ((self.player.current_weapon == "gun") and not self.player.gun_ammo == self.player.gun_max_ammo):
 							self.gun_reload_1.play()
 							self.player.in_realoding = True
-			elif event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_ESCAPE:
-					self.playing = False
-					self.menu = True
 				elif event.key == pygame.K_i:
 					self.tips = not self.tips
 					if self.tips:
 						self.tips1.set_alpha(150)
-						self.tips2.set_alpha(150)
 						self.tips3.set_alpha(150)
 					else:
 						self.tips1.set_alpha(0)
-						self.tips2.set_alpha(0)
 						self.tips3.set_alpha(0)
 				elif event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
 					self.playing = not self.playing
@@ -472,6 +462,11 @@ class Game:
 				else:
 					self.current_code = []
 					self.code_index = 0
+			if event.type == pygame.KEYUP:
+				if event.key == pygame.K_ESCAPE:
+					self.pause = True
+					self.playing = False
+					self.intro_screen()
 
 	def events_day(self):
 		# game loop events
@@ -491,11 +486,9 @@ class Game:
 					self.tips = not self.tips
 					if self.tips:
 						self.tips1.set_alpha(150)
-						self.tips2.set_alpha(150)
 						self.tips3.set_alpha(150)
 					else:
 						self.tips1.set_alpha(0)
-						self.tips2.set_alpha(0)
 						self.tips3.set_alpha(0)
 			if event.type == pygame.MOUSEBUTTONUP:
 				self.recolteTimeAct = 0
@@ -503,6 +496,11 @@ class Game:
 			if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_LSHIFT:
 					self.player.sprint(event)
+			if event.type == pygame.KEYUP:
+				if event.key == pygame.K_ESCAPE:
+					self.pause = True
+					self.playing = False
+					self.intro_screen()
 
 	def update_night(self):
 		# game llop events
@@ -642,13 +640,9 @@ class Game:
 
 		font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
 		if self.tips:
-			self.tips1 = font.render("Press 'esc' to quit party", True, BLACK)
+			self.tips1 = font.render("Press 'esc' to open options", True, BLACK)
 			self.tips1.set_alpha(150)
-			self.tips1_rect = self.tips1.get_rect(x=self.screen.get_width() / 2 - self.tips1.get_width() / 2, y=100)
-
-			self.tips2 = font.render("Press 'ctrl' to open options", True, BLACK)
-			self.tips2.set_alpha(150)
-			self.tips2_rect = self.tips2.get_rect(x=self.screen.get_width() / 2 - self.tips2.get_width() / 2, y=130)
+			self.tips1_rect = self.tips1.get_rect(x=self.screen.get_width() / 2 - self.tips1.get_width() / 2, y=130)
 
 			self.tips3 = font.render("Press 'i' to toggle tips", True, BLACK)
 			self.tips3.set_alpha(150)
@@ -670,7 +664,6 @@ class Game:
 		self.screen.fill(BLACK)
 		self.all_sprites.draw(self.screen)
 		self.screen.blit(self.tips1, self.tips1_rect)
-		self.screen.blit(self.tips2, self.tips2_rect)
 		self.screen.blit(self.tips3, self.tips3_rect)
 		self.screen.blit(self.timer, self.timer_rect)
 		self.screen.blit(counter_day,counter_day_rect)
@@ -960,10 +953,6 @@ class Game:
 				self.playing = False
 				self.running = False
 				exit()
-			if event.type == pygame.KEYUP:
-				if event.key == pygame.K_ESCAPE:
-						self.farm_time=False
-						self.day_time=True
 			if event.type == pygame.MOUSEBUTTONUP and self.farm_buy_btn1.rect.collidepoint(pygame.mouse.get_pos()):
 				if (self.player.potat_counter>=10):
 					self.player.potat_counter-=10
@@ -998,7 +987,11 @@ class Game:
 				pygame.mixer.music.load(self.sound_night)
 				pygame.mixer.music.set_volume(0.05)
 				pygame.mixer.music.play(fade_ms=2000)
-
+			if event.type == pygame.KEYUP:
+				if event.key == pygame.K_ESCAPE:
+					self.pause = True
+					self.playing = False
+					self.intro_screen()
 	def main(self):
 		self.playing = True
 
@@ -1023,11 +1016,6 @@ class Game:
 
 		pygame.display.update()
 
-	def game_over(self):
-		self.player.kill()
-		self.intro_screen()
-		# A REVOIR
-
 	def curseur(self):
 		mouse_pos = pygame.mouse.get_pos()
 		CURSOR = pygame.transform.scale(
@@ -1041,18 +1029,21 @@ class Game:
 		self.menu = True
 
 		if self.music_played == True:
-
 			pygame.mixer.music.load(self.sound_title)
-			# pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town8.ogg'))
 			pygame.mixer.music.set_volume(0.05)
 			pygame.mixer.music.play(fade_ms=2000)
-		else:
-			pygame.mixer.music.pause()
+			self.music_played = False
 
 		title = self.font.render('Crab Island', True, BLACK)
 		title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
 
-		play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.farm_btn_img11, 'Play', 40)
+		if (self.pause):
+			Text_Button = "Resume"
+		else:
+			Text_Button = "Play"
+
+		play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.farm_btn_img11, Text_Button, 40)
+
 		rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.farm_btn_img11, 'Game Rules', 40)
 		option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.farm_btn_img11, 'Options', 40)
 		credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.farm_btn_img11, 'Credits', 40)
@@ -1068,9 +1059,9 @@ class Game:
 			mouse_pressed = pygame.mouse.get_pressed()
 
 			if play_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-				play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.btn_img22, 'Play', 40)
+				play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.btn_img22, Text_Button, 40)
 			else:
-				play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.farm_btn_img21, 'Play', 40)
+				play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.farm_btn_img21, Text_Button, 40)
 
 			if rules_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
 				rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img42, 'Game Rules', 40)
@@ -1093,17 +1084,26 @@ class Game:
 				exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Exit', 40)
 
 			if play_button.is_pressed(mouse_pos, mouse_pressed):
-				self.menu = False
-				self.playing = True
+				if (self.pause):
+					self.menu = False
+					self.pause = False
+					self.playing = True
+				else:
+					self.menu = False
+					self.playing = True
 			if rules_button.is_pressed(mouse_pos, mouse_pressed):
-				self.menu = False
-				self.rules = True
+				if (self.pause):
+
+					self.menu = False
+					self.rules = True
 			if option_button.is_pressed(mouse_pos, mouse_pressed):
-				self.menu = False
-				self.options = True
+				if (self.pause):
+					self.menu = False
+					self.options = True
 			if credits_button.is_pressed(mouse_pos, mouse_pressed):
-				self.menu = False
-				self.credits = True
+				if (self.pause):
+					self.menu = False
+					self.credits = True
 			if exit_button.is_pressed(mouse_pos, mouse_pressed):
 				exit()
 			self.screen.blit(pygame.image.load('assets/img/tests/menu.png'),(0,0))
@@ -1414,12 +1414,8 @@ class Game:
 					self.running = False
 					exit()
 				elif event.type == pygame.MOUSEBUTTONUP and back_button.rect.collidepoint(pygame.mouse.get_pos()):
-					if self.back_to_game:
-						self.rules = False
-						self.playing = True
-					else:
-						self.rules = False
-						self.menu = True
+					self.rules = False
+					self.menu = True
 			mouse_pos = pygame.mouse.get_pos()
 			if back_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
 				back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img12, 'Back to menu', 30)
@@ -1472,7 +1468,6 @@ while g.running == True:
 	elif g.playing == True:
 		g.new()
 		g.main()
-		g.game_over()
 
 pygame.quit()
 sys.exit()
