@@ -511,7 +511,6 @@ class Game:
                     self.recolteTimeAct = 0
 
             if self.campFire.rect.collidepoint(pygame.mouse.get_pos()):
-<<<<<<< HEAD
                 if self.passerDayAct < self.passerDayTotal :
                     self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
                 else:
@@ -521,15 +520,6 @@ class Game:
         if self.campFire.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
             self.screen.blit(self.marketMessage, self.marketMessage_rect)
 
-=======
-                    if self.passerDayAct < self.passerDayTotal :
-                        self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
-                    else:
-                        self.day_time = False
-                        self.farm_time = True
-            else:
-                self.passerDayAct = 0
->>>>>>> 03d817cd38edbfd4d7ae0888917422ae991d4c46
         self.campFireAnimation()
         self.curseur()
 
