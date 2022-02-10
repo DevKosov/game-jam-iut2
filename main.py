@@ -90,6 +90,12 @@ class Game:
         self.apparitionFarmPossible = True
         self.game_day = 1;
 
+        #Insane Easter Egss
+        self.CODE = [pygame.K_UP, pygame.K_UP, pygame.K_DOWN, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_LEFT,
+                pygame.K_RIGHT, pygame.K_b, pygame.K_a]
+        self.current_code = []
+        self.code_index = 0
+
         self.btn_img11 = "assets/img/tests/redButton11.png"
         self.btn_img12 = "assets/img/tests/redButton12.png"
         self.btn_img21 = "assets/img/tests/greenButton11.png"
@@ -318,6 +324,16 @@ class Game:
                     self.playing = not self.playing
                     self.options = not self.options
                     self.back_to_game = True
+            if event.type == pygame.KEYDOWN: #event Konami code
+                if event.key == self.CODE[self.code_index ]:
+                    self.current_code.append(event.key)
+                    self.code_index  += 1
+                    if self.current_code == self.CODE:
+                        self.code_index  = 0
+                        print('Bingo!')
+                else:
+                    self.current_code = []
+                    self.code_index = 0
 
     def events_day(self):
         # game loop events
