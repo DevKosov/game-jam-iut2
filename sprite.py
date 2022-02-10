@@ -75,6 +75,9 @@ class Player(pygame.sprite.Sprite):
 		self.gun_time_animation = 0
 		self.animation_gun_duration = 180
 
+		#Gestion du Knife
+		self.in_cutting = False
+
 		#sprint
 		self.in_running = False
 		self.max_stamina = 100
@@ -313,8 +316,10 @@ class Player(pygame.sprite.Sprite):
 				Bullet(self.game, self.rect.centerx, self.rect.centery, x, y, 5)
 				self.gun_ammo -= 1
 		else:
-			self.game.knife_sound.play()
-			KnifeCute(self.game)
+			if (not self.in_cutting):
+				self.in_cutting = True
+				self.game.knife_sound.play()
+				KnifeCute(self.game)
 
 	def sprint(self,event):
 		if event.type == pygame.KEYUP :
@@ -784,28 +789,39 @@ class KnifeCute(pygame.sprite.Sprite):
 
 		self.image = pygame.transform.scale(pygame.image.load(os.path.join('assets/img/tests', 'knife.png')).convert_alpha(), (13, 32))
 
-
 		diff_x = self.game.player.rect.x - x
 		diff_y = self.game.player.rect.y - y
 		marge_de_deplacement_x = 15
-		marge_de_deplacement_y = 10
+		marge_de_deplacement_y = 15
 
 		if abs(diff_x) > abs(diff_y):
-			self.y = self.game.player.rect.y
-			if diff_x < 0:
+			self.y = self.game.player.rect.y + marge_de_deplacement_y
+			if diff_x < 0:#Droite
 				self.x = self.game.player.rect.x  + 50 + marge_de_deplacement_x
-			else:
-				self.x = self.game.player.rect.x - 50+ marge_de_deplacement_x
+				self.image = pygame.transform.rotate(self.image, -90)
+				self.angle = "droite"
+			else:#Gauche
+				self.image = pygame.transform.rotate(self.image, 90)
+				self.x = self.game.player.rect.x - 50
+				self.angle = "gauche"
 		else:
 			self.x = self.game.player.rect.x + marge_de_deplacement_x
-			if diff_y < 0:
+			if diff_y < 0: #Bas
+				self.image = pygame.transform.flip(self.image, 0,1)
 				self.y = self.game.player.rect.y + 50+ marge_de_deplacement_y
-			else:
+				self.angle = "bas"
+			else: #Haut
 				self.y = self.game.player.rect.y - 50+ marge_de_deplacement_y
+				self.angle = "haut"
 
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
 		self.rect.y = self.y
+
+		self.in_animation = True
+		self.current_time_animation = 0
+		self.time_animation = 15
+		self.speed = 1
 
 
 	def collisition(self):
@@ -813,14 +829,36 @@ class KnifeCute(pygame.sprite.Sprite):
 			if pygame.sprite.collide_mask(self, enemies):
 				enemies.damaged(50)
 				self.game.damaged_sound.play()
-				self.kill()
+				self.in_animation = False
 				break
 		hit = pygame.sprite.spritecollide(self, self.game.blocks_collid, False)
 		if hit:
+			self.in_animation = False
+
+	def animation(self):
+		if self.in_animation:
+			if (self.current_time_animation == self.time_animation ):
+				self.in_animation = False
+			else:
+				self.current_time_animation += 1
+				if (self.angle == "haut"):
+					self.rect.y -= self.speed
+				elif (self.angle == "bas"):
+					self.rect.y += self.speed
+				elif (self.angle == "gauche"):
+					self.rect.x -= self.speed
+				elif (self.angle == "droite"):
+					self.rect.x += self.speed
+
+		else:
+			self.game.player.in_cutting = False
 			self.kill()
+
+
 
 	def update(self):
 		self.collisition()
+		self.animation()
 
 # 		try:
 # 			self.sheet_image = pygame.image.load('assets/img/characters/doux.png').convert_alpha()

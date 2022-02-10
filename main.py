@@ -847,8 +847,8 @@ class Game:
                 self.credits = True
             if exit_button.is_pressed(mouse_pos, mouse_pressed):
                 exit()
-            self.screen.fill(BLUE)
-            self.screen.blit(title, title_rect)
+            self.screen.blit(pygame.image.load('assets/img/tests/menu.png'),(0,0))
+            # self.screen.blit(title, title_rect)
             self.screen.blit(play_button.image, play_button.rect)
             self.screen.blit(rules_button.image, rules_button.rect)
             self.screen.blit(option_button.image, option_button.rect)
