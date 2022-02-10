@@ -72,6 +72,8 @@ class Player(pygame.sprite.Sprite):
 		self.gun_ammo = 5
 		self.gun_max_ammo = 5
 		self.in_realoding = False
+		self.gun_time_animation = 0
+		self.animation_gun_duration = 180
 
 		#sprint
 		self.in_running = False
@@ -80,10 +82,8 @@ class Player(pygame.sprite.Sprite):
 		self.basic_speed = self.player_speed
 		self.speed_upgrade_with_sprint = 3
 
-
 		self.takingDamage = False
 		self.nbTickDamage = 0
-		
 
 	def update(self):
 		self.movement()
@@ -98,7 +98,6 @@ class Player(pygame.sprite.Sprite):
 
 		self.x_change = 0
 		self.y_change  = 0
-
 
 		if not(self.takingDamage):
 			if not self.player_invulnerability:
@@ -127,6 +126,7 @@ class Player(pygame.sprite.Sprite):
 		
 		self.stamina()
 		self.death()
+		self.reloading()
 
 	def death(self):
 		if self.player_health == 0:
@@ -336,8 +336,14 @@ class Player(pygame.sprite.Sprite):
 				self.current_stamina += 0.5
 
 	def reloading(self):
-		if (not self.in_realoding) and (self.current_weapon == "gun"):
-			self.gun_ammo = self.gun_max_ammo
+		if (self.in_realoding):
+			if (self.gun_time_animation > self.animation_gun_duration):
+				self.in_realoding = False
+				self.gun_time_animation = 0
+				self.gun_ammo = self.gun_max_ammo
+			else:
+				print(self.gun_time_animation)
+				self.gun_time_animation = self.game.animationLoading(self.animation_gun_duration,self.gun_time_animation,WHITE)
 
 
 	def collision(self, direction):
@@ -776,7 +782,7 @@ class KnifeCute(pygame.sprite.Sprite):
 		self.groups = self.game.all_sprites, self.game.bullets
 		pygame.sprite.Sprite.__init__(self, self.groups)
 
-		self.image = pygame.transform.scale(pygame.image.load(os.path.join('assets/img/tests', 'bullet_26x64.png')).convert_alpha(), (13, 32))
+		self.image = pygame.transform.scale(pygame.image.load(os.path.join('assets/img/tests', 'knife.png')).convert_alpha(), (13, 32))
 
 
 		diff_x = self.game.player.rect.x - x

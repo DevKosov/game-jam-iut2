@@ -91,10 +91,10 @@ class Game:
         self.btn_img41 = "assets/img/tests/purpleButton11.png"
 
         self.recolteTimeAct = 0;
-        self.recolteTimeTotal = 60;
+        self.recolteTimeTotal = TEMPS_RECOLTE;
 
         self.passerDayAct = 0;
-        self.passerDayTotal = 20;
+        self.passerDayTotal = TEMPS_PASSER_JOUR;
 
         self.xTopLefIsland = 0
         self.yTopLefIsland = 0
@@ -289,7 +289,9 @@ class Game:
                         self.crab_spawn(self.hpCrab)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_r:
-                    self.player.reloading()
+                    if not (self.player.in_realoding):
+                        if ((self.player.current_weapon == "gun") and not self.player.gun_ammo == self.player.gun_max_ammo):
+                            self.player.in_realoding = True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.playing = False
@@ -329,6 +331,7 @@ class Game:
                         self.tips3.set_alpha(0)
             if event.type == pygame.MOUSEBUTTONUP:
                 self.recolteTimeAct = 0
+                self.passerDayAct = 0
             if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LSHIFT:
                     self.player.sprint(event)
@@ -508,6 +511,7 @@ class Game:
                     self.recolteTimeAct = 0
 
             if self.campFire.rect.collidepoint(pygame.mouse.get_pos()):
+<<<<<<< HEAD
                 if self.passerDayAct < self.passerDayTotal :
                     self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
                 else:
@@ -517,6 +521,15 @@ class Game:
         if self.campFire.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
             self.screen.blit(self.marketMessage, self.marketMessage_rect)
 
+=======
+                    if self.passerDayAct < self.passerDayTotal :
+                        self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
+                    else:
+                        self.day_time = False
+                        self.farm_time = True
+            else:
+                self.passerDayAct = 0
+>>>>>>> 03d817cd38edbfd4d7ae0888917422ae991d4c46
         self.campFireAnimation()
         self.curseur()
 
@@ -734,10 +747,6 @@ class Game:
                 self.playing = False
                 self.running = False
                 exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    self.farm_time = False
-                    self.night_time = True
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn1.rect.collidepoint(pygame.mouse.get_pos()):
                 if (self.player.potat_counter>=10):
                     self.player.potat_counter-=10
