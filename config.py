@@ -10,6 +10,7 @@ BLUE = (150, 252, 255)
 RED = (255, 0, 0)
 GREEN_VALIDATION = (35, 220, 61)
 ORANGE = (255, 127, 0)
+DARK_GREEN = (12, 166, 0)
 
 #layer :
 BULLET_LAYER = 2
@@ -42,12 +43,6 @@ ISLANDHEIGHT = TILE_HEIGHT * 17
 OFFSETX = 23.5
 OFFSETY = 15
 
-HP_CRAB = 100
-TIME_SPAWN_CRAB = 180*2 # /60 = nombre de seconde moyenne entre chaque spawn
-CRAB_VITESSE_MIN = 1
-CRAB_VITESSE_MAX = 5
-
-CRAB_ADD_PER_DAY = 5
 
 GROW_MINTIME_STAGE1 = 480 #/60 = 1sec
 GROW_MAXTIME_STAGE1 = 720 #/60 = 1sec
@@ -65,3 +60,32 @@ TEMPS_PASSER_JOUR = 20
 
 BUTTON_WIDTH = 64
 BUTTON_HEIGHT = 20
+
+
+#############################
+#EQUILIBRAGE
+
+#DEGAT = 50 + (Ratio * NB_point_dedans)
+
+RATIO_DEGAT_KNIFE = 10
+
+RATIO_DEGAT_GUN = 10
+
+CUT_COOLDOWN = 60 #En frame
+
+# NB secondes de temps de reload
+ANIMATION_GUN_DURATION = 3
+#######################
+#Crab Equilibrage
+
+
+# Vie crab = HP + (Ratio * (Nbjour-1))
+HP_CRAB = 100
+RATIO_VIE_CRAB = 20
+#####
+
+TIME_SPAWN_CRAB = 180 # /60 = nombre de seconde moyenne entre chaque spawn
+CRAB_VITESSE_MIN = 1
+CRAB_VITESSE_MAX = 5
+
+CRAB_ADD_PER_DAY = 5
