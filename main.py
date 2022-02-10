@@ -189,8 +189,6 @@ class Game:
 		self.campFireEffect = pygame.image.load(os.path.join('assets/img/tests', 'fire_overlay.png')).convert_alpha()
 		self.campFireEffect = pygame.transform.scale(self.campFireEffect, (500, 500))
 
-
-
 		#init farm
 
 		self.farm_title = self.font.render("It's farmer time", True, WHITE)
