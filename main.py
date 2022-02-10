@@ -89,6 +89,7 @@ class Game:
         self.farminTileActGauche = []
         self.farminTileACTDroite = []
         self.apparitionFarmPossible = True
+        self.peutCollect = False
 
         #Insane Easter Egss
         self.CODE = [pygame.K_UP, pygame.K_UP, pygame.K_DOWN, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_LEFT,
@@ -186,6 +187,7 @@ class Game:
         ]  # lul
         self.fireEffect = pygame.image.load(os.path.join('assets/img/tests', 'gunfire_overlay.png')).convert_alpha()
         self.campFireEffect = pygame.image.load(os.path.join('assets/img/tests', 'fire_overlay.png')).convert_alpha()
+        self.campFireEffect = pygame.transform.scale(self.campFireEffect, (500, 500))
 
 
 
@@ -630,6 +632,10 @@ class Game:
         self.collectMessage.set_alpha(150)
         self.collectMessage_rect = self.collectMessage.get_rect(x=WINDOW_WIDTH / 2 - self.collectMessage.get_width() / 2, y=700)
 
+        self.comebackMessage = font.render("Come back when the plant has fully grown", True, BLACK)
+        self.comebackMessage.set_alpha(150)
+        self.comebackMessage_rect = self.comebackMessage.get_rect(x=WINDOW_WIDTH / 2 - self.comebackMessage.get_width() / 2, y=700)
+
         self.marketMessage = font.render("Left click to go to the market", True, BLACK)
         self.marketMessage.set_alpha(150)
         self.marketMessage_rect = self.marketMessage.get_rect(x=WINDOW_WIDTH / 2 - self.marketMessage.get_width() / 2, y=700)
@@ -647,8 +653,16 @@ class Game:
         self.screen.blit(label_nb_ress1,label_nb_ress1_rect)
         self.screen.blit(label_nb_ress2,label_nb_ress2_rect)
         self.clock.tick(FPS)
-        if pygame.sprite.spritecollide(self.player, self.blocks_no_collid_farm, False):
-            self.screen.blit(self.collectMessage, self.collectMessage_rect)
+            
+        for block in self.blocks_no_collid_farm:
+            if block.block_type == 'secondStageCorn' or block.block_type == 'secondStagePotat' or block.block_type == 'rottenPotat' or block.block_type == 'rottenCorn':
+                    if pygame.sprite.collide_mask(self.player, block):
+                        self.screen.blit(self.collectMessage, self.collectMessage_rect)
+                        self.peutCollect = True
+            elif (block.block_type == 'firstStagePotato' or block.block_type == 'firstStageCorn') and self.peutCollect:
+                if pygame.sprite.collide_mask(self.player, block):
+                    self.screen.blit(self.comebackMessage, self.comebackMessage_rect)
+            self.peutCollect = False
 
         mouse = pygame.mouse.get_pressed()[0]
         if mouse:
@@ -709,21 +723,24 @@ class Game:
     def campFireAnimation(self):
         if self.campFireGrandit:
             if self.campFireXMax > self.campFireXAct:
-                self.campFireXAct += 1
+                self.campFireXAct += 5
             else:
                 self.campFireGrandit = False
                 self.campFireReduit = True
                 self.campFireXMin = random.randint(150, 240)
         else:
             if self.campFireXMin < self.campFireXAct:
-                self.campFireXAct -= 1
+                self.campFireXAct -= 5
             else:
                 self.campFireGrandit = True
                 self.campFireReduit = False
                 self.campFireXMax = random.randint(240, 500)
         self.campfireYAct = self.campFireXAct
-        self.campFireEffect = pygame.transform.scale(self.campFireEffect, (self.campFireXAct, self.campfireYAct))
-        self.screen.blit(self.campFireEffect, ((self.xTopLefIsland + (31-16.5) * TILE_WIDTH) - self.campFireEffect.get_width() / 2, (self.yTopLefIsland + (21-11.5) * TILE_HEIGHT) - self.campFireEffect.get_height() / 2))
+        #self.campFireEffect = pygame.transform.scale(self.campFireEffect, (self.campFireXAct, self.campfireYAct))
+        alpha = (105 * (self.campFireXAct-150) ) // 350
+        alpha += 150
+        self.campFireEffect.set_alpha(alpha)
+        self.screen.blit(self.campFireEffect, ((self.xTopLefIsland + (31-16.8) * TILE_WIDTH) - self.campFireEffect.get_width() / 2, (self.yTopLefIsland + (21-11.8) * TILE_HEIGHT) - self.campFireEffect.get_height() / 2))
 
 
     def update_day(self):
@@ -967,14 +984,16 @@ class Game:
                 self.draw_farm()
                 self.events_farm()
             elif self.night_time:
+                self.update_night()
                 self.draw()
                 self.events_night()
-                self.update_night()
+                
                 if self.nb_crabs_left==0:
                     self.after_win()
                     pygame.mixer.music.load(self.sound_title)
                 if self.player.player_health==0:
                     self.after_game_over()
+                
         pygame.display.update()
 
     def game_over(self):

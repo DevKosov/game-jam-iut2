@@ -89,6 +89,7 @@ class Player(pygame.sprite.Sprite):
 		self.nbTickDamage = 0
 
 	def update(self):
+		
 		self.movement()
 		self.animate()
 
@@ -129,6 +130,7 @@ class Player(pygame.sprite.Sprite):
 		
 		self.stamina()
 		self.reloading()
+		
 
 	def movement(self):
 
