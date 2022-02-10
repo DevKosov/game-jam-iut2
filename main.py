@@ -32,13 +32,13 @@ tilemap = [
    'EEEEEEEEEEEEEEEEDSSaggggggggggggggggg]ppppp[bSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSagggggggggggggggggy/////ybSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSagggggggggggggggggg/////gbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggg/////gbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSagggggggggggggggggt/////tbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSagggggggggggPgggggipppppubSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSa]pp[ggggggg*ggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSao//yggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
-   'EEEEEEEEEEEEEEEEDSSao//gggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggg$~~/////gbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSaggggggggggggggg@gt/////tbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSagggggggggg$P#gg@gipppppubSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSa]pp[gggggg@*@gg@ggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao//ygg$~~~(~(~~&ggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao//ggg@gggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
+   'EEEEEEEEEEEEEEEEDSSao//~~~&gggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSao//tggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSSaippuggggggggggggggggggggbSSlEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEDSS3xxxxxxxxxxxxxxxxxxxxxxxx4SSlEEEEEEEEEEEEEEEE',
@@ -244,6 +244,8 @@ class Game:
                     Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'topStopFence', True, False, i, j)
                 if column == 't':
                     Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'bottomStopFence', True, False, i, j)
+
+                #campfire
                 if column == '*':
                     self.campFire = Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'campFire', True, False, i, j)
 
@@ -251,10 +253,34 @@ class Game:
                 if column == ':':
                     Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'dirt', False, False, i, j)
                     Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'firstStagePotato', True, True, i, j)
+
+                #Road
+                if column == '~':
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'roadH', False, False, i, j)
+                if column == '@':
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'roadV', False, False, i, j)
+                if column == '#':
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'roadTopR', False, False, i, j)
+                if column == '$':
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'roadTopL', False, False, i, j)
+                if column == '^':
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'roadBottomLeft', False, False, i, j)
+                if column == '&':
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'roadBottomRight', False, False, i, j)
+                if column == '(':
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'roadT', False, False, i, j)
+                if column == ')':
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'roadTReverse', False, False, i, j)
+                if column == '_':
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'roadTRight', False, False, i, j)
+                if column == '+':
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'roadTLeft', False, False, i, j)
+                
+
                 # Player pog
                 if column == 'P':
                     self.player = Player(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, self.gameplay_ZQSD)
-                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'grass', False, False, i, j)
+                    Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'roadH', False, False, i, j)
 
         self.screen.blit(
             pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0, 0))

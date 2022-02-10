@@ -487,9 +487,31 @@ class Block(pygame.sprite.Sprite):
 		if self.block_type == 'bottomStopFence':
 			self.image = self.game.terrain_spritesheet.get_image(2, 4, self.width, self.height, self.scale, BLACK)
 
+		#campfire
 		if self.block_type == 'campFire':
 			self.image = self.game.terrain_spritesheet.get_image(4, 5, self.width, self.height, self.scale, BLACK)
 
+		#Road
+		if self.block_type == 'roadH':
+			self.image = self.game.terrain_spritesheet.get_image(6, 6, self.width, self.height, self.scale, BLACK)
+		if self.block_type == 'roadV':
+			self.image = self.game.terrain_spritesheet.get_image(1, 6, self.width, self.height, self.scale, BLACK)
+		if self.block_type == 'roadTopR':
+			self.image = self.game.terrain_spritesheet.get_image(8, 6, self.width, self.height, self.scale, BLACK)
+		if self.block_type == 'roadTopL':
+			self.image = self.game.terrain_spritesheet.get_image(7, 6, self.width, self.height, self.scale, BLACK)
+		if self.block_type == 'roadBottomLeft':
+			self.image = self.game.terrain_spritesheet.get_image(1, 7, self.width, self.height, self.scale, BLACK)
+		if self.block_type == 'roadBottomRight':
+			self.image = self.game.terrain_spritesheet.get_image(2, 7, self.width, self.height, self.scale, BLACK)
+		if self.block_type == 'roadT':
+			self.image = self.game.terrain_spritesheet.get_image(2, 6, self.width, self.height, self.scale, BLACK)
+		if self.block_type == 'roadTReverse':
+			self.image = self.game.terrain_spritesheet.get_image(3, 6, self.width, self.height, self.scale, BLACK)
+		if self.block_type == 'roadTRight':
+			self.image = self.game.terrain_spritesheet.get_image(4, 6, self.width, self.height, self.scale, BLACK)
+		if self.block_type == 'roadTLeft':
+			self.image = self.game.terrain_spritesheet.get_image(5, 6, self.width, self.height, self.scale, BLACK)
 
 		if self.block_type == 'firstStagePotato':
 			self.image = self.game.terrain_spritesheet.get_image(5, 3, self.width, self.height, self.scale, BLACK)
