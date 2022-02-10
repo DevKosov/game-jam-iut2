@@ -345,6 +345,7 @@ class Player(pygame.sprite.Sprite):
 			if (self.gun_time_animation > self.animation_gun_duration):
 				self.in_realoding = False
 				self.gun_time_animation = 0
+				self.game.gun_reload_2.play()
 				self.gun_ammo = self.gun_max_ammo
 			else:
 				self.gun_time_animation = self.game.animationLoading(self.animation_gun_duration,self.gun_time_animation,WHITE)
@@ -580,21 +581,24 @@ class Button:
 
 		self.x = x
 		self.y = y
-		self.width = width
-		self.height = height
+		self.width = BUTTON_WIDTH
+		self.height = BUTTON_HEIGHT
 
 		self.fg = fg
 		self.bg = bg
+
+		self.button_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests', 'buttons.png')).convert_alpha())
 		
-		img = pygame.image.load(self.bg)
-		self.image = pygame.transform.scale(img,(self.width,self.height))
+		img = self.button_spritesheet.get_image(bg[0], bg[1], self.width, self.height, 10, BLACK)
+		self.image = pygame.transform.scale(img,(width,height))
+		self.image = self.image.convert_alpha()
 		self.rect = self.image.get_rect()
 
 		self.rect.x = self.x
 		self.rect.y = self.y
 
 		self.text = self.font.render(self.content, True, self.fg)
-		self.text_rect = self.text.get_rect(center=(self.width//2, self.height//2))
+		self.text_rect = self.text.get_rect(center=(width//2, height//2))
 		self.image.blit(self.text, self.text_rect)
 
 	def is_pressed(self, pos, pressed):
@@ -613,9 +617,12 @@ class ButtonNoText:
 		self.height = height
 
 		self.bg = bg
-		
-		img = pygame.image.load(self.bg)
-		self.image = pygame.transform.scale(img,(self.width,self.height))
+
+		self.button_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests', 'buttons.png')).convert_alpha())
+
+		img = self.button_spritesheet.get_image(bg[0], bg[1], self.width, self.height, 10, BLACK)
+		self.image = pygame.transform.scale(img,(width,height))
+		self.image = self.image.convert_alpha()
 		self.rect = (self.x,self.y)
 
 class Crab(pygame.sprite.Sprite):
