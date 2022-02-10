@@ -57,8 +57,8 @@ tilemap = [
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
 ]
-spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Up1.ogg'))
-click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Decision5.ogg'))
+spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio', 'Up1.ogg'))
+click_sound = pygame.mixer.Sound(os.path.join('assets/audio', 'Decision5.ogg'))
 
 
 class Game:
@@ -137,11 +137,11 @@ class Game:
             self.knife_sound.set_volume(0)
 
         self.character_spritesheet = SpriteSheet(
-            pygame.image.load(os.path.join('assets/img/characters', 'doux2.png')).convert_alpha())
+            pygame.image.load(os.path.join('assets/img/tests', 'doux2.png')).convert_alpha())
         self.terrain_spritesheet = SpriteSheet(
             pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha())
         self.crab_spritesheet = SpriteSheet(
-            pygame.image.load(os.path.join('assets/img/tests/Crab.png')).convert_alpha())
+            pygame.image.load(os.path.join('assets/img/tests/CrabUpdate_100x78.png')).convert_alpha())
         self.night_effet = [
             pygame.image.load(os.path.join('assets/img/tests', 'overlayN.png')).convert_alpha(),
             pygame.image.load(os.path.join('assets/img/tests', 'overlayNormalRed.png')).convert_alpha(),
@@ -731,7 +731,7 @@ class Game:
     def curseur(self):
         mouse_pos = pygame.mouse.get_pos()
         CURSOR = pygame.transform.scale(
-            pygame.image.load(os.path.join('assets/img/cursor', 'viewfinder.png')).convert_alpha(), (100, 100))
+            pygame.image.load(os.path.join('assets/img/tests', 'viewfinder.png')).convert_alpha(), (100, 100))
         CURSOR_RECT = CURSOR.get_rect()
         CURSOR_RECT.center = mouse_pos
         self.screen.blit(CURSOR, CURSOR_RECT)
