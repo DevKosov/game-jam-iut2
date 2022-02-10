@@ -139,6 +139,9 @@ class Game:
         self.damaged_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Damage1.ogg'))
         self.shop_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Shop2.ogg'))
         self.knife_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Sword4.ogg'))
+        self.gun_reload_1 = pygame.mixer.Sound(os.path.join('assets/audio/se/Equip1.ogg'))
+        self.gun_reload_2 = pygame.mixer.Sound(os.path.join('assets/audio/se/Equip3.ogg'))
+        self.victory = pygame.mixer.Sound(os.path.join('assets/audio/me/Victory1.ogg'))
 
         #Musique de fond
         self.sound_title = os.path.join('assets/audio/bgm/Town1.ogg')
@@ -155,6 +158,9 @@ class Game:
             self.damaged_sound.set_volume(0.05)
             self.shop_sound.set_volume(0.05)
             self.knife_sound.set_volume(0.05)
+            self.gun_reload_1.set_volume(0.05)
+            self.gun_reload_2.set_volume(0.05)
+            self.victory.set_volume(0.05)
         else:
             self.bullet_sound.set_volume(0)
             self.switch_weapon_sound.set_volume(0)
@@ -163,6 +169,9 @@ class Game:
             self.damaged_sound.set_volume(0)
             self.shop_sound.set_volume(0)
             self.knife_sound.set_volume(0)
+            self.gun_reload_1.set_volume(0)
+            self.gun_reload_2.set_volume(0)
+            self.victory.set_volume(0)
 
         self.character_spritesheet = SpriteSheet(
             pygame.image.load(os.path.join('assets/img/tests', 'doux2.png')).convert_alpha())
@@ -263,10 +272,11 @@ class Game:
             pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0, 0))
 
     def after_win(self):
+        self.victory.play()
         pygame.mixer.fadeout(1000)
-        pygame.mixer.music.load(self.sound_farm)
         pygame.mixer.music.set_volume(0.05)
-        pygame.mixer.music.play(fade_ms=2000)
+        pygame.mixer.music.load(self.sound_farm)
+        pygame.mixer.music.play(fade_ms=1000)
         self.game_day+=1
         self.nb_crabs_left = 5+self.game_day*CRAB_ADD_PER_DAY
         for enemies in self.enemies:
@@ -319,6 +329,7 @@ class Game:
                 if event.key == pygame.K_r:
                     if not (self.player.in_realoding):
                         if ((self.player.current_weapon == "gun") and not self.player.gun_ammo == self.player.gun_max_ammo):
+                            self.gun_reload_1.play()
                             self.player.in_realoding = True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -1075,6 +1086,9 @@ class Game:
                         self.damaged_sound.set_volume(0.05)
                         self.shop_sound.set_volume(0.05)
                         self.knife_sound.set_volume(0.05)
+                        self.gun_reload_1.set_volume(0.05)
+                        self.gun_reload_2.set_volume(0.05)
+                        self.victory.set_volume(0.0)
                     else:
                         self.bullet_sound.set_volume(0)
                         self.switch_weapon_sound.set_volume(0)
@@ -1083,7 +1097,9 @@ class Game:
                         self.damaged_sound.set_volume(0)
                         self.shop_sound.set_volume(0)
                         self.knife_sound.set_volume(0)
-
+                        self.gun_reload_1.set_volume(0)
+                        self.gun_reload_2.set_volume(0)
+                        self.victory.set_volume(0)
                     self.options_screen()
                 elif event.type == pygame.MOUSEBUTTONUP and (top_btn1.rect.collidepoint(pygame.mouse.get_pos()) or
                                                              bottom_btn1.rect.collidepoint(pygame.mouse.get_pos()) or

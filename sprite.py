@@ -345,6 +345,7 @@ class Player(pygame.sprite.Sprite):
 			if (self.gun_time_animation > self.animation_gun_duration):
 				self.in_realoding = False
 				self.gun_time_animation = 0
+				self.game.gun_reload_2.play()
 				self.gun_ammo = self.gun_max_ammo
 			else:
 				self.gun_time_animation = self.game.animationLoading(self.animation_gun_duration,self.gun_time_animation,WHITE)
