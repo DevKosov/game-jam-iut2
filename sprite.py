@@ -73,7 +73,7 @@ class Player(pygame.sprite.Sprite):
 		self.gun_max_ammo = 5
 		self.in_realoding = False
 		self.gun_time_animation = 0
-		self.animation_gun_duration = 180
+		self.animation_gun_duration = ANIMATION_GUN_DURATION * 60
 
 		#Gestion du Knife
 		self.in_cutting = False
@@ -127,6 +127,7 @@ class Player(pygame.sprite.Sprite):
 			else:
 				self.nbTickDamage = 0
 				self.takingDamage = False
+		
 		self.stamina()
 		
 
@@ -334,18 +335,6 @@ class Player(pygame.sprite.Sprite):
 		else:
 			if self.current_stamina < self.max_stamina:
 				self.current_stamina += 0.5
-
-	def reloading(self):
-		if (self.in_realoding):
-			if (self.gun_time_animation > self.animation_gun_duration):
-				self.in_realoding = False
-				self.gun_time_animation = 0
-				self.game.gun_reload_2.play()
-				self.gun_ammo = self.gun_max_ammo
-			else:
-				pygame.draw.rect(self.game.screen, BLACK, pygame.Rect(self.game.player.rect.centerx - 34, self.game.player.rect.centery - 50, 74, 20), 2)
-				pygame.draw.rect(self.game.screen, WHITE, pygame.Rect(self.game.player.rect.centerx - 32, self.game.player.rect.centery - 48, ((self.gun_time_animation * 74 ) // self.animation_gun_duration ) - 4, 16))
-				self.gun_time_animation += 1 #self.game.animationLoading(self.animation_gun_duration,self.gun_time_animation,WHITE)
 
 
 	def collision(self, direction):
@@ -690,15 +679,6 @@ class Crab(pygame.sprite.Sprite):
 
 
 	def damaged(self,damaged):
-		# mouse_pos = pygame.mouse.get_pos()
-		# mouse_pressed = pygame.mouse.get_pressed()
-		# if mouse_pressed[0]:
-		# 	if self.rect.collidepoint(mouse_pos) == True:
-		# 		self.hp += -20
-
-		# hit = pygame.sprite.spritecollide(self, self.game.bullets, False)
-		#
-		# if hit:
 			self.hp += -damaged
 
 	def death(self):
@@ -801,7 +781,7 @@ class Bullet(pygame.sprite.Sprite):
 	def collisition(self):
 		for enemies in self.game.enemies:
 			if pygame.sprite.collide_mask(self, enemies):
-				enemies.damaged(50)
+				enemies.damaged(50 + RATIO_DEGAT_GUN*self.game.player.damaged_gun)
 				self.game.damaged_sound.play()
 				self.kill()
 				break
@@ -864,7 +844,7 @@ class KnifeCute(pygame.sprite.Sprite):
 	def collisition(self):
 		for enemies in self.game.enemies:
 			if pygame.sprite.collide_mask(self, enemies):
-				enemies.damaged(50)
+				enemies.damaged(50 + RATIO_DEGAT_KNIFE*self.game.player.damaged_knife)
 				self.game.damaged_sound.play()
 				self.in_animation = False
 				break
