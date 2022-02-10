@@ -364,6 +364,7 @@ class Game:
 		pygame.mixer.music.play(fade_ms=1000)
 		self.timer_value = 30
 		self.game_day+=1
+		self.nbCrabOnScreen = 0
 		self.player.player_health=3
 		self.nb_crabs_left = 5+self.game_day*CRAB_ADD_PER_DAY
 		for enemies in self.enemies:
@@ -477,6 +478,7 @@ class Game:
 	def events_day(self):
 		# game loop events
 		if self.timer_value < 0:
+			self.shop_sound.play()
 			self.day_time = False
 			self.farm_time = True
 		else:
@@ -498,11 +500,13 @@ class Game:
 						self.tips2.set_alpha(0)
 						self.tips3.set_alpha(0)
 			if event.type == pygame.MOUSEBUTTONUP:
-				self.recolteTimeAct = 0
-				self.passerDayAct = 0
+				if event.type == pygame.BUTTON_RIGHT:
+					self.recolteTimeAct = 0
+					self.passerDayAct = 0
 			if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_LSHIFT:
 					self.player.sprint(event)
+
 	def update_night(self):
 		# game llop events
 		self.player.update()
@@ -713,6 +717,7 @@ class Game:
 				if self.passerDayAct < self.passerDayTotal :
 					self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
 				else:
+					self.shop_sound.play()
 					self.day_time = False
 					self.farm_time = True
 		mouse_pos = pygame.mouse.get_pos()
