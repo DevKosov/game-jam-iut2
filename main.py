@@ -263,6 +263,7 @@ class Game:
         self.night_time=False
         self.day_time=True
         self.game_day+=1
+        self.nb_crabs_left = 5+self.game_day*CRAB_ADD_PER_DAY
 
     def new(self):
         # a new game starts
