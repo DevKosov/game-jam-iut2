@@ -539,11 +539,11 @@ class Button:
 		self.width = width
 		self.height = height
 
-		self.bg = bg
 		self.fg = fg
-
-		self.image = pygame.Surface((self.width, self.height))
-		self.image.fill(self.bg)
+		self.bg = bg
+		
+		img = pygame.image.load(self.bg)
+		self.image = pygame.transform.scale(img,(self.width,self.height))
 		self.rect = self.image.get_rect()
 
 		self.rect.x = self.x
@@ -559,6 +559,20 @@ class Button:
 				return True
 			return False
 		return False
+
+class ButtonNoText:
+	def __init__(self, x, y, width, height, bg):
+
+		self.x = x
+		self.y = y
+		self.width = width
+		self.height = height
+
+		self.bg = bg
+		
+		img = pygame.image.load(self.bg)
+		self.image = pygame.transform.scale(img,(self.width,self.height))
+		self.rect = (self.x,self.y)
 
 class Crab(pygame.sprite.Sprite):
 	def __init__(self, game, x, y, hp,speed):
