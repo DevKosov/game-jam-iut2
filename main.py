@@ -260,9 +260,15 @@ class Game:
             pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0, 0))
 
     def after_win(self):
+        pygame.mixer.fadeout(1000)
+        pygame.mixer.music.load(self.sound_farm)
+        pygame.mixer.music.set_volume(0.05)
+        pygame.mixer.music.play(fade_ms=2000)
+        self.game_day+=1
+        for enemies in self.enemies:
+            enemies.kill()
         self.night_time=False
         self.day_time=True
-        self.game_day+=1
 
     def new(self):
         # a new game starts
@@ -291,13 +297,7 @@ class Game:
     def events_night(self):
         # Farm Zone
         if (self.nb_crabs_left == 0):
-            pygame.mixer.fadeout(1000)
-            pygame.mixer.music.load(self.sound_farm)
-            pygame.mixer.music.set_volume(0.05)
-            pygame.mixer.music.play(fade_ms=2000)
-            self.night_time = False
-            self.day_time = True
-            self.game_day += 1
+            self.after_win()
         # game loop events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
