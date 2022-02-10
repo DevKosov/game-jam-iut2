@@ -127,9 +127,7 @@ class Player(pygame.sprite.Sprite):
 			else:
 				self.nbTickDamage = 0
 				self.takingDamage = False
-		
 		self.stamina()
-		self.reloading()
 		
 
 	def movement(self):
@@ -345,7 +343,9 @@ class Player(pygame.sprite.Sprite):
 				self.game.gun_reload_2.play()
 				self.gun_ammo = self.gun_max_ammo
 			else:
-				self.gun_time_animation = self.game.animationLoading(self.animation_gun_duration,self.gun_time_animation,WHITE)
+				pygame.draw.rect(self.game.screen, BLACK, pygame.Rect(self.game.player.rect.centerx - 34, self.game.player.rect.centery - 50, 74, 20), 2)
+				pygame.draw.rect(self.game.screen, WHITE, pygame.Rect(self.game.player.rect.centerx - 32, self.game.player.rect.centery - 48, ((self.gun_time_animation * 74 ) // self.animation_gun_duration ) - 4, 16))
+				self.gun_time_animation += 1 #self.game.animationLoading(self.animation_gun_duration,self.gun_time_animation,WHITE)
 
 
 	def collision(self, direction):

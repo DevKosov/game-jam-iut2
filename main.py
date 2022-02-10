@@ -498,7 +498,7 @@ class Game:
                     self.player.sprint(event)
     def update_night(self):
         # game llop events
-        self.player.update()
+        
         self.blocks_no_collid_not_farm.update()
         self.blocks_collid.update()
         self.enemies.update()
@@ -508,6 +508,7 @@ class Game:
             if self.nbCrabOnScreen < NB_CRAB_MAX:
                 self.nbCrabOnScreen += 1
                 self.crab_spawn(self.hpCrab)
+        self.player.update() # trouver
 
     def crab_spawn(self, hp):
         spawn_sound.play()
@@ -586,8 +587,20 @@ class Game:
         for i in range(int(self.player.player_health)):
             self.screen.blit(heart_img2, (900+35*i,20))
         self.campFireAnimation()
+        if (self.player.in_realoding):
+            if (self.player.gun_time_animation > self.player.animation_gun_duration):
+                self.player.in_realoding = False
+                self.player.gun_time_animation = 0
+                self.player.game.gun_reload_2.play()
+                self.player.gun_ammo = self.player.gun_max_ammo
+            else:
+                self.player.gun_time_animation = self.animationLoading(self.player.animation_gun_duration,self.player.gun_time_animation,WHITE)
+
         self.curseur()
         pygame.display.update()
+
+
+        
 
     def draw_day(self):
 
@@ -677,7 +690,7 @@ class Game:
                             elif block.block_type == 'rottenCorn':
                                 self.player.corn_counter += random.randint(1, 2)
                             elif block.block_type == 'secondStagePotat':
-                                self.player.potat_counter += random.randint(3, 5) # trouver
+                                self.player.potat_counter += random.randint(3, 5)
                             else:
                                 self.player.potat_counter += random.randint(1, 2)
                             case = (block.i, block.j)
@@ -746,7 +759,7 @@ class Game:
     def update_day(self):
         # game llop events
         
-        if self.apparitionFarmPossible and random.randint(1,30) == 15: # trouver #POTATO_APPEAR_TIME
+        if self.apparitionFarmPossible and random.randint(1,POTATO_APPEAR_TIME) == 15: 
             self.caseMaxFarmGauche = len(self.farmingTilePosGauche)
             self.caseMaxFarmDroite = len(self.farmingTilePosDroite)
 
@@ -827,7 +840,7 @@ class Game:
             gun_img1 = pygame.image.load("assets/img/tests/gunUpgraded2.png")
             gun_img2 = pygame.transform.scale(gun_img1,(100,70))
 
-        #trouver
+
         self.farm_font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 60)
         self.farm_gun_dam_value = self.farm_font.render("+"+str(self.player.damaged_gun), True, BLACK)
         self.farm_gun_dam_rect_value = self.farm_gun_dam_value.get_rect(x=200, y=450)
@@ -984,15 +997,16 @@ class Game:
                 self.draw_farm()
                 self.events_farm()
             elif self.night_time:
-                self.update_night()
                 self.draw()
                 self.events_night()
+                
                 
                 if self.nb_crabs_left==0:
                     self.after_win()
                     pygame.mixer.music.load(self.sound_title)
                 if self.player.player_health==0:
                     self.after_game_over()
+                self.update_night()
                 
         pygame.display.update()
 
@@ -1426,6 +1440,7 @@ class Game:
     def animationLoading(self, animationTotalTime, animationTime, color):
         pygame.draw.rect(self.screen, BLACK, pygame.Rect(self.player.rect.centerx - 34, self.player.rect.centery - 50, 74, 20), 2)
         pygame.draw.rect(self.screen, color, pygame.Rect(self.player.rect.centerx - 32, self.player.rect.centery - 48, ((animationTime * 74 ) // animationTotalTime ) - 4, 16))
+        # pygame.display.flip()
 
         animationTime += 1
         return animationTime
