@@ -767,7 +767,7 @@ class Game:
         else:
             self.start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.btn_img11, 'Start', 40)
 
-        self.screen.fill(BLACK)
+        self.screen.blit(pygame.image.load('assets/img/tests/shopBG.png'),(0,0))
         self.clock.tick(FPS)
         self.screen.blit(title, title_rect)
         self.screen.blit(subtitle, subtitle_rect)
