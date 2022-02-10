@@ -128,12 +128,7 @@ class Player(pygame.sprite.Sprite):
 				self.takingDamage = False
 		
 		self.stamina()
-		self.death()
 		self.reloading()
-
-	def death(self):
-		if self.player_health == 0:
-			self.game.game_over()
 
 	def movement(self):
 

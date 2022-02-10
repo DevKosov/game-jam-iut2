@@ -361,11 +361,34 @@ class Game:
         pygame.mixer.music.load(self.sound_farm)
         pygame.mixer.music.play(fade_ms=1000)
         self.game_day+=1
+        self.player.player_health=3
         self.nb_crabs_left = 5+self.game_day*CRAB_ADD_PER_DAY
         for enemies in self.enemies:
             enemies.kill()
         self.night_time=False
         self.day_time=True
+    
+    def after_game_over(self):
+        pygame.mixer.fadeout(1000)
+        pygame.mixer.music.load(self.sound_farm)
+        pygame.mixer.music.set_volume(0.05)
+        pygame.mixer.music.play(fade_ms=2000)
+        for enemies in self.enemies:
+            enemies.kill()
+        self.night_time=False
+        self.reset_value_after_game_over()
+        self.day_time=True
+
+    def reset_value_after_game_over(self):
+        self.game_day=1
+        self.nb_crabs_left = 5+self.game_day*CRAB_ADD_PER_DAY
+        self.player.player_health = 3
+        self.player.corn_counter = 0
+        self.player.potat_counter = 0
+        self.player.current_stamina = 100
+        self.player.damaged_gun = 0
+        self.player.damaged_knife = 0
+        self.player.gun_ammo = 5
 
     def new(self):
         # a new game starts
@@ -554,7 +577,7 @@ class Game:
             self.screen.blit(current_ammo,current_ammo_label_rect)
         else:
             self.screen.blit(knife_img2, (900,680))
-        for i in range(int(self.player.hp/50)):
+        for i in range(int(self.player.player_health)):
             self.screen.blit(heart_img2, (900+35*i,20))
         self.campFireAnimation()
         self.curseur()
@@ -942,6 +965,8 @@ class Game:
                 if self.nb_crabs_left==0:
                     self.after_win()
                     pygame.mixer.music.load(self.sound_title)
+                if self.player.player_health==0:
+                    self.after_game_over()
         pygame.display.update()
 
     def game_over(self):
