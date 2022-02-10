@@ -102,6 +102,8 @@ class Game:
         self.campFireXAct = 240
         self.campfireYAct = 240
 
+        self.nbCrabOnScreen = 0
+
         self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
         self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Switch2.ogg'))
         self.damaged_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Damage1.ogg'))
@@ -256,7 +258,9 @@ class Game:
                 if event.button == pygame.BUTTON_LEFT:
                     self.player.attacks()
                 if event.button == pygame.BUTTON_RIGHT:
-                    self.crab_spawn(self.hpCrab)
+                    if self.nbCrabOnScreen < NB_CRAB_MAX:
+                        self.nbCrabOnScreen += 1
+                        self.crab_spawn(self.hpCrab)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_r:
                     self.player.reloading()
@@ -308,7 +312,9 @@ class Game:
         self.all_sprites.update()
         # crabSpawn
         if (random.randint(0, TIME_SPAWN_CRAB)) == 0:
-            self.crab_spawn(self.hpCrab)
+            if self.nbCrabOnScreen < NB_CRAB_MAX:
+                self.nbCrabOnScreen += 1
+                self.crab_spawn(self.hpCrab)
 
     def crab_spawn(self, hp):
         spawn_sound.play()
