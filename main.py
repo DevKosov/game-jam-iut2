@@ -96,12 +96,16 @@ class Game:
         self.current_code = []
         self.code_index = 0
 
-        self.farm_btn_img11 = (3, 1)
+        self.farm_btn_img11 = (3, 1) #red
         self.farm_btn_img12 = (3, 2)
-        self.farm_btn_img21 = (1, 1)
-        self.farm_btn_img31 = (2, 1)
+        self.farm_btn_img21 = (1, 1) #green
+        self.btn_img22 = (1, 2)
+        self.farm_btn_img31 = (2, 1) #blue
         self.farm_btn_img32 = (2, 2)
-        self.farm_btn_img41 = (5, 1)
+        self.farm_btn_img41 = (5, 1) #purple
+        self.btn_img42 = (5, 2) 
+        self.btn_img51 = (4, 1) #yellow
+        self.btn_img52 = (4, 2) 
 
         self.recolteTimeAct = 0;
         self.recolteTimeTotal = TEMPS_RECOLTE;
@@ -135,6 +139,9 @@ class Game:
         self.damaged_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Damage1.ogg'))
         self.shop_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Shop2.ogg'))
         self.knife_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Sword4.ogg'))
+        self.gun_reload_1 = pygame.mixer.Sound(os.path.join('assets/audio/se/Equip1.ogg'))
+        self.gun_reload_2 = pygame.mixer.Sound(os.path.join('assets/audio/se/Equip3.ogg'))
+        self.victory = pygame.mixer.Sound(os.path.join('assets/audio/me/Victory1.ogg'))
 
         #Musique de fond
         self.sound_title = os.path.join('assets/audio/bgm/Town1.ogg')
@@ -142,7 +149,6 @@ class Game:
         self.sound_night = os.path.join('assets/audio/bgs', 'Night.ogg')
 
         pygame.mouse.set_visible(False)
-
 
         if self.fx_played == True:
             self.bullet_sound.set_volume(0.1)
@@ -152,6 +158,9 @@ class Game:
             self.damaged_sound.set_volume(0.05)
             self.shop_sound.set_volume(0.05)
             self.knife_sound.set_volume(0.05)
+            self.gun_reload_1.set_volume(0.05)
+            self.gun_reload_2.set_volume(0.05)
+            self.victory.set_volume(0.05)
         else:
             self.bullet_sound.set_volume(0)
             self.switch_weapon_sound.set_volume(0)
@@ -160,6 +169,9 @@ class Game:
             self.damaged_sound.set_volume(0)
             self.shop_sound.set_volume(0)
             self.knife_sound.set_volume(0)
+            self.gun_reload_1.set_volume(0)
+            self.gun_reload_2.set_volume(0)
+            self.victory.set_volume(0)
 
         self.character_spritesheet = SpriteSheet(
             pygame.image.load(os.path.join('assets/img/tests', 'doux2.png')).convert_alpha())
@@ -317,10 +329,11 @@ class Game:
             pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0, 0))
 
     def after_win(self):
+        self.victory.play()
         pygame.mixer.fadeout(1000)
-        pygame.mixer.music.load(self.sound_farm)
         pygame.mixer.music.set_volume(0.05)
-        pygame.mixer.music.play(fade_ms=2000)
+        pygame.mixer.music.load(self.sound_farm)
+        pygame.mixer.music.play(fade_ms=1000)
         self.game_day+=1
         self.nb_crabs_left = 5+self.game_day*CRAB_ADD_PER_DAY
         for enemies in self.enemies:
@@ -373,6 +386,7 @@ class Game:
                 if event.key == pygame.K_r:
                     if not (self.player.in_realoding):
                         if ((self.player.current_weapon == "gun") and not self.player.gun_ammo == self.player.gun_max_ammo):
+                            self.gun_reload_1.play()
                             self.player.in_realoding = True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -949,24 +963,24 @@ class Game:
             mouse_pressed = pygame.mouse.get_pressed()
         
             if play_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.farm_btn_img12, 'Play', 40)
+                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.btn_img22, 'Play', 40)
             else:
-                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.farm_btn_img11, 'Play', 40)
+                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.farm_btn_img21, 'Play', 40)
 
             if rules_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.farm_btn_img12, 'Rules of play', 40)
+                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img42, 'Rules of play', 40)
             else:
-                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.farm_btn_img11, 'Rules of play', 40)
+                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.farm_btn_img41, 'Rules of play', 40)
 
             if option_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.farm_btn_img12, 'Options', 40)
+                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.btn_img42, 'Options', 40)
             else:
-                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.farm_btn_img11, 'Options', 40)
+                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.farm_btn_img41, 'Options', 40)
 
             if credits_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.farm_btn_img12, 'Credits', 40)
+                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.btn_img42, 'Credits', 40)
             else:
-                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.farm_btn_img11, 'Credits', 40)
+                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.farm_btn_img41, 'Credits', 40)
 
             if exit_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
                 exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img12, 'Exit', 40)
@@ -1012,14 +1026,14 @@ class Game:
         sound_options_rect = sound_options.get_rect(x=self.screen.get_width() / 3 - title.get_width() / 2, y=200)
 
         if self.music_played == True:
-            music_on_off = Button(700, 240, 60, 30, BLACK, self.btn_img31, 'On', 30)
+            music_on_off = Button(700, 240, 60, 30, BLACK, self.farm_btn_img31, 'On', 30)
         else:
-            music_on_off = Button(700, 240, 60, 30, BLACK, self.btn_img32, 'Off', 30)
+            music_on_off = Button(700, 240, 60, 30, BLACK, self.farm_btn_img32, 'Off', 30)
 
         if self.fx_played == True:
-            fx_on_off = Button(700, 270, 60, 30, BLACK, self.btn_img31, 'On', 30)
+            fx_on_off = Button(700, 270, 60, 30, BLACK, self.farm_btn_img31, 'On', 30)
         else:
-            fx_on_off = Button(700, 270, 60, 30, BLACK, self.btn_img32, 'Off', 30)
+            fx_on_off = Button(700, 270, 60, 30, BLACK, self.farm_btn_img32, 'Off', 30)
 
         music_sound = font2.render('Music theme sound', True, BLACK)
         music_sound_rect = music_sound.get_rect(x=self.screen.get_width() / 3 - title.get_width() / 2, y=250)
@@ -1043,28 +1057,28 @@ class Game:
         right_rect = right.get_rect(x=self.screen.get_width() / 3 - title.get_width() / 2, y=460)
 
         if self.gameplay_ZQSD == True:
-            top_btn1 = Button(700, 370, 60, 30, BLACK, self.btn_img31, 'Z', 30)
-            bottom_btn1 = Button(700, 400, 60, 30, BLACK, self.btn_img31, 'S', 30)
-            left_btn1 = Button(700, 430, 60, 30, BLACK, self.btn_img31, 'Q', 30)
-            right_btn1 = Button(700, 460, 60, 30, BLACK, self.btn_img31, "D", 30)
-            top_btn2 = Button(590, 370, 110, 30, BLACK, self.btn_img32, 'Arr. Top', 30)
-            bottom_btn2 = Button(590, 400, 110, 30, BLACK, self.btn_img32, 'Arr. Bottom', 30)
-            left_btn2 = Button(590, 430, 110, 30, BLACK, self.btn_img32, 'Arr. Left', 30)
-            right_btn2 = Button(590, 460, 110, 30, BLACK, self.btn_img32, "Arr. Right", 30)
+            top_btn1 = Button(700, 370, 60, 30, BLACK, self.farm_btn_img31, 'Z', 30)
+            bottom_btn1 = Button(700, 400, 60, 30, BLACK, self.farm_btn_img31, 'S', 30)
+            left_btn1 = Button(700, 430, 60, 30, BLACK, self.farm_btn_img31, 'Q', 30)
+            right_btn1 = Button(700, 460, 60, 30, BLACK, self.farm_btn_img31, "D", 30)
+            top_btn2 = Button(590, 370, 110, 30, BLACK, self.farm_btn_img32, 'Arr. Top', 30)
+            bottom_btn2 = Button(590, 400, 110, 30, BLACK, self.farm_btn_img32, 'Arr. Bottom', 30)
+            left_btn2 = Button(590, 430, 110, 30, BLACK, self.farm_btn_img32, 'Arr. Left', 30)
+            right_btn2 = Button(590, 460, 110, 30, BLACK, self.farm_btn_img32, "Arr. Right", 30)
         else:
-            top_btn1 = Button(700, 370, 60, 30, BLACK, self.btn_img32, 'Z', 30)
-            bottom_btn1 = Button(700, 400, 60, 30, BLACK, self.btn_img32, 'S', 30)
-            left_btn1 = Button(700, 430, 60, 30, BLACK, self.btn_img32, 'Q', 30)
-            right_btn1 = Button(700, 460, 60, 30, BLACK, self.btn_img32, "D", 30)
-            top_btn2 = Button(590, 370, 110, 30, BLACK, self.btn_img31, 'Arr. Top', 30)
-            bottom_btn2 = Button(590, 400, 110, 30, BLACK, self.btn_img31, 'Arr. Bottom', 30)
-            left_btn2 = Button(590, 430, 110, 30, BLACK, self.btn_img31, 'Arr. Left', 30)
-            right_btn2 = Button(590, 460, 110, 30, BLACK, self.btn_img31, "Arr. Right", 30)
+            top_btn1 = Button(700, 370, 60, 30, BLACK, self.farm_btn_img32, 'Z', 30)
+            bottom_btn1 = Button(700, 400, 60, 30, BLACK, self.farm_btn_img32, 'S', 30)
+            left_btn1 = Button(700, 430, 60, 30, BLACK, self.farm_btn_img32, 'Q', 30)
+            right_btn1 = Button(700, 460, 60, 30, BLACK, self.farm_btn_img32, "D", 30)
+            top_btn2 = Button(590, 370, 110, 30, BLACK, self.farm_btn_img31, 'Arr. Top', 30)
+            bottom_btn2 = Button(590, 400, 110, 30, BLACK, self.farm_btn_img31, 'Arr. Bottom', 30)
+            left_btn2 = Button(590, 430, 110, 30, BLACK, self.farm_btn_img31, 'Arr. Left', 30)
+            right_btn2 = Button(590, 460, 110, 30, BLACK, self.farm_btn_img31, "Arr. Right", 30)
 
         if self.back_to_game:
-            back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to game', 30)
+            back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Back to game', 30)
         else:
-            back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
+            back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Back to menu', 30)
 
         while self.options:
             for event in pygame.event.get():
@@ -1091,6 +1105,9 @@ class Game:
                         self.damaged_sound.set_volume(0.05)
                         self.shop_sound.set_volume(0.05)
                         self.knife_sound.set_volume(0.05)
+                        self.gun_reload_1.set_volume(0.05)
+                        self.gun_reload_2.set_volume(0.05)
+                        self.victory.set_volume(0.0)
                     else:
                         self.bullet_sound.set_volume(0)
                         self.switch_weapon_sound.set_volume(0)
@@ -1099,7 +1116,9 @@ class Game:
                         self.damaged_sound.set_volume(0)
                         self.shop_sound.set_volume(0)
                         self.knife_sound.set_volume(0)
-
+                        self.gun_reload_1.set_volume(0)
+                        self.gun_reload_2.set_volume(0)
+                        self.victory.set_volume(0)
                     self.options_screen()
                 elif event.type == pygame.MOUSEBUTTONUP and (top_btn1.rect.collidepoint(pygame.mouse.get_pos()) or
                                                              bottom_btn1.rect.collidepoint(pygame.mouse.get_pos()) or
@@ -1125,14 +1144,14 @@ class Game:
             mouse_pos = pygame.mouse.get_pos()
             if back_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
                 if self.back_to_game:
-                    back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img12, 'Back to game', 30)
+                    back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img12, 'Back to game', 30)
                 else:
-                    back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img12, 'Back to menu', 30)
+                    back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img12, 'Back to menu', 30)
             else:
                 if self.back_to_game:
-                    back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to game', 30)
+                    back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Back to game', 30)
                 else:
-                    back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
+                    back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Back to menu', 30)
 
             self.screen.blit(pygame.image.load('assets/img/tests/menuForAll.png'),(0,0))
             self.screen.blit(title, title_rect)
@@ -1166,7 +1185,34 @@ class Game:
         title = self.font.render('Credits', True, BLACK)
         title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
 
-        back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
+        font1 = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 50)
+        font2 = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 30)
+
+        line1 = font1.render('Graphics', True, BLACK)
+        line1_rect = line1.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=200)
+
+        line2 = font2.render('All the graphics of the game have been handmade by Altin Rrahmani.', True, BLACK)
+        line2_rect = line2.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=250)
+
+        line3 = font1.render('Development', True, BLACK)
+        line3_rect = line3.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=300)
+
+        line4 = font2.render('This game has been developed in python with the pygame library.', True, BLACK)
+        line4_rect = line4.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=350)
+
+        line5 = font2.render('Developers: Alexandre Arle, Remi Del Medico, Romain Miras.', True, BLACK)
+        line5_rect = line5.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=380)
+
+        line6 = font1.render('Sounds', True, BLACK)
+        line6_rect = line6.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=420)
+
+        line7 = font2.render('All game sounds are from www.rpgmakerweb.com.', True, BLACK)
+        line7_rect = line7.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=470)
+
+        line8 = font2.render('A game created by Pog Champs Team.', True, BLACK)
+        line8_rect = line8.get_rect(x=self.screen.get_width() / 2 - line8.get_width() / 2, y=560)
+
+        back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Back to menu', 30)
 
         while self.credits:
             for event in pygame.event.get():
@@ -1183,12 +1229,20 @@ class Game:
                         self.menu = True
             mouse_pos = pygame.mouse.get_pos()
             if back_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img12, 'Back to menu', 30)
+                back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img12, 'Back to menu', 30)
             else:
-                back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
+                back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Back to menu', 30)
 
             self.screen.blit(pygame.image.load('assets/img/tests/menuForAll.png'),(0,0))
             self.screen.blit(title, title_rect)
+            self.screen.blit(line1, line1_rect)
+            self.screen.blit(line2, line2_rect)
+            self.screen.blit(line3, line3_rect)
+            self.screen.blit(line4, line4_rect)
+            self.screen.blit(line5, line5_rect)
+            self.screen.blit(line6, line6_rect)
+            self.screen.blit(line7, line7_rect)
+            self.screen.blit(line8, line8_rect)
             self.screen.blit(back_button.image, back_button.rect)
 
             self.clock.tick(FPS)
@@ -1219,34 +1273,34 @@ class Game:
         rules_desc5 = font.render('To move the character :', True, BLACK)
         rules_desc5_rect = rules_desc5.get_rect(x=230, y=350)
 
-        btn1 = Button(620,340,180,40,BLACK,self.btn_img21,"ZQSD or Arrows",30)
+        btn1 = Button(620,340,180,40,BLACK,self.farm_btn_img21,"ZQSD or Arrows",30)
 
         rules_desc6 = font.render('To target crabs :', True, BLACK)
         rules_desc6_rect = rules_desc6.get_rect(x=230, y=400)
 
-        btn2 = Button(620,390,80,40,BLACK,self.btn_img21,"Mouse",30)
+        btn2 = Button(620,390,80,40,BLACK,self.farm_btn_img21,"Mouse",30)
 
         rules_desc7 = font.render('To shoot :', True, BLACK)
         rules_desc7_rect = rules_desc7.get_rect(x=230, y=450)
 
-        btn3 = Button(620,440,150,40,BLACK,self.btn_img21,"Right click",30)
+        btn3 = Button(620,440,150,40,BLACK,self.farm_btn_img21,"Right click",30)
 
         rules_desc8 = font.render('To collect potatoes/corn :', True, BLACK)
         rules_desc8_rect = rules_desc8.get_rect(x=230, y=500)
 
-        btn4 = Button(620,490,150,40,BLACK,self.btn_img21,"Left click",30)
+        btn4 = Button(620,490,150,40,BLACK,self.farm_btn_img21,"Left click",30)
 
         rules_desc9 = font.render('To change weapons :', True, BLACK)
         rules_desc9_rect = rules_desc9.get_rect(x=230, y=550)
 
-        btn5 = Button(620,540,150,40,BLACK,self.btn_img21,"Mouse wheel",30)
+        btn5 = Button(620,540,150,40,BLACK,self.farm_btn_img21,"Mouse wheel",30)
 
         rules_desc10 = font.render('To reload the gun :', True, BLACK)
         rules_desc10_rect = rules_desc10.get_rect(x=230, y=600)
 
-        btn6 = Button(620,590,40,40,BLACK,self.btn_img21,"R",30)
+        btn6 = Button(620,590,40,40,BLACK,self.farm_btn_img21,"R",30)
 
-        back_button = Button((self.screen.get_width() / 2) - 100, 670, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
+        back_button = Button((self.screen.get_width() / 2) - 100, 670, 200, 50, BLACK, self.farm_btn_img11, 'Back to menu', 30)
 
         while self.rules:
             for event in pygame.event.get():
@@ -1263,9 +1317,9 @@ class Game:
                         self.menu = True
             mouse_pos = pygame.mouse.get_pos()
             if back_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img12, 'Back to menu', 30)
+                back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img12, 'Back to menu', 30)
             else:
-                back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
+                back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Back to menu', 30)
 
             self.screen.blit(pygame.image.load('assets/img/tests/menuForAll.png'),(0,0))
             self.screen.blit(title, title_rect)
