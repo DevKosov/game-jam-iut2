@@ -309,7 +309,11 @@ class Game:
                     self.player.sprint(event)
     def update_night(self):
         # game llop events
-        self.all_sprites.update()
+        self.player.update()
+        self.blocks_no_collid_not_farm.update()
+        self.blocks_collid.update()
+        self.enemies.update()
+        self.bullets.update()
         # crabSpawn
         if (random.randint(0, TIME_SPAWN_CRAB)) == 0:
             if self.nbCrabOnScreen < NB_CRAB_MAX:
