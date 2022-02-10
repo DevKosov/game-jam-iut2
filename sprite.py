@@ -347,7 +347,6 @@ class Player(pygame.sprite.Sprite):
 				self.gun_time_animation = 0
 				self.gun_ammo = self.gun_max_ammo
 			else:
-				print(self.gun_time_animation)
 				self.gun_time_animation = self.game.animationLoading(self.animation_gun_duration,self.gun_time_animation,WHITE)
 
 
