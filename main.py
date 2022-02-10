@@ -284,7 +284,9 @@ class Game:
                         self.crab_spawn(self.hpCrab)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_r:
-                    self.player.reloading()
+                    if not (self.player.in_realoding):
+                        if ((self.player.current_weapon == "gun") and not self.player.gun_ammo == self.player.gun_max_ammo):
+                            self.player.in_realoding = True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.playing = False
