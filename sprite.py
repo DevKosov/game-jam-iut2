@@ -77,6 +77,7 @@ class Player(pygame.sprite.Sprite):
 
 		#Gestion du Knife
 		self.in_cutting = False
+		self.current_cut_cooldown = 0
 
 		#sprint
 		self.in_running = False
@@ -87,6 +88,7 @@ class Player(pygame.sprite.Sprite):
 
 		self.takingDamage = False
 		self.nbTickDamage = 0
+
 
 	def update(self):
 		
@@ -129,7 +131,14 @@ class Player(pygame.sprite.Sprite):
 				self.takingDamage = False
 		
 		self.stamina()
-		
+		self.cut_cooldown()
+
+	def cut_cooldown(self):
+		if (self.current_cut_cooldown > 0):
+			self.current_cut_cooldown -= 1
+			print(self.current_cut_cooldown)
+		else:
+			self.current_cut_cooldown = 0
 
 	def movement(self):
 
@@ -312,10 +321,11 @@ class Player(pygame.sprite.Sprite):
 				Bullet(self.game, self.rect.centerx, self.rect.centery, x, y, 5)
 				self.gun_ammo -= 1
 		else:
-			if (not self.in_cutting):
+			if (not self.in_cutting) and self.current_cut_cooldown == 0:
 				self.in_cutting = True
 				self.game.knife_sound.play()
 				KnifeCute(self.game)
+				self.current_cut_cooldown = CUT_COOLDOWN
 
 	def sprint(self,event):
 		if event.type == pygame.KEYUP :
