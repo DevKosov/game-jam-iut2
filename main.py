@@ -379,7 +379,8 @@ class Game:
 			enemies.kill()
 		self.night_time=False
 		self.reset_value_after_game_over()
-		self.day_time=True
+		#self.day_time=True
+		self.menu = True
 
 	def reset_value_after_game_over(self):
 		self.game_day=1
