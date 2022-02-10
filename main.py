@@ -60,7 +60,6 @@ tilemap = [
 spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Up1.ogg'))
 click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Decision5.ogg'))
 
-
 class Game:
     def __init__(self):
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -82,6 +81,13 @@ class Game:
         self.clock = pygame.time.Clock()
         self.nb_crabs_killed = 0
         self.gun_level = 1
+
+        self.btn_img11 = "assets/img/tests/redButton11.png"
+        self.btn_img12 = "assets/img/tests/redButton12.png"
+        self.btn_img21 = "assets/img/tests/greenButton11.png"
+        self.btn_img31 = "assets/img/tests/blueButton11.png"
+        self.btn_img32 = "assets/img/tests/blueButton12.png"
+        self.btn_img41 = "assets/img/tests/purpleButton11.png"
 
         self.recolteTimeAct = 0;
         self.recolteTimeTotal = 60;
@@ -526,10 +532,10 @@ class Game:
         subtitle_rect = subtitle.get_rect(x=self.screen.get_width() / 2 - subtitle.get_width() / 2, y=150)
 
         potato_img1 = pygame.image.load("assets/img/tests/potato.png")
-        potato_img2 = pygame.transform.scale(potato_img1, (40,40))
+        potato_img2 = pygame.transform.scale(potato_img1, (30,30))
 
         corn_img1 = pygame.image.load("assets/img/tests/corna.png")
-        corn_img2 = pygame.transform.scale(corn_img1, (40,40))
+        corn_img2 = pygame.transform.scale(corn_img1, (30,30))
  
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
         label_nb_ress1 = font.render(str(self.player.potat_counter), True, WHITE)
@@ -539,13 +545,13 @@ class Game:
 
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
         label_gun_dam = font.render("Gun damage", True, BLACK)
-        label_gun_dam_rect = label_gun_dam.get_rect(x=110, y=310)
+        label_gun_dam_rect = label_gun_dam.get_rect(x=110, y=320)
 
         label_gun_ammo = font.render("Gun ammo", True, BLACK)
-        label_gun_ammo_rect = label_gun_ammo.get_rect(x=350, y=310)
+        label_gun_ammo_rect = label_gun_ammo.get_rect(x=350, y=320)
 
         label_knife_dam = font.render("Knife damage", True, BLACK)
-        label_knife_dam_rect = label_knife_dam.get_rect(x=545, y=310)
+        label_knife_dam_rect = label_knife_dam.get_rect(x=545, y=320)
 
         if self.gun_level==1:
             gun_img1 = pygame.image.load("assets/img/tests/gunNormal2.png")
@@ -562,7 +568,7 @@ class Game:
         bullet_img2 = pygame.transform.scale(bullet_img1,(30,90))
 
         label_stamina = font.render("Max stamina", True, BLACK)
-        label_stamina_rect = label_stamina.get_rect(x=775, y=310)
+        label_stamina_rect = label_stamina.get_rect(x=775, y=320)
 
         #############################################################
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 60)
@@ -580,17 +586,43 @@ class Game:
         stamina_rect_value = stamina_value.get_rect(x=800, y=390)
         
 
-        res_btn1 = Button(80, 500, 120, 50, BLACK, (78, 85, 115), '.   10', 30)
-        res_btn2 = Button(300, 500, 120, 50, BLACK, (78, 85, 115), '.        10', 30)
-        res_btn3 = Button(520, 500, 120, 50, BLACK, (78, 85, 115), '.   10', 30)
-        res_btn4 = Button(740, 500, 120, 50, BLACK, (78, 85, 115), '.        10', 30)
+        res_btn1 = Button(80, 500, 120, 50, BLACK, self.btn_img21, '.     10', 30)
+        res_btn2 = Button(300, 500, 120, 50, BLACK, self.btn_img21, '.      10', 30)
+        res_btn3 = Button(520, 500, 120, 50, BLACK, self.btn_img21, '.     10', 30)
+        res_btn4 = Button(740, 500, 120, 50, BLACK, self.btn_img21, '.      10', 30)
 
-        self.start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, WHITE, RED, 'Start', 40)
+        self.start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.btn_img11, 'Start', 40)
 
-        self.buy_btn1 = Button(200, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
-        self.buy_btn2 = Button(420, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
-        self.buy_btn3 = Button(640, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
-        self.buy_btn4 = Button(860, 500, 80, 50, BLACK, (115, 88, 78), 'Buy', 30)
+        self.buy_btn1 = Button(200, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
+        self.buy_btn2 = Button(420, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
+        self.buy_btn3 = Button(640, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
+        self.buy_btn4 = Button(860, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
+
+        mouse_pos = pygame.mouse.get_pos()
+        if self.buy_btn1.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+            self.buy_btn1 = Button(200, 500, 80, 50, BLACK, self.btn_img32, 'Buy', 30)
+        else:
+            self.buy_btn1 = Button(200, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
+
+        if self.buy_btn2.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+            self.buy_btn2 = Button(420, 500, 80, 50, BLACK, self.btn_img32, 'Buy', 30)
+        else:
+            self.buy_btn2 = Button(420, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
+
+        if self.buy_btn3.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+            self.buy_btn3 = Button(640, 500, 80, 50, BLACK, self.btn_img32, 'Buy', 30)
+        else:
+            self.buy_btn3 = Button(640, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
+
+        if self.buy_btn4.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+            self.buy_btn4 = Button(860, 500, 80, 50, BLACK, self.btn_img32, 'Buy', 30)
+        else:
+            self.buy_btn4 = Button(860, 500, 80, 50, BLACK, self.btn_img31, 'Buy', 30)
+
+        if self.start_before_farm.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+            self.start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.btn_img12, 'Start', 40)
+        else:
+            self.start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.btn_img11, 'Start', 40)
 
         self.screen.fill(BLACK)
         self.clock.tick(FPS)
@@ -602,32 +634,40 @@ class Game:
         self.screen.blit(potato_img1, (370,210))
         self.screen.blit(corn_img1, (550,210))
 
-        pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(80, 300, 200, 200)) # gun damage
+
+        background_square = ButtonNoText(70,290,220,240,self.btn_img41)
+        self.screen.blit(background_square.image, background_square.rect)
         self.screen.blit(label_gun_dam, label_gun_dam_rect)
         self.screen.blit(gun_dam_value, gun_dam_rect_value)
         self.screen.blit(res_btn1.image, res_btn1.rect)
-        self.screen.blit(potato_img2, (90,505))
+        self.screen.blit(potato_img2, (100,507))
         self.screen.blit(gun_img2,(130,360))
         self.screen.blit(self.buy_btn1.image, self.buy_btn1.rect)
-        pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(300, 300, 200, 200)) # gun ammo
+
+        background_square = ButtonNoText(290,290,220,240,self.btn_img41)
+        self.screen.blit(background_square.image, background_square.rect)
         self.screen.blit(label_gun_ammo, label_gun_ammo_rect)
         self.screen.blit(gun_ammo_value, gun_ammo_rect_value)
         self.screen.blit(res_btn2.image, res_btn2.rect)
-        self.screen.blit(corn_img2, (320,505))
+        self.screen.blit(corn_img2, (322,507))
         self.screen.blit(bullet_img2,(385,350))
         self.screen.blit(self.buy_btn2.image, self.buy_btn2.rect)
-        pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(520, 300, 200, 200)) # knife damage
+
+        background_square = ButtonNoText(510,290,220,240,self.btn_img41)
+        self.screen.blit(background_square.image, background_square.rect)
         self.screen.blit(label_knife_dam, label_knife_dam_rect)
         self.screen.blit(knife_dam_value, knife_dam_rect_value)
         self.screen.blit(res_btn3.image, res_btn3.rect)
-        self.screen.blit(potato_img2, (530,505))
+        self.screen.blit(potato_img2, (540,507))
         self.screen.blit(knife_img3,(560,350))
         self.screen.blit(self.buy_btn3.image, self.buy_btn3.rect)
-        pygame.draw.rect(self.screen, (111, 115, 78), pygame.Rect(740, 300, 200, 200)) # stamina
+
+        background_square = ButtonNoText(730,290,220,240,self.btn_img41)
+        self.screen.blit(background_square.image, background_square.rect)
         self.screen.blit(label_stamina, label_stamina_rect)
         self.screen.blit(stamina_value, stamina_rect_value)
         self.screen.blit(res_btn4.image, res_btn4.rect)
-        self.screen.blit(corn_img2, (760,505))
+        self.screen.blit(corn_img2, (762,507))
         self.screen.blit(self.start_before_farm.image, self.start_before_farm.rect)
         self.screen.blit(self.buy_btn4.image, self.buy_btn4.rect)
         self.curseur()
@@ -718,11 +758,11 @@ class Game:
         title = self.font.render('Crab Island', True, BLACK)
         title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
 
-        play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, WHITE, BLACK, 'Play', 40)
-        rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, WHITE, BLACK, 'Rules of play', 40)
-        option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, WHITE, BLACK, 'Options', 40)
-        credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, WHITE, BLACK, 'Credits', 40)
-        exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, WHITE, BLACK, 'Exit', 40)
+        play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.btn_img11, 'Play', 40)
+        rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img11, 'Rules of play', 40)
+        option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.btn_img11, 'Options', 40)
+        credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.btn_img11, 'Credits', 40)
+        exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Exit', 40)
 
         while self.menu:
             for event in pygame.event.get():
@@ -732,20 +772,45 @@ class Game:
                     exit()
             mouse_pos = pygame.mouse.get_pos()
             mouse_pressed = pygame.mouse.get_pressed()
+        
+            if play_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.btn_img12, 'Play', 40)
+            else:
+                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.btn_img11, 'Play', 40)
+
+            if rules_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img12, 'Rules of play', 40)
+            else:
+                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img11, 'Rules of play', 40)
+
+            if option_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.btn_img12, 'Options', 40)
+            else:
+                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.btn_img11, 'Options', 40)
+
+            if credits_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.btn_img12, 'Credits', 40)
+            else:
+                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.btn_img11, 'Credits', 40)
+
+            if exit_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+                exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img12, 'Exit', 40)
+            else:
+                exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Exit', 40)
 
             if play_button.is_pressed(mouse_pos, mouse_pressed):
                 self.menu = False
                 self.playing = True
-            elif rules_button.is_pressed(mouse_pos, mouse_pressed):
+            if rules_button.is_pressed(mouse_pos, mouse_pressed):
                 self.menu = False
                 self.rules = True
-            elif option_button.is_pressed(mouse_pos, mouse_pressed):
+            if option_button.is_pressed(mouse_pos, mouse_pressed):
                 self.menu = False
                 self.options = True
-            elif credits_button.is_pressed(mouse_pos, mouse_pressed):
+            if credits_button.is_pressed(mouse_pos, mouse_pressed):
                 self.menu = False
                 self.credits = True
-            elif exit_button.is_pressed(mouse_pos, mouse_pressed):
+            if exit_button.is_pressed(mouse_pos, mouse_pressed):
                 exit()
             self.screen.fill(BLUE)
             self.screen.blit(title, title_rect)
@@ -772,14 +837,14 @@ class Game:
         sound_options_rect = sound_options.get_rect(x=self.screen.get_width() / 3 - title.get_width() / 2, y=200)
 
         if self.music_played == True:
-            music_on_off = Button(700, 240, 60, 30, WHITE, BLACK, 'On', 30)
+            music_on_off = Button(700, 240, 60, 30, BLACK, self.btn_img31, 'On', 30)
         else:
-            music_on_off = Button(700, 240, 60, 30, BLACK, WHITE, 'Off', 30)
+            music_on_off = Button(700, 240, 60, 30, BLACK, self.btn_img32, 'Off', 30)
 
         if self.fx_played == True:
-            fx_on_off = Button(700, 270, 60, 30, WHITE, BLACK, 'On', 30)
+            fx_on_off = Button(700, 270, 60, 30, BLACK, self.btn_img31, 'On', 30)
         else:
-            fx_on_off = Button(700, 270, 60, 30, BLACK, WHITE, 'Off', 30)
+            fx_on_off = Button(700, 270, 60, 30, BLACK, self.btn_img32, 'Off', 30)
 
         music_sound = font2.render('Music theme sound', True, BLACK)
         music_sound_rect = music_sound.get_rect(x=self.screen.get_width() / 3 - title.get_width() / 2, y=250)
@@ -803,28 +868,28 @@ class Game:
         right_rect = right.get_rect(x=self.screen.get_width() / 3 - title.get_width() / 2, y=460)
 
         if self.gameplay_ZQSD == True:
-            top_btn1 = Button(700, 370, 60, 30, WHITE, BLACK, 'Z', 30)
-            bottom_btn1 = Button(700, 400, 60, 30, WHITE, BLACK, 'S', 30)
-            left_btn1 = Button(700, 430, 60, 30, WHITE, BLACK, 'Q', 30)
-            right_btn1 = Button(700, 460, 60, 30, WHITE, BLACK, "D", 30)
-            top_btn2 = Button(590, 370, 110, 30, BLACK, WHITE, 'Arr. Top', 30)
-            bottom_btn2 = Button(590, 400, 110, 30, BLACK, WHITE, 'Arr. Bottom', 30)
-            left_btn2 = Button(590, 430, 110, 30, BLACK, WHITE, 'Arr. Left', 30)
-            right_btn2 = Button(590, 460, 110, 30, BLACK, WHITE, "Arr. Right", 30)
+            top_btn1 = Button(700, 370, 60, 30, BLACK, self.btn_img31, 'Z', 30)
+            bottom_btn1 = Button(700, 400, 60, 30, BLACK, self.btn_img31, 'S', 30)
+            left_btn1 = Button(700, 430, 60, 30, BLACK, self.btn_img31, 'Q', 30)
+            right_btn1 = Button(700, 460, 60, 30, BLACK, self.btn_img31, "D", 30)
+            top_btn2 = Button(590, 370, 110, 30, BLACK, self.btn_img32, 'Arr. Top', 30)
+            bottom_btn2 = Button(590, 400, 110, 30, BLACK, self.btn_img32, 'Arr. Bottom', 30)
+            left_btn2 = Button(590, 430, 110, 30, BLACK, self.btn_img32, 'Arr. Left', 30)
+            right_btn2 = Button(590, 460, 110, 30, BLACK, self.btn_img32, "Arr. Right", 30)
         else:
-            top_btn1 = Button(700, 370, 60, 30, BLACK, WHITE, 'Z', 30)
-            bottom_btn1 = Button(700, 400, 60, 30, BLACK, WHITE, 'S', 30)
-            left_btn1 = Button(700, 430, 60, 30, BLACK, WHITE, 'Q', 30)
-            right_btn1 = Button(700, 460, 60, 30, BLACK, WHITE, "D", 30)
-            top_btn2 = Button(590, 370, 110, 30, WHITE, BLACK, 'Arr. Top', 30)
-            bottom_btn2 = Button(590, 400, 110, 30, WHITE, BLACK, 'Arr. Bottom', 30)
-            left_btn2 = Button(590, 430, 110, 30, WHITE, BLACK, 'Arr. Left', 30)
-            right_btn2 = Button(590, 460, 110, 30, WHITE, BLACK, "Arr. Right", 30)
+            top_btn1 = Button(700, 370, 60, 30, BLACK, self.btn_img32, 'Z', 30)
+            bottom_btn1 = Button(700, 400, 60, 30, BLACK, self.btn_img32, 'S', 30)
+            left_btn1 = Button(700, 430, 60, 30, BLACK, self.btn_img32, 'Q', 30)
+            right_btn1 = Button(700, 460, 60, 30, BLACK, self.btn_img32, "D", 30)
+            top_btn2 = Button(590, 370, 110, 30, BLACK, self.btn_img31, 'Arr. Top', 30)
+            bottom_btn2 = Button(590, 400, 110, 30, BLACK, self.btn_img31, 'Arr. Bottom', 30)
+            left_btn2 = Button(590, 430, 110, 30, BLACK, self.btn_img31, 'Arr. Left', 30)
+            right_btn2 = Button(590, 460, 110, 30, BLACK, self.btn_img31, "Arr. Right", 30)
 
         if self.back_to_game:
-            back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, WHITE, BLACK, 'Back to game', 30)
+            back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to game', 30)
         else:
-            back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, WHITE, BLACK, 'Back to menu', 30)
+            back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
 
         while self.options:
             for event in pygame.event.get():
@@ -878,6 +943,18 @@ class Game:
                         self.options = False
                         self.menu = True
 
+            mouse_pos = pygame.mouse.get_pos()
+            if back_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+                if self.back_to_game:
+                    back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img12, 'Back to game', 30)
+                else:
+                    back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img12, 'Back to menu', 30)
+            else:
+                if self.back_to_game:
+                    back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to game', 30)
+                else:
+                    back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
+
             self.screen.fill(BLUE)
             self.screen.blit(title, title_rect)
             self.screen.blit(sound_options, sound_options_rect)
@@ -910,7 +987,7 @@ class Game:
         title = self.font.render('Credits', True, BLACK)
         title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
 
-        back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, WHITE, BLACK, 'Back to menu', 30)
+        back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
 
         while self.credits:
             for event in pygame.event.get():
@@ -925,6 +1002,11 @@ class Game:
                     else:
                         self.credits = False
                         self.menu = True
+            mouse_pos = pygame.mouse.get_pos()
+            if back_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+                back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img12, 'Back to menu', 30)
+            else:
+                back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
 
             self.screen.fill(BLUE)
             self.screen.blit(title, title_rect)
@@ -958,34 +1040,34 @@ class Game:
         rules_desc5 = font.render('To move the character :', True, BLACK)
         rules_desc5_rect = rules_desc5.get_rect(x=230, y=350)
 
-        btn1 = Button(620,340,180,40,WHITE,RED,"ZQSD or Arrows",30)
+        btn1 = Button(620,340,180,40,BLACK,self.btn_img21,"ZQSD or Arrows",30)
 
         rules_desc6 = font.render('To target crabs :', True, BLACK)
         rules_desc6_rect = rules_desc6.get_rect(x=230, y=400)
 
-        btn2 = Button(620,390,80,40,WHITE,RED,"Mouse",30)
+        btn2 = Button(620,390,80,40,BLACK,self.btn_img21,"Mouse",30)
 
         rules_desc7 = font.render('To shoot :', True, BLACK)
         rules_desc7_rect = rules_desc7.get_rect(x=230, y=450)
 
-        btn3 = Button(620,440,150,40,WHITE,RED,"Right click",30)
+        btn3 = Button(620,440,150,40,BLACK,self.btn_img21,"Right click",30)
 
         rules_desc8 = font.render('To collect potatoes/corn :', True, BLACK)
         rules_desc8_rect = rules_desc8.get_rect(x=230, y=500)
 
-        btn4 = Button(620,490,150,40,WHITE,RED,"Left click",30)
+        btn4 = Button(620,490,150,40,BLACK,self.btn_img21,"Left click",30)
 
         rules_desc9 = font.render('To change weapons :', True, BLACK)
         rules_desc9_rect = rules_desc9.get_rect(x=230, y=550)
 
-        btn5 = Button(620,540,150,40,WHITE,RED,"Mouse wheel",30)
+        btn5 = Button(620,540,150,40,BLACK,self.btn_img21,"Mouse wheel",30)
 
         rules_desc10 = font.render('To reload the gun :', True, BLACK)
         rules_desc10_rect = rules_desc10.get_rect(x=230, y=600)
 
-        btn6 = Button(620,590,40,40,WHITE,RED,"R",30)
+        btn6 = Button(620,590,40,40,BLACK,self.btn_img21,"R",30)
 
-        back_button = Button((self.screen.get_width() / 2) - 100, 670, 200, 50, WHITE, BLACK, 'Back to menu', 30)
+        back_button = Button((self.screen.get_width() / 2) - 100, 670, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
 
         while self.rules:
             for event in pygame.event.get():
@@ -1000,6 +1082,11 @@ class Game:
                     else:
                         self.rules = False
                         self.menu = True
+            mouse_pos = pygame.mouse.get_pos()
+            if back_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+                back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img12, 'Back to menu', 30)
+            else:
+                back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
 
             self.screen.fill(BLUE)
             self.screen.blit(title, title_rect)
