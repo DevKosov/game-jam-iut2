@@ -79,7 +79,8 @@ class Game:
         self.timer_value = 0
         self.timer_init = 120  # 120s
         self.clock = pygame.time.Clock()
-        self.nb_crabs_killed = 0
+        self.game_day = 1;
+        self.nb_crabs_left = 5+self.game_day*CRAB_ADD_PER_DAY
         self.gun_level = 1
         self.farmingTilePosGauche = [(21, 22), (22, 22), (21, 23), (22, 23), (21, 24), (22, 24), (21, 25), (22, 25)]
         self.farmingTilePosDroite = [(38, 16), (39, 16), (40, 16), (41, 16), (42, 16), (38, 17), (39, 17), (40, 17), (41, 17), (42, 17), (38, 18), (39, 18), (40, 18), (41, 18), (42, 18), (38, 19), (39, 19), (40, 19), (41, 19), (42, 19)]
@@ -88,7 +89,6 @@ class Game:
         self.farminTileActGauche = []
         self.farminTileACTDroite = []
         self.apparitionFarmPossible = True
-        self.game_day = 1;
 
         #Insane Easter Egss
         self.CODE = [pygame.K_UP, pygame.K_UP, pygame.K_DOWN, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_LEFT,
@@ -284,6 +284,15 @@ class Game:
         self.createTileMap()
 
     def events_night(self):
+        # Farm Zone
+        if (self.nb_crabs_left == 0):
+            pygame.mixer.fadeout(1000)
+            pygame.mixer.music.load(self.sound_farm)
+            pygame.mixer.music.set_volume(0.05)
+            pygame.mixer.music.play(fade_ms=2000)
+            self.night_time = False
+            self.day_time = True
+            self.game_day += 1
         # game loop events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -297,10 +306,6 @@ class Game:
                 self.player.switch_weapon(event)
                 if event.button == pygame.BUTTON_LEFT:
                     self.player.attacks()
-                if event.button == pygame.BUTTON_RIGHT:
-                    if self.nbCrabOnScreen < NB_CRAB_MAX:
-                        self.nbCrabOnScreen += 1
-                        self.crab_spawn(self.hpCrab)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_r:
                     if not (self.player.in_realoding):
@@ -393,12 +398,9 @@ class Game:
     def draw(self):
         #game loop draw
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 35)
-        self.timer = font.render("Time left:  " + str(self.timer_value) + "s", True, WHITE)
-        self.timer.set_alpha(150)
-        self.timer_rect = self.timer.get_rect(x=20, y=20)
-        self.crabs_killed = font.render("Crabs killed: "+str(self.nb_crabs_killed), True, WHITE)
+        self.crabs_killed = font.render("Crabs left: "+str(self.nb_crabs_left), True, WHITE)
         self.crabs_killed.set_alpha(150)
-        self.crabs_killed_rect = self.crabs_killed.get_rect(x=20, y=50)
+        self.crabs_killed_rect = self.crabs_killed.get_rect(x=20, y=20)
         counter_day = font.render("Day: "+str(self.game_day), True, WHITE)
         counter_day.set_alpha(150)
         counter_day_rect = counter_day.get_rect(x=20, y=730)
@@ -441,7 +443,6 @@ class Game:
         if self.FireBullet:
             self.screen.blit(self.fireEffect, (self.player.rect.centerx - self.fireEffect.get_width() / 2, self.player.rect.centery - self.fireEffect.get_height() / 2))
             self.FireBullet = False
-        self.screen.blit(self.timer,self.timer_rect)
         self.screen.blit(counter_day,counter_day_rect)
         self.screen.blit(self.crabs_killed,self.crabs_killed_rect)
         self.screen.blit(current_defense_label,current_defense_label_rect)
@@ -548,13 +549,15 @@ class Game:
                     self.recolteTimeAct = 0
 
             if self.campFire.rect.collidepoint(pygame.mouse.get_pos()):
-                    if self.passerDayAct < self.passerDayTotal :
-                        self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
-                    else:
-                        self.day_time = False
-                        self.farm_time = True
-            else:
-                self.passerDayAct = 0
+                if self.passerDayAct < self.passerDayTotal :
+                    self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
+                else:
+                    self.day_time = False
+                    self.farm_time = True
+        mouse_pos = pygame.mouse.get_pos()
+        if self.campFire.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+            self.screen.blit(self.marketMessage, self.marketMessage_rect)
+
         self.campFireAnimation()
         self.curseur()
 
@@ -764,7 +767,7 @@ class Game:
         else:
             self.start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.btn_img11, 'Start', 40)
 
-        self.screen.fill(BLACK)
+        self.screen.blit(pygame.image.load('assets/img/tests/shopBG.png'),(0,0))
         self.clock.tick(FPS)
         self.screen.blit(title, title_rect)
         self.screen.blit(subtitle, subtitle_rect)
@@ -855,7 +858,6 @@ class Game:
                 pygame.mixer.music.load(self.sound_night)
                 pygame.mixer.music.set_volume(0.05)
                 pygame.mixer.music.play(fade_ms=2000)
-
 
     def main(self):
         self.playing = True
