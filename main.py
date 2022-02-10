@@ -128,7 +128,6 @@ class Game:
 
         self.nbCrabOnScreen = 0
 
-        self.aaaaaaaaaaaaaaaaaaaa = 0
 
         #Bruitage
         self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
@@ -549,13 +548,15 @@ class Game:
                     self.recolteTimeAct = 0
 
             if self.campFire.rect.collidepoint(pygame.mouse.get_pos()):
-                    if self.passerDayAct < self.passerDayTotal :
-                        self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
-                    else:
-                        self.day_time = False
-                        self.farm_time = True
-            else:
-                self.passerDayAct = 0
+                if self.passerDayAct < self.passerDayTotal :
+                    self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
+                else:
+                    self.day_time = False
+                    self.farm_time = True
+        mouse_pos = pygame.mouse.get_pos()
+        if self.campFire.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
+            self.screen.blit(self.marketMessage, self.marketMessage_rect)
+
         self.campFireAnimation()
         self.curseur()
 
