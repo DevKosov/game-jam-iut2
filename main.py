@@ -57,8 +57,8 @@ tilemap = [
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
 ]
-spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Up1.ogg'))
-click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Decision5.ogg'))
+spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio', 'Up1.ogg'))
+click_sound = pygame.mixer.Sound(os.path.join('assets/audio', 'Decision5.ogg'))
 
 
 class Game:
@@ -104,9 +104,9 @@ class Game:
 
         self.nbCrabOnScreen = 0
 
-        self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Gun1.ogg'))
-        self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Switch2.ogg'))
-        self.damaged_sound = pygame.mixer.Sound(os.path.join('assets/audio/se/Damage1.ogg'))
+        self.bullet_sound = pygame.mixer.Sound(os.path.join('assets/audio', 'Gun1.ogg'))
+        self.switch_weapon_sound = pygame.mixer.Sound(os.path.join('assets/audio', 'Switch2.ogg'))
+        self.damaged_sound = pygame.mixer.Sound(os.path.join('assets/audio', 'Damage1.ogg'))
 
         #self.xTopLefIsland + (31-17) * TILE_WIDTH, self.yTopLefIsland + (21-12) * TILE_HEIGHT, 64, 64) fire tile
 
@@ -127,7 +127,7 @@ class Game:
             self.damaged_sound.set_volume(0)
 
         self.character_spritesheet = SpriteSheet(
-            pygame.image.load(os.path.join('assets/img/characters', 'doux2.png')).convert_alpha())
+            pygame.image.load(os.path.join('assets/img/tests', 'doux2.png')).convert_alpha())
         self.terrain_spritesheet = SpriteSheet(
             pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha())
         self.crab_spritesheet = SpriteSheet(
@@ -309,7 +309,11 @@ class Game:
                     self.player.sprint(event)
     def update_night(self):
         # game llop events
-        self.all_sprites.update()
+        self.player.update()
+        self.blocks_no_collid_not_farm.update()
+        self.blocks_collid.update()
+        self.enemies.update()
+        self.bullets.update()
         # crabSpawn
         if (random.randint(0, TIME_SPAWN_CRAB)) == 0:
             if self.nbCrabOnScreen < NB_CRAB_MAX:
@@ -705,7 +709,7 @@ class Game:
     def curseur(self):
         mouse_pos = pygame.mouse.get_pos()
         CURSOR = pygame.transform.scale(
-            pygame.image.load(os.path.join('assets/img/cursor', 'viewfinder.png')).convert_alpha(), (100, 100))
+            pygame.image.load(os.path.join('assets/img/tests', 'viewfinder.png')).convert_alpha(), (100, 100))
         CURSOR_RECT = CURSOR.get_rect()
         CURSOR_RECT.center = mouse_pos
         self.screen.blit(CURSOR, CURSOR_RECT)
@@ -715,7 +719,7 @@ class Game:
         self.menu = True
 
         if self.music_played == True:
-            pygame.mixer.music.load(os.path.join('assets/audio/bgm', 'Town1.ogg'))
+            pygame.mixer.music.load(os.path.join('assets/audio', 'Town1.ogg'))
             pygame.mixer.music.set_volume(0.05)
             pygame.mixer.music.play(fade_ms=2000)
         else:
