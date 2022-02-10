@@ -96,12 +96,16 @@ class Game:
         self.current_code = []
         self.code_index = 0
 
-        self.btn_img11 = (3, 1)
+        self.btn_img11 = (3, 1) #red
         self.btn_img12 = (3, 2)
-        self.btn_img21 = (1, 1)
-        self.btn_img31 = (2, 1)
+        self.btn_img21 = (1, 1) #green
+        self.btn_img22 = (1, 2)
+        self.btn_img31 = (2, 1) #blue
         self.btn_img32 = (2, 2)
-        self.btn_img41 = (5, 1)
+        self.btn_img41 = (5, 1) #purple
+        self.btn_img42 = (5, 2) 
+        self.btn_img51 = (4, 1) #yellow
+        self.btn_img52 = (4, 2) 
 
         self.recolteTimeAct = 0;
         self.recolteTimeTotal = TEMPS_RECOLTE;
@@ -142,7 +146,6 @@ class Game:
         self.sound_night = os.path.join('assets/audio/bgs', 'Night.ogg')
 
         pygame.mouse.set_visible(False)
-
 
         if self.fx_played == True:
             self.bullet_sound.set_volume(0.1)
@@ -930,24 +933,24 @@ class Game:
             mouse_pressed = pygame.mouse.get_pressed()
         
             if play_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.btn_img12, 'Play', 40)
+                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.btn_img22, 'Play', 40)
             else:
-                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.btn_img11, 'Play', 40)
+                play_button = Button((self.screen.get_width() / 2) - 100, 250, 200, 50, BLACK, self.btn_img21, 'Play', 40)
 
             if rules_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img12, 'Rules of play', 40)
+                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img42, 'Rules of play', 40)
             else:
-                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img11, 'Rules of play', 40)
+                rules_button = Button((self.screen.get_width() / 2) - 100, 350, 200, 50, BLACK, self.btn_img41, 'Rules of play', 40)
 
             if option_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.btn_img12, 'Options', 40)
+                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.btn_img42, 'Options', 40)
             else:
-                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.btn_img11, 'Options', 40)
+                option_button = Button((self.screen.get_width() / 2) - 100, 450, 200, 50, BLACK, self.btn_img41, 'Options', 40)
 
             if credits_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
-                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.btn_img12, 'Credits', 40)
+                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.btn_img42, 'Credits', 40)
             else:
-                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.btn_img11, 'Credits', 40)
+                credits_button = Button((self.screen.get_width() / 2) - 100, 550, 200, 50, BLACK, self.btn_img41, 'Credits', 40)
 
             if exit_button.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
                 exit_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img12, 'Exit', 40)
@@ -1147,6 +1150,33 @@ class Game:
         title = self.font.render('Credits', True, BLACK)
         title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
 
+        font1 = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 50)
+        font2 = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 30)
+
+        line1 = font1.render('Graphics', True, BLACK)
+        line1_rect = line1.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=200)
+
+        line2 = font2.render('All the graphics of the game have been handmade by Altin Rrahmani.', True, BLACK)
+        line2_rect = line2.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=250)
+
+        line3 = font1.render('Development', True, BLACK)
+        line3_rect = line3.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=300)
+
+        line4 = font2.render('This game has been developed in python with the pygame library.', True, BLACK)
+        line4_rect = line4.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=350)
+
+        line5 = font2.render('Developers: Alexandre Arle, Remi Del Medico, Romain Miras.', True, BLACK)
+        line5_rect = line5.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=380)
+
+        line6 = font1.render('Sounds', True, BLACK)
+        line6_rect = line6.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=420)
+
+        line7 = font2.render('All game sounds are from www.rpgmakerweb.com.', True, BLACK)
+        line7_rect = line7.get_rect(x=self.screen.get_width() / 3 - line1.get_width() / 2, y=470)
+
+        line8 = font2.render('A game created by Pog Champs Team.', True, BLACK)
+        line8_rect = line8.get_rect(x=self.screen.get_width() / 2 - line8.get_width() / 2, y=560)
+
         back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.btn_img11, 'Back to menu', 30)
 
         while self.credits:
@@ -1170,6 +1200,14 @@ class Game:
 
             self.screen.blit(pygame.image.load('assets/img/tests/menuForAll.png'),(0,0))
             self.screen.blit(title, title_rect)
+            self.screen.blit(line1, line1_rect)
+            self.screen.blit(line2, line2_rect)
+            self.screen.blit(line3, line3_rect)
+            self.screen.blit(line4, line4_rect)
+            self.screen.blit(line5, line5_rect)
+            self.screen.blit(line6, line6_rect)
+            self.screen.blit(line7, line7_rect)
+            self.screen.blit(line8, line8_rect)
             self.screen.blit(back_button.image, back_button.rect)
 
             self.clock.tick(FPS)
