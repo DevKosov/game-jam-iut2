@@ -379,12 +379,14 @@ class Player(pygame.sprite.Sprite):
 					self.game.yTopLefIsland -= self.player_speed
 
 class Block(pygame.sprite.Sprite):
-	def __init__(self, game, x, y, block_type, colision, farm):
+	def __init__(self, game, x, y, block_type, colision, farm, i, j):
 		self.scale = TILEMAP_SCALE
 
 		self.colision = colision
 		self.game = game
 		self._layer = BLOCK_LAYER
+		self.i = i
+		self.j = j
 
 		if not(farm):
 			
@@ -400,6 +402,7 @@ class Block(pygame.sprite.Sprite):
 			self.height = TILE_HEIGHT
 
 			self.block_type = block_type
+			self.growStage = 0
 
 		else:
 			self.groups = self.game.all_sprites, self.game.blocks_no_collid_farm
@@ -498,45 +501,54 @@ class Block(pygame.sprite.Sprite):
 		self.rect.y = self.y
 
 	def update(self):
-		if self.block_type == 'firstStagePotato':
-			if self.growStage == 1:
-				self.time += 1
-				if self.time >= self.timeToGrow:
-					self.image = self.game.terrain_spritesheet.get_image(6, 3, self.width, self.height, self.scale, BLACK)
-					self.growStage += 1
-					self.time = 0
-					self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
-			elif self.growStage == 2:
-				self.time += 1
-				if self.time >= self.timeToGrow:
-					self.image = self.game.terrain_spritesheet.get_image(7, 3, self.width, self.height, self.scale, BLACK)
-					self.growStage += 1
-					self.time = 0
-					self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
-			elif self.growStage == 3:
-				self.time += 1
-				if self.time >= self.timeToGrow:
-					self.image = self.game.terrain_spritesheet.get_image(8, 3, self.width, self.height, self.scale, BLACK)
+		if self.growStage >= 1 and self.growStage <= 3:
+			if self.block_type == 'firstStagePotato' or self.block_type == 'secondStagePotat' or self.block_type == 'rottenPotat':
+				if self.growStage == 1:
+					self.time += 1
+					if self.time >= self.timeToGrow:
+						self.image = self.game.terrain_spritesheet.get_image(6, 3, self.width, self.height, self.scale, BLACK)
+						self.growStage += 1
+						self.block_type = 'secondStagePotat'
+						self.time = 0
+						self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
+				elif self.growStage == 2:
+					self.time += 1
+					if self.time >= self.timeToGrow:
+						self.image = self.game.terrain_spritesheet.get_image(7, 3, self.width, self.height, self.scale, BLACK)
+						self.growStage += 1
+						self.block_type = 'rottenPotat'
+						self.time = 0
+						self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
+				elif self.growStage == 3:
+					self.time += 1
+					if self.time >= self.timeToGrow:
+						self.image = self.game.terrain_spritesheet.get_image(8, 3, self.width, self.height, self.scale, BLACK)
+						self.block_type = 'deadDirt'
+						self.growStage += 1
 
-		elif self.block_type == 'firstStageCorn':
-			if self.growStage == 1:
-				self.time += 1
-				if self.time >= self.timeToGrow:
-					self.image = self.game.terrain_spritesheet.get_image(2, 5, self.width, self.height, self.scale, BLACK)
-					self.growStage += 1
-					self.time = 0
-					self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
-			elif self.growStage == 2:
-				self.time += 1
-				if self.time >= self.timeToGrow:
-					self.image = self.game.terrain_spritesheet.get_image(3, 5, self.width, self.height, self.scale, BLACK)
-					self.growStage += 1
-					self.time = 0
-					self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
-			elif self.growStage == 3:
-				self.time += 1
-				if self.time >= self.timeToGrow:
-					self.image = self.game.terrain_spritesheet.get_image(8, 3, self.width, self.height, self.scale, BLACK)
+			else:
+				if self.growStage == 1:
+					self.time += 1
+					if self.time >= self.timeToGrow:
+						self.image = self.game.terrain_spritesheet.get_image(2, 5, self.width, self.height, self.scale, BLACK)
+						self.growStage += 1
+						self.block_type = 'secondStageCorn'
+						self.time = 0
+						self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
+				elif self.growStage == 2:
+					self.time += 1
+					if self.time >= self.timeToGrow:
+						self.image = self.game.terrain_spritesheet.get_image(3, 5, self.width, self.height, self.scale, BLACK)
+						self.growStage += 1
+						self.block_type = 'rottenCorn'
+						self.time = 0
+						self.timeToGrow = random.randint(GROW_MINTIME_STAGE1,GROW_MAXTIME_STAGE1)
+				elif self.growStage == 3:
+					self.time += 1
+					if self.time >= self.timeToGrow:
+						self.image = self.game.terrain_spritesheet.get_image(8, 3, self.width, self.height, self.scale, BLACK)
+						self.block_type = 'deadDirt'
+						self.growStage += 1
 
 
 class Button:
