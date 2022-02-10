@@ -79,7 +79,7 @@ class Game:
         self.timer_value = 0
         self.timer_init = 120  # 120s
         self.clock = pygame.time.Clock()
-        self.nb_crabs_killed = 0
+        self.nb_crabs_left = 0
         self.gun_level = 1
         self.farmingTilePosGauche = [(21, 22), (22, 22), (21, 23), (22, 23), (21, 24), (22, 24), (21, 25), (22, 25)]
         self.farmingTilePosDroite = [(38, 16), (39, 16), (40, 16), (41, 16), (42, 16), (38, 17), (39, 17), (40, 17), (41, 17), (42, 17), (38, 18), (39, 18), (40, 18), (41, 18), (42, 18), (38, 19), (39, 19), (40, 19), (41, 19), (42, 19)]
@@ -397,7 +397,7 @@ class Game:
         self.timer = font.render("Time left:  " + str(self.timer_value) + "s", True, WHITE)
         self.timer.set_alpha(150)
         self.timer_rect = self.timer.get_rect(x=20, y=20)
-        self.crabs_killed = font.render("Crabs killed: "+str(self.nb_crabs_killed), True, WHITE)
+        self.crabs_killed = font.render("Crabs killed: "+str(self.nb_crabs_left), True, WHITE)
         self.crabs_killed.set_alpha(150)
         self.crabs_killed_rect = self.crabs_killed.get_rect(x=20, y=50)
         counter_day = font.render("Day: "+str(self.game_day), True, WHITE)
