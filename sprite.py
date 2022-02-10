@@ -641,6 +641,7 @@ class Crab(pygame.sprite.Sprite):
 	def death(self):
 		if self.hp <= 0:
 			self.game.nb_crabs_killed += 1
+			self.game.nbCrabOnScreen -= 1
 			self.kill()
 
 	def movement(self):

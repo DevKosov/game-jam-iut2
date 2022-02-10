@@ -55,3 +55,5 @@ POTATO_APPEAR_TIME = 240 #/60 = seconde ( doit être > 69)
 KNOCKBACK = 3
 
 PUSHBACK_POWER = 10
+
+NB_CRAB_MAX = 10
