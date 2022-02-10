@@ -31,7 +31,8 @@ class Player(pygame.sprite.Sprite):
 
 		self.x = x
 		self.y = y
-		self.width = PLAYER_SPRITE_WIDTH
+		self.widthUp = PLAYER_SPRITE_WIDTH_UP
+		self.widthLeft = PLAYER_SPRITE_WIDTH_LEFT
 		self.height = PLAYER_SPRITE_HEIGHT
 		self.hp = PLAYER_HP
 		self.recharge = False
@@ -46,7 +47,7 @@ class Player(pygame.sprite.Sprite):
 		self.facing = 'right'
 		self.animation_loop = 1
 
-		self.image = self.game.character_spritesheet.get_image(1, 1, self.width, self.height, 3, BLACK)
+		self.image = self.game.character_spritesheet.get_image(1, 1, self.widthUp, self.height, 1, BLACK)
 
 		self.rect = self.image.get_rect()
 		self.rect.x = self.x
@@ -252,25 +253,27 @@ class Player(pygame.sprite.Sprite):
 		
 
 	def animate(self):
-		SCALE = 3
+		SCALE = 1
 
-		image = pygame.transform.flip(self.game.character_spritesheet.get_image(1, 1, self.width, self.height, SCALE, BLACK), 1, 0)
-		image.set_colorkey(BLACK)
-		image1 = pygame.transform.flip(self.game.character_spritesheet.get_image(2, 1, self.width, self.height, SCALE, BLACK), 1, 0)
-		image1.set_colorkey(BLACK)
-		image2 = pygame.transform.flip(self.game.character_spritesheet.get_image(3, 1, self.width, self.height, SCALE, BLACK), 1, 0)
-		image2.set_colorkey(BLACK)
-		left_animations = [image,
-							image1,
-							image2]
+		left_animations = [self.game.character_spritesheet.get_image(4, 2, self.widthLeft, self.height, SCALE, BLACK),
+						   self.game.character_spritesheet.get_image(5, 2, self.widthLeft, self.height, SCALE, BLACK),
+						   self.game.character_spritesheet.get_image(6, 2, self.widthLeft, self.height, SCALE, BLACK)]
 
-		right_animations = [self.game.character_spritesheet.get_image(1, 1, self.width, self.height, SCALE, BLACK),
-						   self.game.character_spritesheet.get_image(2, 1, self.width, self.height, SCALE, BLACK),
-						   self.game.character_spritesheet.get_image(3, 1, self.width, self.height, SCALE, BLACK)]
+		right_animations = [self.game.character_spritesheet.get_image(1, 2, self.widthLeft, self.height, SCALE, BLACK),
+						   self.game.character_spritesheet.get_image(2, 2, self.widthLeft, self.height, SCALE, BLACK),
+						   self.game.character_spritesheet.get_image(3, 2, self.widthLeft, self.height, SCALE, BLACK)]
+
+		up_animations = [self.game.character_spritesheet.get_image(4, 1, self.widthUp, self.height, SCALE, BLACK),
+						   self.game.character_spritesheet.get_image(5, 1, self.widthUp, self.height, SCALE, BLACK),
+						   self.game.character_spritesheet.get_image(6, 1, self.widthUp, self.height, SCALE, BLACK)]
+
+		down_animations = [self.game.character_spritesheet.get_image(1, 1, self.widthUp, self.height, SCALE, BLACK),
+						   self.game.character_spritesheet.get_image(2, 1, self.widthUp, self.height, SCALE, BLACK),
+						   self.game.character_spritesheet.get_image(3, 1, self.widthUp, self.height, SCALE, BLACK)]
 
 		if self.facing == 'left':
 			if self.x_change == 0:
-				pygame.transform.flip(self.game.character_spritesheet.get_image(1, 1, self.width, self.height, 1, BLACK), 1, 0)
+				pygame.transform.flip(self.game.character_spritesheet.get_image(4, 2, self.widthLeft, self.height, SCALE, BLACK), 1, 0)
 			else :
 				self.image = left_animations[math.floor(self.animation_loop)]
 				self.animation_loop += 0.1
@@ -279,7 +282,7 @@ class Player(pygame.sprite.Sprite):
 
 		if self.facing == 'right':
 			if self.x_change == 0:
-				self.game.character_spritesheet.get_image(1, 1, self.width, self.height, SCALE, BLACK)
+				self.game.character_spritesheet.get_image(1, 2, self.widthLeft, self.height, SCALE, BLACK)
 			else :
 				self.image = right_animations[math.floor(self.animation_loop)]
 				self.animation_loop += 0.1
@@ -288,18 +291,18 @@ class Player(pygame.sprite.Sprite):
 
 		if self.facing == 'up':
 			if self.y_change == 0:
-				self.game.character_spritesheet.get_image(1, 1, self.width, self.height, SCALE, BLACK)
+				self.game.character_spritesheet.get_image(4, 1, self.widthUp, self.height, SCALE, BLACK)
 			else :
-				self.image = right_animations[math.floor(self.animation_loop)]
+				self.image = up_animations[math.floor(self.animation_loop)]
 				self.animation_loop += 0.1
 				if self.animation_loop >= 3:
 					self.animation_loop = 0
 
 		if self.facing == 'down':
 			if self.y_change == 0:
-				pygame.transform.flip(self.game.character_spritesheet.get_image(1, 1, self.width, self.height, 1, BLACK), 1, 0)
+				self.game.character_spritesheet.get_image(1, 1, self.widthUp, self.height, SCALE, BLACK)
 			else :
-				self.image = left_animations[math.floor(self.animation_loop)]
+				self.image = down_animations[math.floor(self.animation_loop)]
 				self.animation_loop += 0.1
 				if self.animation_loop >= 3:
 					self.animation_loop = 0
