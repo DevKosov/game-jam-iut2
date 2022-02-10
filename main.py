@@ -559,13 +559,8 @@ class Game:
         potato_img2 = pygame.transform.scale(potato_img1, (30,30))
 
         corn_img1 = pygame.image.load("assets/img/tests/corna.png")
-<<<<<<< HEAD
         corn_img2 = pygame.transform.scale(corn_img1, (30,30))
  
-=======
-        corn_img2 = pygame.transform.scale(corn_img1, (40,40))
-
->>>>>>> 8780f8f464aff101d82f019eb2e4ef39b805aa20
         font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
         label_nb_ress1 = font.render(str(self.player.potat_counter), True, WHITE)
         label_nb_ress1_rect = subtitle.get_rect(x=450, y=230)
