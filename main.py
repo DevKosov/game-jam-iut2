@@ -147,7 +147,7 @@ class Game:
         self.terrain_spritesheet = SpriteSheet(
             pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha())
         self.crab_spritesheet = SpriteSheet(
-            pygame.image.load(os.path.join('assets/img/tests/CrabUpdate_100x78.png')).convert_alpha())
+            pygame.image.load(os.path.join('assets/img/tests/crabUpdate_100x78.png')).convert_alpha())
         self.night_effet = [
             pygame.image.load(os.path.join('assets/img/tests', 'overlayN.png')).convert_alpha(),
             pygame.image.load(os.path.join('assets/img/tests', 'overlayNormalRed.png')).convert_alpha(),
