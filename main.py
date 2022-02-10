@@ -84,10 +84,10 @@ class Game:
         self.gun_level = 1
 
         self.recolteTimeAct = 0;
-        self.recolteTimeTotal = 60;
+        self.recolteTimeTotal = TEMPS_RECOLTE;
 
         self.passerDayAct = 0;
-        self.passerDayTotal = 20;
+        self.passerDayTotal = TEMPS_PASSER_JOUR;
 
         self.xTopLefIsland = 0
         self.yTopLefIsland = 0
@@ -318,6 +318,7 @@ class Game:
                         self.tips3.set_alpha(0)
             if event.type == pygame.MOUSEBUTTONUP:
                 self.recolteTimeAct = 0
+                self.passerDayAct = 0
             if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LSHIFT:
                     self.player.sprint(event)
@@ -482,6 +483,8 @@ class Game:
                     else:
                         self.day_time = False
                         self.farm_time = True
+            else:
+                self.passerDayAct = 0
         self.campFireAnimation()
         self.curseur()
 
@@ -665,10 +668,6 @@ class Game:
                 self.playing = False
                 self.running = False
                 exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    self.farm_time = False
-                    self.night_time = True
             if event.type == pygame.MOUSEBUTTONUP and self.buy_btn1.rect.collidepoint(pygame.mouse.get_pos()):
                 if (self.player.potat_counter>=10):
                     self.player.potat_counter-=10
