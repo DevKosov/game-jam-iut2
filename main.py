@@ -186,7 +186,7 @@ class Game:
 			pygame.image.load(os.path.join('assets/img/tests', 'overlayBeforeDeath.png')).convert_alpha()
 		]  # lul
 		self.fireEffect = pygame.image.load(os.path.join('assets/img/tests', 'gunfire_overlay.png')).convert_alpha()
-		self.campFireEffect = pygame.image.load(os.path.join('assets/img/tests', 'fire_overlay.png')).convert_alpha()
+		self.campFireEffect = pygame.image.load(os.path.join('assets/img/tests', 'fire_overlay2.png')).convert_alpha()
 		self.campFireEffect = pygame.transform.scale(self.campFireEffect, (500, 500))
 
 		#init farm
