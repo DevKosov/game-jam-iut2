@@ -500,9 +500,8 @@ class Game:
 						self.tips2.set_alpha(0)
 						self.tips3.set_alpha(0)
 			if event.type == pygame.MOUSEBUTTONUP:
-				if event.type == pygame.BUTTON_RIGHT:
-					self.recolteTimeAct = 0
-					self.passerDayAct = 0
+				self.recolteTimeAct = 0
+				self.passerDayAct = 0
 			if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_LSHIFT:
 					self.player.sprint(event)
@@ -577,6 +576,8 @@ class Game:
 		self.screen.fill(BLACK)
 		self.all_sprites.draw(self.screen)
 		self.clock.tick(FPS)
+		
+
 		if (self.player.player_health == 3):
 			self.screen.blit(self.night_effet[0], (0,0))
 		elif (self.player.player_health == 2):
@@ -606,6 +607,12 @@ class Game:
 				self.player.gun_ammo = self.player.gun_max_ammo
 			else:
 				self.player.gun_time_animation = self.animationLoading(self.player.animation_gun_duration,self.player.gun_time_animation,WHITE)
+
+
+		# trouver
+		pygame.draw.rect(self.screen, BLACK, pygame.Rect(900, 60, 100, 20), 2)
+		pygame.draw.rect(self.screen, DARK_GREEN, pygame.Rect(902, 62, ((self.player.current_stamina * 100 ) // self.player.max_stamina ) - 4, 16))
+		
 
 		self.curseur()
 		pygame.display.update()
@@ -649,7 +656,7 @@ class Game:
 			self.tips3.set_alpha(150)
 			self.tips3_rect = self.tips3.get_rect(x=self.screen.get_width() / 2 - self.tips3.get_width() / 2, y=160)
 
-		self.collectMessage = font.render("Left click to collect", True, BLACK)
+		self.collectMessage = font.render("Right click to collect", True, BLACK)
 		self.collectMessage.set_alpha(150)
 		self.collectMessage_rect = self.collectMessage.get_rect(x=WINDOW_WIDTH / 2 - self.collectMessage.get_width() / 2, y=700)
 
@@ -685,8 +692,8 @@ class Game:
 					self.screen.blit(self.comebackMessage, self.comebackMessage_rect)
 			self.peutCollect = False
 
-		mouse = pygame.mouse.get_pressed()[0]
-		if mouse:
+
+		if pygame.mouse.get_pressed()[2]:
 			for block in self.blocks_no_collid_farm:
 				if block.block_type == 'secondStageCorn' or block.block_type == 'secondStagePotat' or block.block_type == 'rottenPotat' or block.block_type == 'rottenCorn':
 					if pygame.sprite.collide_mask(self.player, block):
@@ -698,7 +705,7 @@ class Game:
 							elif block.block_type == 'rottenCorn':
 								self.player.corn_counter += random.randint(1, 2)
 							elif block.block_type == 'secondStagePotat':
-								self.player.potat_counter += random.randint(3, 5) # trouver
+								self.player.potat_counter += random.randint(3, 5)
 							else:
 								self.player.potat_counter += random.randint(1, 2)
 							case = (block.i, block.j)
@@ -712,7 +719,7 @@ class Game:
 							block.kill()
 			if not(pygame.sprite.spritecollide(self.player, self.blocks_no_collid_farm, False)): # si bug
 					self.recolteTimeAct = 0
-
+		if pygame.mouse.get_pressed()[0]:
 			if self.campFire.rect.collidepoint(pygame.mouse.get_pos()):
 				if self.passerDayAct < self.passerDayTotal :
 					self.passerDayAct = self.animationLoading(self.passerDayTotal, self.passerDayAct, ORANGE)
@@ -768,7 +775,7 @@ class Game:
 	def update_day(self):
 		# game llop events
 
-		if self.apparitionFarmPossible and random.randint(1,30) == 15: # trouver #POTATO_APPEAR_TIME
+		if self.apparitionFarmPossible and random.randint(1,POTATO_APPEAR_TIME) == 15:
 			self.caseMaxFarmGauche = len(self.farmingTilePosGauche)
 			self.caseMaxFarmDroite = len(self.farmingTilePosDroite)
 
@@ -849,7 +856,7 @@ class Game:
 			gun_img1 = pygame.image.load("assets/img/tests/gunUpgraded2.png")
 			gun_img2 = pygame.transform.scale(gun_img1,(100,70))
 
-		#trouver
+
 		self.farm_font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 60)
 		self.farm_gun_dam_value = self.farm_font.render("+"+str(self.player.damaged_gun), True, BLACK)
 		self.farm_gun_dam_rect_value = self.farm_gun_dam_value.get_rect(x=200, y=450)
