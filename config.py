@@ -47,7 +47,7 @@ TIME_SPAWN_CRAB = 180*2 # /60 = nombre de seconde moyenne entre chaque spawn
 CRAB_VITESSE_MIN = 1
 CRAB_VITESSE_MAX = 5
 
-CRAB_ADD_PER_DAY = 10
+CRAB_ADD_PER_DAY = 1
 
 GROW_MINTIME_STAGE1 = 480 #/60 = 1sec
 GROW_MAXTIME_STAGE1 = 720 #/60 = 1sec

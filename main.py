@@ -80,7 +80,7 @@ class Game:
         self.timer_init = 120  # 120s
         self.clock = pygame.time.Clock()
         self.game_day = 1;
-        self.nb_crabs_left = 1 # 10+self.game_day*CRAB_ADD_PER_DAY
+        self.nb_crabs_left = 5+self.game_day*CRAB_ADD_PER_DAY
         self.gun_level = 1
         self.farmingTilePosGauche = [(21, 22), (22, 22), (21, 23), (22, 23), (21, 24), (22, 24), (21, 25), (22, 25)]
         self.farmingTilePosDroite = [(38, 16), (39, 16), (40, 16), (41, 16), (42, 16), (38, 17), (39, 17), (40, 17), (41, 17), (42, 17), (38, 18), (39, 18), (40, 18), (41, 18), (42, 18), (38, 19), (39, 19), (40, 19), (41, 19), (42, 19)]
@@ -289,6 +289,15 @@ class Game:
         self.createTileMap()
 
     def events_night(self):
+        # Farm Zone
+        if (self.nb_crabs_left == 0):
+            pygame.mixer.fadeout(1000)
+            pygame.mixer.music.load(self.sound_farm)
+            pygame.mixer.music.set_volume(0.05)
+            pygame.mixer.music.play(fade_ms=2000)
+            self.night_time = False
+            self.day_time = True
+            self.game_day += 1
         # game loop events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -763,7 +772,7 @@ class Game:
         else:
             self.start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.btn_img11, 'Start', 40)
 
-        self.screen.fill(BLACK)
+        self.screen.blit(pygame.image.load('assets/img/tests/shopBG.png'),(0,0))
         self.clock.tick(FPS)
         self.screen.blit(title, title_rect)
         self.screen.blit(subtitle, subtitle_rect)
@@ -854,7 +863,6 @@ class Game:
                 pygame.mixer.music.load(self.sound_night)
                 pygame.mixer.music.set_volume(0.05)
                 pygame.mixer.music.play(fade_ms=2000)
-
 
     def main(self):
         self.playing = True
