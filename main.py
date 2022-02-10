@@ -175,7 +175,7 @@ class Game:
 			self.victory.set_volume(0)
 
 		self.character_spritesheet = SpriteSheet(
-			pygame.image.load(os.path.join('assets/img/tests', 'doux2.png')).convert_alpha())
+			pygame.image.load(os.path.join('assets/img/tests', 'CrackedOutTheWoahZOOOODud.png')).convert_alpha())
 		self.terrain_spritesheet = SpriteSheet(
 			pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha())
 		self.crab_spritesheet = SpriteSheet(
