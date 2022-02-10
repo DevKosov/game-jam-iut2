@@ -427,6 +427,10 @@ class Game:
             if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LSHIFT:
                     self.player.sprint(event)
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_ESCAPE:
+                        self.night_time=False
+                        self.day_time=True
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.player.switch_weapon(event)
                 if event.button == pygame.BUTTON_LEFT:
@@ -912,6 +916,10 @@ class Game:
                 self.playing = False
                 self.running = False
                 exit()
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_ESCAPE:
+                        self.farm_time=False
+                        self.day_time=True
             if event.type == pygame.MOUSEBUTTONUP and self.farm_buy_btn1.rect.collidepoint(pygame.mouse.get_pos()):
                 if (self.player.potat_counter>=10):
                     self.player.potat_counter-=10
