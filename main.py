@@ -259,6 +259,11 @@ class Game:
         self.screen.blit(
             pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0, 0))
 
+    def after_win(self):
+        self.night_time=False
+        self.day_time=True
+        self.game_day+=1
+
     def new(self):
         # a new game starts
         self.playing = True
@@ -874,7 +879,9 @@ class Game:
                 self.draw()
                 self.events_night()
                 self.update_night()
-                self.timer_value = int(self.timer_init - (pygame.time.get_ticks()) / 1000)
+                if self.nb_crabs_left==0:
+                    self.after_win()
+                    pygame.mixer.music.load(self.sound_title)
         pygame.display.update()
 
     def game_over(self):
