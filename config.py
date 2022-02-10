@@ -32,7 +32,7 @@ TILEMAP_SCALE = 1
 CRAB_WIDTH = 100
 CRAB_HEIGHT = 79
 CRAB_SCALE = 0.7
-CRAB_VITESSE_ANIMATION = 0.1
+CRAB_VITESSE_ANIMATION = 0.4
 
 VITESSE_BULLET = 50
 
@@ -43,7 +43,7 @@ OFFSETX = 23.5
 OFFSETY = 15
 
 HP_CRAB = 100
-TIME_SPAWN_CRAB = 180 # /60 = nombre de seconde moyenne entre chaque spawn
+TIME_SPAWN_CRAB = 180*2 # /60 = nombre de seconde moyenne entre chaque spawn
 CRAB_VITESSE_MIN = 1
 CRAB_VITESSE_MAX = 5
 
@@ -55,3 +55,5 @@ POTATO_APPEAR_TIME = 240 #/60 = seconde ( doit être > 69)
 KNOCKBACK = 3
 
 PUSHBACK_POWER = 10
+
+NB_CRAB_MAX = 10
