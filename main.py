@@ -592,7 +592,17 @@ class Game:
 			self.screen.blit(knife_img2, (900,680))
 		for i in range(int(self.player.player_health)):
 			self.screen.blit(heart_img2, (900+35*i,20))
+
 		self.campFireAnimation()
+		if self.player.in_realoding:
+			if self.player.gun_time_animation > self.player.animation_gun_duration:
+				self.player.in_realoding = False
+				self.player.gun_time_animation = 0
+				self.gun_reload_2.play()
+				self.player.gun_ammo = self.player.gun_max_ammo
+			else:
+				self.player.gun_time_animation = self.animationLoading(self.player.animation_gun_duration,self.player.gun_time_animation,WHITE)
+
 		self.curseur()
 		pygame.display.update()
 
