@@ -176,7 +176,7 @@ class Game:
 			self.victory.set_volume(0)
 
 		self.character_spritesheet = SpriteSheet(
-			pygame.image.load(os.path.join('assets/img/tests', 'CrackedOutTheWoahZOOOODud.png')).convert_alpha())
+			pygame.image.load(os.path.join('assets/img/tests', 'persoTest.png')).convert_alpha())
 		self.terrain_spritesheet = SpriteSheet(
 			pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha())
 		self.crab_spritesheet = SpriteSheet(
@@ -554,6 +554,9 @@ class Game:
 		heart_img1 = pygame.image.load("assets/img/tests/heart.png")
 		heart_img2 = pygame.transform.scale(heart_img1, (30,30))
 
+		heartDead_img1 = pygame.image.load("assets/img/tests/deadHeart.png")
+		heartDead_img2 = pygame.transform.scale(heartDead_img1, (30,30))
+
 		if self.player.current_weapon=="gun":
 			if self.gun_level==1:
 				gun_img1 = pygame.image.load("assets/img/tests/gunNormal2.png")
@@ -581,8 +584,12 @@ class Game:
 			self.screen.blit(self.night_effet[0], (0,0))
 		elif (self.player.player_health == 2):
 			self.screen.blit(self.night_effet[1], (0,0))
+			self.night_effet[0].set_alpha(150)
+			self.screen.blit(self.night_effet[0], (0,0))
 		else:
 			self.screen.blit(self.night_effet[2], (0,0))
+			self.night_effet[0].set_alpha(150)
+			self.screen.blit(self.night_effet[0], (0,0))
 		if self.FireBullet:
 			self.screen.blit(self.fireEffect, (self.player.rect.centerx - self.fireEffect.get_width() / 2, self.player.rect.centery - self.fireEffect.get_height() / 2))
 			self.FireBullet = False
@@ -594,8 +601,11 @@ class Game:
 			self.screen.blit(current_ammo,current_ammo_label_rect)
 		else:
 			self.screen.blit(knife_img2, (900,680))
-		for i in range(int(self.player.player_health)):
-			self.screen.blit(heart_img2, (900+35*i,20))
+		for i in range(3):
+			if i < self.player.player_health:
+				self.screen.blit(heart_img2, (900+35*i,20))
+			else:
+				self.screen.blit(heartDead_img2, (900+35*i,20))
 
 		self.campFireAnimation()
 		if self.player.in_realoding:
@@ -628,16 +638,22 @@ class Game:
 
 		font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 35)
 		label_nb_ress1 = font.render(str(self.player.potat_counter), True, BLACK)
-		label_nb_ress1_rect = label_nb_ress1.get_rect(x=940, y=30)
+		label_nb_ress1_rect = label_nb_ress1.get_rect(x=940, y=660)
 
 		label_nb_ress2 = font.render(str(self.player.corn_counter), True, BLACK)
-		label_nb_ress2_rect = label_nb_ress1.get_rect(x=940,y=90)
+		label_nb_ress2_rect = label_nb_ress1.get_rect(x=940,y=720)
 
 		potato_img1 = pygame.image.load("assets/img/tests/potato.png")
 		potato_img2 = pygame.transform.scale(potato_img1, (40,40))
 
 		corn_img1 = pygame.image.load("assets/img/tests/corna.png")
 		corn_img2 = pygame.transform.scale(corn_img1, (40,40))
+
+		heart_img1 = pygame.image.load("assets/img/tests/heart.png")
+		heart_img2 = pygame.transform.scale(heart_img1, (30,30))
+
+		heartDead_img1 = pygame.image.load("assets/img/tests/deadHeart.png")
+		heartDead_img2 = pygame.transform.scale(heartDead_img1, (30,30))
 
 
 
@@ -670,8 +686,8 @@ class Game:
 		self.screen.blit(self.tips3, self.tips3_rect)
 		self.screen.blit(self.timer, self.timer_rect)
 		self.screen.blit(counter_day,counter_day_rect)
-		self.screen.blit(potato_img2, (970,20))
-		self.screen.blit(corn_img2, (970,80))
+		self.screen.blit(potato_img2, (970,660))
+		self.screen.blit(corn_img2, (970,720))
 		self.screen.blit(label_nb_ress1,label_nb_ress1_rect)
 		self.screen.blit(label_nb_ress2,label_nb_ress2_rect)
 		self.clock.tick(FPS)
@@ -681,10 +697,10 @@ class Game:
 					if pygame.sprite.collide_mask(self.player, block):
 						self.screen.blit(self.collectMessage, self.collectMessage_rect)
 						self.peutCollect = True
-			elif (block.block_type == 'firstStagePotato' or block.block_type == 'firstStageCorn') and self.peutCollect:
+			elif (block.block_type == 'firstStagePotato' or block.block_type == 'firstStageCorn') and not(self.peutCollect):
 				if pygame.sprite.collide_mask(self.player, block):
 					self.screen.blit(self.comebackMessage, self.comebackMessage_rect)
-			self.peutCollect = False
+		self.peutCollect = False
 
 
 		if pygame.mouse.get_pressed()[2]:
@@ -725,6 +741,16 @@ class Game:
 		if self.campFire.rect.collidepoint(mouse_pos[0],mouse_pos[1]):
 			self.screen.blit(self.marketMessage, self.marketMessage_rect)
 
+		for i in range(3):
+			if i < self.player.player_health:
+				self.screen.blit(heart_img2, (900+35*i,20))
+			else:
+				self.screen.blit(heartDead_img2, (900+35*i,20))
+
+
+		pygame.draw.rect(self.screen, BLACK, pygame.Rect(900, 60, 100, 20), 2)
+		pygame.draw.rect(self.screen, DARK_GREEN, pygame.Rect(902, 62, ((self.player.current_stamina * 100 ) // self.player.max_stamina ) - 4, 16))
+
 		self.campFireAnimation()
 		self.curseur()
 
@@ -763,7 +789,7 @@ class Game:
 		alpha = (105 * (self.campFireXAct-150) ) // 350
 		alpha += 150
 		self.campFireEffect.set_alpha(alpha)
-		self.screen.blit(self.campFireEffect, ((self.xTopLefIsland + (31-16.8) * TILE_WIDTH) - self.campFireEffect.get_width() / 2, (self.yTopLefIsland + (21-11.8) * TILE_HEIGHT) - self.campFireEffect.get_height() / 2))
+		self.screen.blit(self.campFireEffect, ((self.xTopLefIsland + (31-16.5) * TILE_WIDTH) - self.campFireEffect.get_width() / 2, (self.yTopLefIsland + (21-11.5) * TILE_HEIGHT) - self.campFireEffect.get_height() / 2))
 
 
 	def update_day(self):

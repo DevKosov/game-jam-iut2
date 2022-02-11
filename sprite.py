@@ -137,7 +137,6 @@ class Player(pygame.sprite.Sprite):
 	def cut_cooldown(self):
 		if (self.current_cut_cooldown > 0):
 			self.current_cut_cooldown -= 1
-			print(self.current_cut_cooldown)
 		else:
 			self.current_cut_cooldown = 0
 
@@ -257,54 +256,58 @@ class Player(pygame.sprite.Sprite):
 
 		left_animations = [self.game.character_spritesheet.get_image(4, 2, self.widthLeft, self.height, SCALE, BLACK),
 						   self.game.character_spritesheet.get_image(5, 2, self.widthLeft, self.height, SCALE, BLACK),
+						   self.game.character_spritesheet.get_image(4, 2, self.widthLeft, self.height, SCALE, BLACK),
 						   self.game.character_spritesheet.get_image(6, 2, self.widthLeft, self.height, SCALE, BLACK)]
 
 		right_animations = [self.game.character_spritesheet.get_image(1, 2, self.widthLeft, self.height, SCALE, BLACK),
 						   self.game.character_spritesheet.get_image(2, 2, self.widthLeft, self.height, SCALE, BLACK),
+						   self.game.character_spritesheet.get_image(1, 2, self.widthLeft, self.height, SCALE, BLACK),
 						   self.game.character_spritesheet.get_image(3, 2, self.widthLeft, self.height, SCALE, BLACK)]
 
 		up_animations = [self.game.character_spritesheet.get_image(4, 1, self.widthUp, self.height, SCALE, BLACK),
 						   self.game.character_spritesheet.get_image(5, 1, self.widthUp, self.height, SCALE, BLACK),
+						   self.game.character_spritesheet.get_image(4, 1, self.widthUp, self.height, SCALE, BLACK),
 						   self.game.character_spritesheet.get_image(6, 1, self.widthUp, self.height, SCALE, BLACK)]
 
 		down_animations = [self.game.character_spritesheet.get_image(1, 1, self.widthUp, self.height, SCALE, BLACK),
 						   self.game.character_spritesheet.get_image(2, 1, self.widthUp, self.height, SCALE, BLACK),
+						   self.game.character_spritesheet.get_image(1, 1, self.widthUp, self.height, SCALE, BLACK),
 						   self.game.character_spritesheet.get_image(3, 1, self.widthUp, self.height, SCALE, BLACK)]
 
 		if self.facing == 'left':
 			if self.x_change == 0:
-				pygame.transform.flip(self.game.character_spritesheet.get_image(4, 2, self.widthLeft, self.height, SCALE, BLACK), 1, 0)
+				self.image = left_animations[0]
 			else :
 				self.image = left_animations[math.floor(self.animation_loop)]
-				self.animation_loop += 0.1
-				if self.animation_loop >= 3:
+				self.animation_loop += 0.2
+				if self.animation_loop >= 4:
 					self.animation_loop = 0
 
 		if self.facing == 'right':
 			if self.x_change == 0:
-				self.game.character_spritesheet.get_image(1, 2, self.widthLeft, self.height, SCALE, BLACK)
+				self.image = right_animations[0]
 			else :
 				self.image = right_animations[math.floor(self.animation_loop)]
-				self.animation_loop += 0.1
-				if self.animation_loop >= 3:
+				self.animation_loop += 0.2
+				if self.animation_loop >= 4:
 					self.animation_loop = 0
 
 		if self.facing == 'up':
 			if self.y_change == 0:
-				self.game.character_spritesheet.get_image(4, 1, self.widthUp, self.height, SCALE, BLACK)
+				self.image = up_animations[0]
 			else :
 				self.image = up_animations[math.floor(self.animation_loop)]
-				self.animation_loop += 0.1
-				if self.animation_loop >= 3:
+				self.animation_loop += 0.2
+				if self.animation_loop >= 4:
 					self.animation_loop = 0
 
 		if self.facing == 'down':
 			if self.y_change == 0:
-				self.game.character_spritesheet.get_image(1, 1, self.widthUp, self.height, SCALE, BLACK)
+				self.image = down_animations[0]
 			else :
 				self.image = down_animations[math.floor(self.animation_loop)]
-				self.animation_loop += 0.1
-				if self.animation_loop >= 3:
+				self.animation_loop += 0.2
+				if self.animation_loop >= 4:
 					self.animation_loop = 0
 
 	def switch_weapon(self,event):
