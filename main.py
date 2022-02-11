@@ -90,6 +90,7 @@ class Game:
 		self.farminTileACTDroite = []
 		self.apparitionFarmPossible = True
 		self.peutCollect = False
+		self.notPause = False
 
 		#Insane Easter Egss
 		self.CODE = [pygame.K_UP, pygame.K_UP, pygame.K_DOWN, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_LEFT,
@@ -132,6 +133,11 @@ class Game:
 		self.campfireYAct = 240
 
 		self.nbCrabOnScreen = 0
+
+		self.prixGunDamage = PRIX_GUN_DAMAGE
+		self.prixKnifeDamage = PRIX_KNIFE_DAMAGE
+		self.prixAmmo = PRIX_AMMO
+		self.prixStamina = PRIX_STAMINA
 
 
 		#Bruitage
@@ -234,10 +240,10 @@ class Game:
 		self.farm_buy_btn3 = Button(640, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
 		self.farm_buy_btn4 = Button(860, 500, 80, 50, BLACK, self.farm_btn_img31, 'Buy', 30)
 
-		self.farm_res_btn1 = Button(80, 500, 120, 50, BLACK, self.farm_btn_img21, '.     10', 30)
-		self.farm_res_btn2 = Button(300, 500, 120, 50, BLACK, self.farm_btn_img21, '.      10', 30)
-		self.farm_res_btn3 = Button(520, 500, 120, 50, BLACK, self.farm_btn_img21, '.     10', 30)
-		self.farm_res_btn4 = Button(740, 500, 120, 50, BLACK, self.farm_btn_img21, '.      10', 30)
+		self.farm_res_btn1 = Button(80, 500, 120, 50, BLACK, self.farm_btn_img21, '.     ' + str(self.prixGunDamage), 30)
+		self.farm_res_btn2 = Button(300, 500, 120, 50, BLACK, self.farm_btn_img21, '.      ' + str(self.prixAmmo), 30)
+		self.farm_res_btn3 = Button(520, 500, 120, 50, BLACK, self.farm_btn_img21, '.     ' + str(self.prixKnifeDamage), 30)
+		self.farm_res_btn4 = Button(740, 500, 120, 50, BLACK, self.farm_btn_img21, '.      ' + str(self.prixStamina), 30)
 
 
 
@@ -382,6 +388,9 @@ class Game:
 		#self.day_time=True
 		
 		#self.menu = True
+		self.notPause = True
+		self.pause = True
+		self.playing = False
 		self.intro_screen()
 
 	def reset_value_after_game_over(self):
@@ -586,10 +595,12 @@ class Game:
 			self.screen.blit(self.night_effet[1], (0,0))
 			self.night_effet[0].set_alpha(150)
 			self.screen.blit(self.night_effet[0], (0,0))
+			self.night_effet[0].set_alpha(255)
 		else:
 			self.screen.blit(self.night_effet[2], (0,0))
 			self.night_effet[0].set_alpha(150)
 			self.screen.blit(self.night_effet[0], (0,0))
+			self.night_effet[0].set_alpha(255)
 		if self.FireBullet:
 			self.screen.blit(self.fireEffect, (self.player.rect.centerx - self.fireEffect.get_width() / 2, self.player.rect.centery - self.fireEffect.get_height() / 2))
 			self.FireBullet = False
@@ -863,6 +874,11 @@ class Game:
 
 	def draw_farm(self):
 
+		self.farm_res_btn1 = Button(80, 500, 120, 50, BLACK, self.farm_btn_img21, '.     ' + str(self.prixGunDamage), 30)
+		self.farm_res_btn2 = Button(300, 500, 120, 50, BLACK, self.farm_btn_img21, '.      ' + str(self.prixAmmo), 30)
+		self.farm_res_btn3 = Button(520, 500, 120, 50, BLACK, self.farm_btn_img21, '.     ' + str(self.prixKnifeDamage), 30)
+		self.farm_res_btn4 = Button(740, 500, 120, 50, BLACK, self.farm_btn_img21, '.      ' + str(self.prixStamina), 30)
+
 		self.farm_label_nb_ress1 = self.farm_font_special.render(str(self.player.potat_counter), True, WHITE)
 		self.farm_label_nb_ress1_rect = self.farm_subtitle.get_rect(x=450, y=230)
 		self.farm_label_nb_ress2 = self.farm_font_special.render(str(self.player.corn_counter), True, WHITE)
@@ -983,30 +999,34 @@ class Game:
 				self.running = False
 				exit()
 			if event.type == pygame.MOUSEBUTTONUP and self.farm_buy_btn1.rect.collidepoint(pygame.mouse.get_pos()):
-				if (self.player.potat_counter>=10):
-					self.player.potat_counter-=10
+				if (self.player.potat_counter>=self.prixGunDamage):
+					self.player.potat_counter-=self.prixGunDamage
 					# add gun damage
+					self.prixGunDamage += 3
 					self.player.damaged_gun+=1
 					self.shop_sound.play()
 					if self.player.damaged_gun>=5:
 						self.gun_level=2
 			if event.type == pygame.MOUSEBUTTONUP and self.farm_buy_btn2.rect.collidepoint(pygame.mouse.get_pos()):
-				if (self.player.corn_counter>=10):
-					self.player.corn_counter-=10
+				if (self.player.corn_counter>=self.prixAmmo):
+					self.player.corn_counter-=self.prixAmmo
 					# add gun ammo
+					self.prixAmmo += 3
 					self.player.gun_ammo+=1
 					self.player.gun_max_ammo+=1
 					self.shop_sound.play()
 			if event.type == pygame.MOUSEBUTTONUP and self.farm_buy_btn3.rect.collidepoint(pygame.mouse.get_pos()):
-				if (self.player.potat_counter>=10):
-					self.player.potat_counter-=10
+				if (self.player.potat_counter>=self.prixKnifeDamage):
+					self.player.potat_counter-=self.prixKnifeDamage
 					# add knife damage
+					self.prixKnifeDamage += 3
 					self.player.damaged_knife+=1
 					self.shop_sound.play()
 			if event.type == pygame.MOUSEBUTTONUP and self.farm_buy_btn4.rect.collidepoint(pygame.mouse.get_pos()):
-				if (self.player.corn_counter>=10):
-					self.player.corn_counter-=10
+				if (self.player.corn_counter>=self.prixStamina):
+					self.player.corn_counter-=self.prixStamina
 					# add stamina
+					self.prixStamina += 3
 					self.player.max_stamina+=10
 					self.shop_sound.play()
 			if event.type == pygame.MOUSEBUTTONUP and self.farm_start_before_farm.rect.collidepoint(pygame.mouse.get_pos()):
@@ -1066,7 +1086,7 @@ class Game:
 		title = self.font.render('Crab Island', True, BLACK)
 		title_rect = title.get_rect(x=self.screen.get_width() / 2 - title.get_width() / 2, y=100)
 
-		if (self.pause):
+		if (self.pause): #  and not(self.notPause)
 			Text_Button = "Resume"
 		else:
 			Text_Button = "Play"
