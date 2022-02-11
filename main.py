@@ -11,7 +11,7 @@ from pygame.locals import *
 
 pygame.init()
 pygame.display.set_caption('Crab Island')
-pygame.display.set_icon(pygame.image.load("assets/img/tests/logo.png"))
+pygame.display.set_icon(pygame.image.load("assets/img/autre/logo.png"))
 
 tilemap = [
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
@@ -57,8 +57,8 @@ tilemap = [
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
    'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
 ]
-spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio', 'Up1.ogg'))
-click_sound = pygame.mixer.Sound(os.path.join('assets/audio', 'Decision5.ogg'))
+spawn_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Up1.ogg'))
+click_sound = pygame.mixer.Sound(os.path.join('assets/audio/se', 'Decision5.ogg'))
 
 class Game:
 	def __init__(self):
@@ -182,18 +182,18 @@ class Game:
 			self.victory.set_volume(0)
 
 		self.character_spritesheet = SpriteSheet(
-			pygame.image.load(os.path.join('assets/img/tests', 'persoTest.png')).convert_alpha())
+			pygame.image.load(os.path.join('assets/img/player', 'persoTest.png')).convert_alpha())
 		self.terrain_spritesheet = SpriteSheet(
-			pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha())
+			pygame.image.load(os.path.join('assets/img/tile', 'spritesBG_3par8_64x64.png')).convert_alpha())
 		self.crab_spritesheet = SpriteSheet(
-			pygame.image.load(os.path.join('assets/img/tests/crabUpdate_100x78.png')).convert_alpha())
+			pygame.image.load(os.path.join('assets/img/ennemi/crabUpdate_100x78.png')).convert_alpha())
 		self.night_effet = [
-			pygame.image.load(os.path.join('assets/img/tests', 'overlayN.png')).convert_alpha(),
-			pygame.image.load(os.path.join('assets/img/tests', 'overlayNormalRed.png')).convert_alpha(),
-			pygame.image.load(os.path.join('assets/img/tests', 'overlayBeforeDeath.png')).convert_alpha()
+			pygame.image.load(os.path.join('assets/img/menu', 'overlayN.png')).convert_alpha(),
+			pygame.image.load(os.path.join('assets/img/menu', 'overlayNormalRed.png')).convert_alpha(),
+			pygame.image.load(os.path.join('assets/img/menu', 'overlayBeforeDeath.png')).convert_alpha()
 		]  # lul
-		self.fireEffect = pygame.image.load(os.path.join('assets/img/tests', 'gunfire_overlay.png')).convert_alpha()
-		self.campFireEffect = pygame.image.load(os.path.join('assets/img/tests', 'fire_overlay2.png')).convert_alpha()
+		self.fireEffect = pygame.image.load(os.path.join('assets/img/menu', 'gunfire_overlay.png')).convert_alpha()
+		self.campFireEffect = pygame.image.load(os.path.join('assets/img/menu', 'fire_overlay2.png')).convert_alpha()
 		self.campFireEffect = pygame.transform.scale(self.campFireEffect, (500, 500))
 
 		#init farm
@@ -205,10 +205,10 @@ class Game:
 		self.farm_subtitle = self.farm_font.render("Improve your skills and weapon damages", True, WHITE)
 		self.farm_subtitle_rect = self.farm_subtitle.get_rect(x=self.screen.get_width() / 2 - self.farm_subtitle.get_width() / 2, y=150)
 
-		self.farm_potato_img1 = pygame.image.load("assets/img/tests/potato.png")
+		self.farm_potato_img1 = pygame.image.load("assets/img/menu/potato.png")
 		self.farm_potato_img2 = pygame.transform.scale(self.farm_potato_img1, (30,30))
 
-		self.farm_corn_img1 = pygame.image.load("assets/img/tests/corna.png")
+		self.farm_corn_img1 = pygame.image.load("assets/img/menu/corna.png")
 		self.farm_corn_img2 = pygame.transform.scale(self.farm_corn_img1, (30,30))
  
 		self.farm_font_special = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 40)
@@ -225,11 +225,11 @@ class Game:
 		self.farm_label_knife_dam_rect = self.farm_label_knife_dam.get_rect(x=545, y=320)
 
 
-		self.farm_knife_img1 = pygame.image.load("assets/img/tests/knife.png")
+		self.farm_knife_img1 = pygame.image.load("assets/img/player/knife.png")
 		self.farm_knife_img2 = pygame.transform.rotate(self.farm_knife_img1,45)
 		self.farm_knife_img3 = pygame.transform.scale(self.farm_knife_img2,(100,100))
 
-		self.farm_bullet_img1 = pygame.image.load("assets/img/tests/bullet_26x64.png")
+		self.farm_bullet_img1 = pygame.image.load("assets/img/player/bullet_26x64.png")
 		self.farm_bullet_img2 = pygame.transform.scale(self.farm_bullet_img1,(30,90))
 
 		self.farm_label_stamina = self.farm_font.render("Max stamina", True, BLACK)
@@ -359,7 +359,7 @@ class Game:
 					Block(self, (j - OFFSETX) * TILE_WIDTH, (i - OFFSETY) * TILE_HEIGHT, 'roadH', False, False, i, j)
 
 		self.screen.blit(
-			pygame.image.load(os.path.join('assets/img/tests', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0, 0))
+			pygame.image.load(os.path.join('assets/img/tile', 'spritesBG_3par8_64x64.png')).convert_alpha(), (0, 0))
 
 	def after_win(self):
 		pygame.mixer.fadeout(1000)
@@ -560,19 +560,19 @@ class Game:
 		current_defense_label.set_alpha(150)
 		current_defense_label_rect = current_defense_label.get_rect(x=860, y=650)
 
-		heart_img1 = pygame.image.load("assets/img/tests/heart.png")
+		heart_img1 = pygame.image.load("assets/img/menu/heart.png")
 		heart_img2 = pygame.transform.scale(heart_img1, (30,30))
 
-		heartDead_img1 = pygame.image.load("assets/img/tests/deadHeart.png")
+		heartDead_img1 = pygame.image.load("assets/img/menu/deadHeart.png")
 		heartDead_img2 = pygame.transform.scale(heartDead_img1, (30,30))
 
 		if self.player.current_weapon=="gun":
 			if self.gun_level==1:
-				gun_img1 = pygame.image.load("assets/img/tests/gunNormal2.png")
+				gun_img1 = pygame.image.load("assets/img/menu/gunNormal2.png")
 				gun_img2 = pygame.transform.scale(gun_img1,(70,45))
 				gun_img2.set_alpha(150)
 			elif self.gun_level==2:
-				gun_img1 = pygame.image.load("assets/img/tests/gunUpgraded2.png")
+				gun_img1 = pygame.image.load("assets/img/menu/gunUpgraded2.png")
 				gun_img2 = pygame.transform.scale(gun_img1,(70,45))
 				gun_img2.set_alpha(150)
 			font = pygame.font.Font(os.path.join('assets/font', 'Pixeltype.ttf'), 25)
@@ -580,7 +580,7 @@ class Game:
 			current_ammo.set_alpha(150)
 			current_ammo_label_rect = current_ammo.get_rect(x=880, y=720)
 		else:
-			knife_img1 = pygame.image.load("assets/img/tests/knife.png")
+			knife_img1 = pygame.image.load("assets/img/player/knife.png")
 			knife_img2 = pygame.transform.rotate(knife_img1,45)
 			knife_img2.set_alpha(150)
 
@@ -654,16 +654,16 @@ class Game:
 		label_nb_ress2 = font.render(str(self.player.corn_counter), True, BLACK)
 		label_nb_ress2_rect = label_nb_ress1.get_rect(x=940,y=720)
 
-		potato_img1 = pygame.image.load("assets/img/tests/potato.png")
+		potato_img1 = pygame.image.load("assets/img/menu/potato.png")
 		potato_img2 = pygame.transform.scale(potato_img1, (40,40))
 
-		corn_img1 = pygame.image.load("assets/img/tests/corna.png")
+		corn_img1 = pygame.image.load("assets/img/menu/corna.png")
 		corn_img2 = pygame.transform.scale(corn_img1, (40,40))
 
-		heart_img1 = pygame.image.load("assets/img/tests/heart.png")
+		heart_img1 = pygame.image.load("assets/img/menu/heart.png")
 		heart_img2 = pygame.transform.scale(heart_img1, (30,30))
 
-		heartDead_img1 = pygame.image.load("assets/img/tests/deadHeart.png")
+		heartDead_img1 = pygame.image.load("assets/img/menu/deadHeart.png")
 		heartDead_img2 = pygame.transform.scale(heartDead_img1, (30,30))
 
 
@@ -886,10 +886,10 @@ class Game:
 
 
 		if self.gun_level==1:
-			gun_img1 = pygame.image.load("assets/img/tests/gunNormal2.png")
+			gun_img1 = pygame.image.load("assets/img/menu/gunNormal2.png")
 			gun_img2 = pygame.transform.scale(gun_img1,(100,70))
 		elif self.gun_level==2:
-			gun_img1 = pygame.image.load("assets/img/tests/gunUpgraded2.png")
+			gun_img1 = pygame.image.load("assets/img/menu/gunUpgraded2.png")
 			gun_img2 = pygame.transform.scale(gun_img1,(100,70))
 
 
@@ -941,7 +941,7 @@ class Game:
 						else:
 							self.farm_start_before_farm = Button(self.screen.get_width()/2-100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Start', 40)
 
-		self.screen.blit(pygame.image.load('assets/img/tests/shopBG.png'),(0,0))
+		self.screen.blit(pygame.image.load('assets/img/menu/shopBG.png'),(0,0))
 		self.clock.tick(60)
 		self.screen.blit(self.farm_title, self.farm_title_rect)
 		self.screen.blit(self.farm_subtitle, self.farm_subtitle_rect)
@@ -1068,7 +1068,7 @@ class Game:
 	def curseur(self):
 		mouse_pos = pygame.mouse.get_pos()
 		CURSOR = pygame.transform.scale(
-			pygame.image.load(os.path.join('assets/img/tests', 'viewfinder.png')).convert_alpha(), (100, 100))
+			pygame.image.load(os.path.join('assets/img/autre', 'viewfinder.png')).convert_alpha(), (100, 100))
 		CURSOR_RECT = CURSOR.get_rect()
 		CURSOR_RECT.center = mouse_pos
 		self.screen.blit(CURSOR, CURSOR_RECT)
@@ -1151,7 +1151,7 @@ class Game:
 					self.credits = True
 			if exit_button.is_pressed(mouse_pos, mouse_pressed):
 				exit()
-			self.screen.blit(pygame.image.load('assets/img/tests/menu.png'),(0,0))
+			self.screen.blit(pygame.image.load('assets/img/menu/menu.png'),(0,0))
 			# self.screen.blit(title, title_rect)
 			self.screen.blit(play_button.image, play_button.rect)
 			self.screen.blit(rules_button.image, rules_button.rect)
@@ -1303,7 +1303,7 @@ class Game:
 				else:
 					back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Back to menu', 30)
 
-			self.screen.blit(pygame.image.load('assets/img/tests/menuForAll.png'),(0,0))
+			self.screen.blit(pygame.image.load('assets/img/menu/menuForAll.png'),(0,0))
 			self.screen.blit(title, title_rect)
 			self.screen.blit(sound_options, sound_options_rect)
 			self.screen.blit(music_sound, music_sound_rect)
@@ -1383,7 +1383,7 @@ class Game:
 			else:
 				back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Back to menu', 30)
 
-			self.screen.blit(pygame.image.load('assets/img/tests/menuForAll.png'),(0,0))
+			self.screen.blit(pygame.image.load('assets/img/menu/menuForAll.png'),(0,0))
 			self.screen.blit(title, title_rect)
 			self.screen.blit(line1, line1_rect)
 			self.screen.blit(line2, line2_rect)
@@ -1467,7 +1467,7 @@ class Game:
 			else:
 				back_button = Button((self.screen.get_width() / 2) - 100, 650, 200, 50, BLACK, self.farm_btn_img11, 'Back to menu', 30)
 
-			self.screen.blit(pygame.image.load('assets/img/tests/menuForAll.png'),(0,0))
+			self.screen.blit(pygame.image.load('assets/img/menu/menuForAll.png'),(0,0))
 			self.screen.blit(title, title_rect)
 			self.screen.blit(rules_desc1, rules_desc1_rect)
 			self.screen.blit(rules_desc2, rules_desc2_rect)

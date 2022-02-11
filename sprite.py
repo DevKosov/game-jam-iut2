@@ -63,8 +63,8 @@ class Player(pygame.sprite.Sprite):
 		#Player Game Night State
 		self.current_weapon = "gun"
 		self.player_speed = PLAYER_SPEED
-		self.potat_counter = 100
-		self.corn_counter = 100
+		self.potat_counter = 0
+		self.corn_counter = 0
 		self.damaged_knife = 0
 		self.damaged_gun = 0
 		self.player_health = 3
@@ -609,7 +609,7 @@ class Button:
 		self.fg = fg
 		self.bg = bg
 
-		self.button_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests', 'buttons.png')).convert_alpha())
+		self.button_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/menu', 'buttons.png')).convert_alpha())
 		
 		img = self.button_spritesheet.get_image(bg[0], bg[1], self.width, self.height, 10, BLACK)
 		self.image = pygame.transform.scale(img,(width,height))
@@ -640,7 +640,7 @@ class ButtonNoText:
 
 		self.bg = bg
 
-		self.button_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/tests', 'buttons.png')).convert_alpha())
+		self.button_spritesheet = SpriteSheet(pygame.image.load(os.path.join('assets/img/menu', 'buttons.png')).convert_alpha())
 
 		img = self.button_spritesheet.get_image(bg[0], bg[1], self.width, self.height, 10, BLACK)
 		self.image = pygame.transform.scale(img,(width,height))
@@ -840,7 +840,7 @@ class KnifeCute(pygame.sprite.Sprite):
 		self.groups = self.game.all_sprites, self.game.bullets
 		pygame.sprite.Sprite.__init__(self, self.groups)
 
-		self.image = pygame.transform.scale(pygame.image.load(os.path.join('assets/img/tests', 'knife.png')).convert_alpha(), (13, 32))
+		self.image = pygame.transform.scale(pygame.image.load(os.path.join('assets/img/player', 'knife.png')).convert_alpha(), (13, 32))
 
 		diff_x = self.game.player.rect.x - x
 		diff_y = self.game.player.rect.y - y
